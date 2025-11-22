@@ -1,0 +1,22 @@
+{
+  "name": "stagematch",
+  "version": "1.0.0",
+  "description": "Looking stage",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZhoupengWu/stageMatch.git"
+  },
+  "author": "ZhoupengWu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZhoupengWu/stageMatch/issues"
+  },
+  "homepage": "https://github.com/ZhoupengWu/stageMatch#readme",
+  "dependencies": {
+    "@mapbox/polyline": "^1.2.1"
+  }
+}

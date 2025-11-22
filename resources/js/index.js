@@ -1,4 +1,8 @@
+/* import "@mapbox/polyline"; */
+
 const button = document.getElementById("percorso");
+const display_path = document.getElementById("path");
+const indication = document.getElementById("ind");
 const map = L.map("map").setView([45.695, 9.67], 13);
 const intre = L.marker([45.592, 9.301]).addTo(map);
 
@@ -16,7 +20,7 @@ async function calcolaPercorso() {
     const start = [9.66, 45.697];
     const end = [9.703, 45.672];
 
-    const response = await fetch( "https://api.openrouteservice.org/v2/directions/driving-car/geojson", {
+    const response = await fetch( "https://api.openrouteservice.org/v2/directions/driving-car/json", {
         method: "POST",
         headers: {
             Authorization: API_KEY,
@@ -37,7 +41,21 @@ async function calcolaPercorso() {
 
     const data = await response.json();
 
-    L.geoJSON(data, { style: { color: 'red', weight: 4 } }).addTo(map);
+    const route = data.routes[0];
+    const coordinates = polyline.decode(route.geometry);
+    const latlngs = coordinates.map(c => [c[0], c[1]]);
+    L.polyline(latlngs, { color: 'red', weight: 4 }).addTo(map);
+
+    const distance = route.summary.distance / 1000;
+    const time = route.summary.duration / 3600;
+    display_path.innerText = `Distanza: ${distance} km\nTempo: ${time} h`;
+
+    route.segments.forEach(segment => {
+        segment.steps.forEach(step => {
+            indication.innerText = step.instruction;
+            console.log(step.instruction);
+        });
+    });
 }
 
 button.addEventListener("click", calcolaPercorso);
