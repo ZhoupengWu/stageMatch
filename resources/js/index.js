@@ -1,4 +1,8 @@
 const button = document.getElementById("percorso");
+
+const input_address_start = document.getElementById("address_start");
+const input_address_end = document.getElementById("address_end");
+
 const map = L.map("map").setView([45.695, 9.67], 13);
 const intre = L.marker([45.592, 9.301]).addTo(map);
 
@@ -41,3 +45,77 @@ async function calcolaPercorso() {
 }
 
 button.addEventListener("click", calcolaPercorso);
+
+async function getCoordinates(addressStart, addressEnd) {
+    if (!addressStart) {
+        console.error("Devi inserire un indirizzo di partenza!");
+        alert("Devi inserire un indirizzo di partenza!");
+
+        return;
+    }
+
+    if (!addressEnd) {
+        console.error("Devi inserire un indirizzo di arrivo!");
+        alert("Devi inserire un indirizzo di arrivo!");
+
+        return;
+    }
+
+    const urlStart = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addressStart)}&format=json&limit=1`;
+    const urlEnd = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addressEnd)}&format=json&limit=1`;
+
+    let coordsStart = [];
+    let coordsEnd = [];
+
+    /*
+        Richiesta del primo indirizzo
+    */
+    try {
+        const response = await fetch(urlStart);
+        const data = await response.json();
+
+        if (data.length > 0) {
+            const lat = data[0].lat;
+            const lon = data[0].lon;
+            coordsStart.push(lat, lon);
+        }
+        else {
+            console.error("Qualcosa è andato storto!");
+
+            return;
+        }
+    } catch (error) {
+        console.error(error);
+        alert(error);
+
+        return;
+    }
+
+    /*
+        Richiesta del secondo indirizzo
+    */
+    try {
+        const response = await fetch(urlEnd);
+        const data = await response.json();
+
+        if (data.length > 0) {
+            const lat = data[0].lat;
+            const lon = data[0].lon;
+            coordsEnd.push(lat, lon);
+        }
+        else {
+            console.error("Qualcosa è andato storto!");
+
+            return;
+        }
+    } catch (error) {
+        console.error(error);
+        alert(error);
+
+        return;
+    }
+
+    const coords = [coordsStart, coordsEnd];
+
+    return coords;
+}

@@ -3,15 +3,3 @@
     width: 100%;
     border: 2px solid #444;
 }
-
-#info {
-    position: relative;
-    max-height: 40vh;
-    overflow: auto;
-    background: rgba(255,255,255,0.95);
-    padding: 10px;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    font-family: system-ui, Arial, sans-serif;
-    font-size: 14px;
-}
