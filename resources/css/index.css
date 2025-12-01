@@ -3,3 +3,77 @@
     width: 100%;
     border: 2px solid #444;
 }
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.input-group {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0 !important;
+}
+
+.input-group .form-control,
+.form-control {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.suggestions-dropdown {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    max-height: calc(5 * 48px);
+    overflow-y: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: none;
+    z-index: 1000;
+}
+
+.suggestions-dropdown.active {
+    display: block;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item.highlighted {
+    background-color: #f5f9ff;
+}
+
+.suggestions-dropdown a,
+.suggestions-dropdown .suggestion-item,
+.suggestions-dropdown .suggestion-item > a {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    text-decoration: none;
+    color: inherit;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.suggestions-dropdown a:hover,
+.suggestions-dropdown .suggestion-item:hover,
+.suggestions-dropdown .suggestion-item.highlighted,
+.suggestions-dropdown a.highlighted {
+    background-color: #f5f9ff;
+}
