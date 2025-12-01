@@ -1,6 +1,7 @@
 let map = L.map('map').setView([0,0], 13); 
 let currentLayer = null;
 let currentMarker = null;
+const DIV_RESULT = document.getElementById("result");
 function displayMap() {
   
 
@@ -22,7 +23,7 @@ function showPath(coords) {
       [coords.End.Lon, coords.End.Lat]   // Point B
     ]
   };
-  
+  try {
   fetch(url, {
     method: "POST",
     headers: {
@@ -36,8 +37,10 @@ function showPath(coords) {
     // 3. Draw the route on the map
     currentLayer = L.geoJSON(data, { style: { color: 'red', weight: 4 } }).addTo(map);
     currentMarker = L.marker([coords.End.Lat, coords.End.Lon]).addTo(map);
-    map.setView([coords.End.Lat, coords.End.Lon], 13);
+    map.setView([coords.End.Lat, coords.End.Lon], 10);
   });
+  }
+  catch (error) {DIV_RESULT.innerText="Errore nella ricerca del percorso: " + error}
 }
 let btnPercorso = document.getElementById("btnPercorso");
 let tbindirizzoPartenza = document.getElementById("tbindirizzopartenza");
@@ -53,7 +56,11 @@ btnPercorso.addEventListener("click", async () => {
 });
 
 async function getCoordinates(addressStart, addressEnd) {
-   
+    /*quando i dati li prenderemo dai db è preferibile che la stringa dell'indirizzo sia 
+
+          Via {nome} {numero}, {CAP} {città}
+
+      per evitare possibili ambiguità */
     if (!addressStart || !addressEnd)
         {alert("inserire gli indirizzi partenza e arrivo"); return;}
 
@@ -77,7 +84,7 @@ async function getCoordinates(addressStart, addressEnd) {
         }
     } catch (error) {
        alert(error);
-        document.getElementById('result').textContent = "Errore nella richiesta conversione indirizzo partenza";
+        DIV_RESULT.textContent = "Errore nella richiesta conversione indirizzo partenza";
     }
     try {
         const response = await fetch(urlEnd);
@@ -95,7 +102,7 @@ async function getCoordinates(addressStart, addressEnd) {
         }
     } catch (error) {
        alert(error);
-        document.getElementById('result').textContent = "Errore nella richiesta conversione indirizzo arrivo";
+        DIV_RESULT.textContent = "Errore nella richiesta conversione indirizzo arrivo";
     }
     let coords = {
       Start: {
@@ -113,5 +120,4 @@ async function getCoordinates(addressStart, addressEnd) {
 }
 window.addEventListener("load", () => {
   displayMap();
-
 })
