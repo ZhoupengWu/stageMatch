@@ -2,8 +2,9 @@ const button = document.getElementById("percorso");
 
 const input_address_start = document.getElementById("address_start");
 const input_address_end = document.getElementById("address_end");
+const initial_coordinates = [45.695, 9.67];
 
-const map = L.map("map").setView([45.695, 9.67], 13);
+const map = L.map("map").setView([initial_coordinates[0], initial_coordinates[1]], 13);
 const intre = L.marker([45.592, 9.301]).addTo(map);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -118,4 +119,37 @@ async function getCoordinates(addressStart, addressEnd) {
     const coords = [coordsStart, coordsEnd];
 
     return coords;
+}
+
+async function suggestion() {
+    const address = input_address_start.value;
+
+    try {
+        const response = await fetch(
+            `photon.komoot.io/api/?q=${encodeURIComponent(address)}&lat=${initial_coordinates[0]}&lon=${initial_coordinates[1]}&limit=5&lang=it`
+        );
+
+        const data = await response.json();
+        const data_address = data.features.map((feature, index) => (
+            {
+                id: index,
+                coordinates: {
+                    longitudine: feature.geometry.coordinates[0],
+                    latitudine: feature.geometry.coordinates[1]
+                },
+                indirizzo_via: feature.properties.street,
+                indirizzo_civico: feature.properties.housenumber,
+                indirizzo_cap: feature.properties.postcode,
+                indirizzo_city: feature.properties.city
+            }
+        ));
+
+        const data_address_html = data_address.map(data => {
+            return `
+                <a href="#" id="${data.id}">${data.indirizzo_via} ${data.indirizzo_civico} ${data.indirizzo_cap} ${data.indirizzo_city}</a>
+            `
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
 }
