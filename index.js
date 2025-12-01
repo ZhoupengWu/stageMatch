@@ -1,24 +1,28 @@
+let map = L.map('map').setView([0,0], 13); 
+let currentLayer = null;
+let currentMarker = null;
 function displayMap() {
-    const map = L.map('map').setView([45.680, 9.7000], 13); 
+  
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 }
-function showPath() {
-  
+function showPath(coords) {
+  if (currentLayer!=null) map.removeLayer(currentLayer);
+  if (currentMarker!=null) map.removeLayer(currentMarker);
   // 2. OpenRouteService routing request
-  const apiKey = "  eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjYzNjJmMmZlNDJkZTRmM2Y5NzYwODI3YWZjMDFhNmMzIiwiaCI6Im11cm11cjY0In0=";
+  const apiKey = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjYzNjJmMmZlNDJkZTRmM2Y5NzYwODI3YWZjMDFhNmMzIiwiaCI6Im11cm11cjY0In0=";
   const url = "https://api.openrouteservice.org/v2/directions/driving-car/geojson";
 
   const requestBody = {
     coordinates: [
-      [9.66, 45.697],  // Point A
-      [9.703, 45.672]   // Point B
+      [coords.Start.Lon, coords.Start.Lat],  // Point A
+      [coords.End.Lon, coords.End.Lat]   // Point B
     ]
   };
-
+  
   fetch(url, {
     method: "POST",
     headers: {
@@ -30,17 +34,23 @@ function showPath() {
   .then(res => res.json())
   .then(data => {
     // 3. Draw the route on the map
-    L.geoJSON(data, { style: { color: 'red', weight: 4 } }).addTo(map);
+    currentLayer = L.geoJSON(data, { style: { color: 'red', weight: 4 } }).addTo(map);
+    currentMarker = L.marker([coords.End.Lat, coords.End.Lon]).addTo(map);
+    map.setView([coords.End.Lat, coords.End.Lon], 13);
   });
 }
-let btn1 = document.getElementById("btn1");
+let btnPercorso = document.getElementById("btnPercorso");
 let tbindirizzoPartenza = document.getElementById("tbindirizzopartenza");
 let tbindirizzoArrivo = document.getElementById("tbindirizzoarrivo");
-    btn1.addEventListener("click", async () => {
-        
-        let coords = await getCoordinates(tbindirizzoPartenza.value, tbindirizzoArrivo.value);
-        
-    });
+btnPercorso.addEventListener("click", async () => {
+    
+    let coords = await getCoordinates(tbindirizzoPartenza.value, tbindirizzoArrivo.value);
+    //let coords = await getCoordinates("via Giacomo Quarenghi, Bergamo", "via Mauro Gavazzeni, Bergamo");
+    //alert("latitudine arrivo: " + coords.CoordsEnd.Lat.toString() + " longitudine arrivo: " + coords.CoordsEnd.Lon.toString());
+    showPath(coords);
+    
+
+});
 
 async function getCoordinates(addressStart, addressEnd) {
    
@@ -59,8 +69,9 @@ async function getCoordinates(addressStart, addressEnd) {
         if (data.length > 0) {
             const lat = data[0].lat;
             const lon = data[0].lon;
-            coordsStart.push(lat, lon);
-          alert(`Lat: ${lat}, Lon: ${lon}`);
+            coordsStart.push(lat);
+            coordsStart.push(lon);
+       //   alert(`Lat: ${lat}, Lon: ${lon}`);
         } else {
             alert("Indirizzo non trovato");
         }
@@ -75,8 +86,9 @@ async function getCoordinates(addressStart, addressEnd) {
         if (data.length > 0) {
             const lat = data[0].lat;
             const lon = data[0].lon;
-            coordsEnd.push(lat, lon);
-            alert(`Lat: ${lat}, Lon: ${lon}`);
+            coordsEnd.push(lat);
+            coordsEnd.push(lon);
+           // alert(`Lat: ${lat}, Lon: ${lon}`);
             
         } else {
             alert("Indirizzo non trovato");
@@ -85,7 +97,21 @@ async function getCoordinates(addressStart, addressEnd) {
        alert(error);
         document.getElementById('result').textContent = "Errore nella richiesta conversione indirizzo arrivo";
     }
-    let coords = [coordsStart, coordsEnd];
+    let coords = {
+      Start: {
+        Lat: coordsStart[0],
+        Lon: coordsStart[1]
+      },
+      End: {
+        Lat: coordsEnd[0],
+        Lon: coordsEnd[1]
+      }
+
+    }
     return coords;
 
 }
+window.addEventListener("load", () => {
+  displayMap();
+
+})
