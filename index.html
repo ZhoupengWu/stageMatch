@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mappa OpenStreetMap con Leaflet</title>
-  
+    <title>MapRoute - Navigazione Intelligente</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <!-- CSS di Leaflet -->
     <link
       rel="stylesheet"
@@ -12,15 +15,87 @@
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
-  
+
     <!-- My CSS -->
-    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <h2>Mappa con OpenStreetMap e Leaflet</h2>
+    <!-- Header con titolo -->
+    <div class="header-title">
+        <h1>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            MapRoute
+        </h1>
+        <p>Trova il percorso migliore verso la tua destinazione</p>
+    </div>
+
+    <!-- Pannello di controllo laterale -->
+    <div id="controlPanel" class="control-panel">
+        <button id="togglePanel" class="toggle-button" aria-label="Espandi/Comprimi pannello">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+        
+        <div class="panel-content">
+            <h3>Pianifica il tuo viaggio</h3>
+            
+            <div class="input-section">
+                <label for="address_start">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Partenza
+                </label>
+                <div class="input-wrapper">
+                    <input type="text" class="form-control" id="address_start" placeholder="Inserisci indirizzo di partenza" aria-label="Indirizzo partenza">
+                    <div id="suggestions_start" class="suggestions-dropdown"></div>
+                </div>
+            </div>
+
+            <div class="route-separator">
+                <div class="separator-line"></div>
+            </div>
+
+            <div class="input-section">
+                <label for="address_end">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Destinazione
+                </label>
+                <div class="input-wrapper">
+                    <input type="text" class="form-control" id="address_end" placeholder="Inserisci indirizzo di destinazione" aria-label="Indirizzo destinazione">
+                    <div id="suggestions_end" class="suggestions-dropdown"></div>
+                </div>
+            </div>
+
+            <button id="percorso" class="btn-route">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                Mostra Percorso
+            </button>
+        </div>
+    </div>
+
+    <!-- Mappa -->
     <div id="map"></div>
 
     <!-- JS di Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="index.js"></script>
 </body>
 </html>
