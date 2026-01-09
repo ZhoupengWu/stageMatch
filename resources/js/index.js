@@ -138,8 +138,8 @@ async function suggestion() {
                     longitudine: feature.geometry.coordinates[0],
                     latitudine: feature.geometry.coordinates[1]
                 },
-                indirizzo_via: feature.properties.street,
-                indirizzo_civico: feature.properties.housenumber,
+                indirizzo_via: feature.properties.street || feature.properties.name,
+                indirizzo_civico: feature.properties.housenumber || "",
                 indirizzo_cap: feature.properties.postcode,
                 indirizzo_city: feature.properties.city
             }
