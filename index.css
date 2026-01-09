@@ -13,17 +13,17 @@ body {
 /* Header con titolo */
 .header-title {
     position: absolute;
-    top: 20px;
+    top: 15px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1001;
-    background: white;
-    padding: 15px 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    text-align: center;
+    z-index: 500;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px);
+    padding: 10px 22px;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    pointer-events: none;
 }
-
 .header-title h1 {
     font-size: 28px;
     font-weight: 700;
@@ -321,4 +321,44 @@ body {
 .panel-content::-webkit-scrollbar-thumb:hover,
 .suggestions-dropdown::-webkit-scrollbar-thumb:hover {
     background: #bdc1c6;
+}
+
+.transport-modes {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.transport-modes .mode {
+    flex: 1;
+    background: #f1f3f4;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.transport-modes .mode span {
+    font-size: 12px;
+    color: #5f6368;
+}
+
+.transport-modes .mode.active {
+    background: #1a73e8;
+    color: white;
+}
+
+.transport-modes .mode.active span {
+    color: #e8f0fe;
+}
+
+.transport-modes .mode:hover {
+    transform: translateY(-2px);
 }
