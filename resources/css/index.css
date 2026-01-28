@@ -1,82 +1,501 @@
-#map {
-    height: 500px;
-    width: 100%;
-    border: 2px solid #444;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Header con titolo - Design migliorato */
+.header-title {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 500;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    padding: 16px 32px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header-title h1 {
+    font-size: 32px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1a73e8 0%, #ea4335 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+}
+
+.header-title h1 svg {
+    color: #ea4335;
+    filter: drop-shadow(0 2px 4px rgba(234, 67, 53, 0.3));
+}
+
+.header-title p {
+    margin: 8px 0 0 0;
+    font-size: 14px;
+    color: #5f6368;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Pannello laterale - Design completamente rinnovato */
+.control-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 450px;
+    height: 100vh;
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12), -2px 0 8px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+    transform: translateX(450px);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Pannello aperto */
+.control-panel.open {
+    transform: translateX(0);
+}
+
+/* Pulsante toggle migliorato CON ROTAZIONE FRECCIA */
+.toggle-button {
+    position: fixed;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4), 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    font-size: 20px;
+}
+
+.toggle-button:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 8px 28px rgba(102, 126, 234, 0.5), 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-button:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* Freccia dentro il toggle button - ROTAZIONE */
+.toggle-button::before {
+    content: '◀';
+    font-size: 20px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+}
+
+/* Quando il pannello è aperto, ruota la freccia */
+.control-panel.open ~ .toggle-button::before {
+    transform: rotate(180deg);
+}
+
+/* Sposta il pulsante quando il pannello è aperto */
+.control-panel.open ~ .toggle-button {
+    right: 465px;
+}
+
+/* Contenuto del pannello */
+.panel-content {
+    flex: 1;
+    padding: 40px 30px;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.panel-content h3 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #202124;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+.panel-content h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+}
+
+/* Sezioni input migliorate */
+.input-section {
+    margin-bottom: 24px;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.input-section label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #3c4043;
+    margin-bottom: 10px;
+}
+
+.input-section label svg {
+    flex-shrink: 0;
+    color: #667eea;
 }
 
 .input-wrapper {
     position: relative;
     width: 100%;
-    margin-bottom: 1rem;
 }
 
-.input-group {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 0 !important;
-}
-
-.input-group .form-control,
+/* Input form migliorati */
 .form-control {
     width: 100%;
-    box-sizing: border-box;
+    padding: 14px 18px;
+    border: 2px solid #e8eaed;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    font-weight: 500;
 }
 
+.form-control:hover {
+    border-color: #dadce0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15), 0 0 0 4px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-control::placeholder {
+    color: #9aa0a6;
+    font-weight: 400;
+}
+
+/* Separatore migliorato */
+.route-separator {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    margin: 20px 0;
+}
+
+.separator-line {
+    width: 3px;
+    height: 40px;
+    background: linear-gradient(to bottom, 
+        #667eea 0%, 
+        #667eea 25%, 
+        transparent 25%, 
+        transparent 50%,
+        #764ba2 50%,
+        #764ba2 75%,
+        transparent 75%,
+        transparent 100%
+    );
+    background-size: 3px 16px;
+    margin-left: 8px;
+    border-radius: 2px;
+}
+
+/* Dropdown suggerimenti migliorato */
 .suggestions-dropdown {
     position: absolute;
     left: 0;
     width: 100%;
-    box-sizing: border-box;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 0 0 4px 4px;
-    max-height: calc(5 * 48px);
+    background-color: white;
+    border: 2px solid #e8eaed;
+    border-radius: 12px;
+    max-height: 280px;
     overflow-y: auto;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
     z-index: 1000;
+    margin-top: 8px;
+    animation: slideDown 0.3s ease;
 }
 
-.not-visible {
-    display: none;
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .suggestions-dropdown.active {
     display: block;
 }
 
-.suggestion-item {
-    padding: 10px;
+.suggestion-item,
+.suggestions-dropdown a {
+    display: block;
+    padding: 14px 18px;
     cursor: pointer;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #f1f3f4;
+    text-decoration: none;
+    color: #3c4043;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
-.suggestion-item:last-child {
+.suggestion-item:first-child,
+.suggestions-dropdown a:first-child {
+    border-radius: 10px 10px 0 0;
+}
+
+.suggestion-item:last-child,
+.suggestions-dropdown a:last-child {
     border-bottom: none;
+    border-radius: 0 0 10px 10px;
 }
 
 .suggestion-item:hover,
-.suggestion-item.highlighted {
-    background-color: #f5f9ff;
-}
-
-.suggestions-dropdown a,
-.suggestions-dropdown .suggestion-item,
-.suggestions-dropdown .suggestion-item > a {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    text-decoration: none;
-    color: inherit;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
+.suggestion-item.highlighted,
 .suggestions-dropdown a:hover,
-.suggestions-dropdown .suggestion-item:hover,
-.suggestions-dropdown .suggestion-item.highlighted,
 .suggestions-dropdown a.highlighted {
-    background-color: #f5f9ff;
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    padding-left: 24px;
+    color: #667eea;
+}
+
+/* Pulsante percorso migliorato */
+.btn-route {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 30px;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4), 0 2px 8px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-route:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: 0 8px 28px rgba(102, 126, 234, 0.5), 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.btn-route:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+
+/* Mezzi di trasporto completamente ridisegnati */
+.transport-modes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 30px;
+    padding: 0 30px;
+    padding-top: 30px;
+}
+
+.transport-modes .mode {
+    background: white;
+    border: 2px solid #e8eaed;
+    border-radius: 16px;
+    padding: 16px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #5f6368;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.transport-modes .mode span {
+    font-size: 11px;
+    color: #80868b;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.transport-modes .mode:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border-color: #667eea;
+}
+
+.transport-modes .mode.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    transform: translateY(-4px) scale(1.05);
+}
+
+.transport-modes .mode.active span {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Mappa */
+#map {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+}
+
+/* Classe helper */
+.not-visible {
+    display: none;
+}
+
+/* Responsive migliorato */
+@media (max-width: 768px) {
+    .control-panel {
+        width: 100%;
+        max-width: 100vw;
+        min-width: 100vw;
+        transform: translateX(100%);
+    }
+    
+    .control-panel.open {
+        transform: translateX(0);
+    }
+    
+    .control-panel.open ~ .toggle-button {
+        right: 15px;
+    }
+    
+    .header-title {
+        top: 15px;
+        padding: 12px 24px;
+    }
+    
+    .header-title h1 {
+        font-size: 24px;
+    }
+    
+    .header-title p {
+        font-size: 12px;
+    }
+    
+    .transport-modes {
+        padding: 20px;
+    }
+    
+    .panel-content {
+        padding: 30px 20px;
+    }
+}
+
+/* Accessibilità */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Focus visibile per accessibilità */
+.toggle-button:focus,
+.form-control:focus,
+.btn-route:focus,
+.suggestion-item:focus,
+.suggestions-dropdown a:focus,
+.transport-modes .mode:focus {
+    outline: 3px solid #667eea;
+    outline-offset: 3px;
+}
+
+/* Scrollbar personalizzata migliorata */
+.panel-content::-webkit-scrollbar,
+.suggestions-dropdown::-webkit-scrollbar {
+    width: 10px;
+}
+
+.panel-content::-webkit-scrollbar-track,
+.suggestions-dropdown::-webkit-scrollbar-track {
+    background: #f1f3f4;
+    border-radius: 10px;
+}
+
+.panel-content::-webkit-scrollbar-thumb,
+.suggestions-dropdown::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    border: 2px solid #f1f3f4;
+}
+
+.panel-content::-webkit-scrollbar-thumb:hover,
+.suggestions-dropdown::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #764ba2 0%, #667eea 100%);
+}
+
+/* Effetto glass morphism per il pannello (opzionale) */
+@supports (backdrop-filter: blur(10px)) {
+    .control-panel {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+    }
 }
