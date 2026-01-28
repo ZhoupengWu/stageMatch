@@ -1,43 +1,42 @@
-from flask import Flask, render_template, request, jsonify
+import os
+from flask import Flask, request, jsonify
 import requests
 import aiohttp
 import urllib.parse
 import asyncio
-app = Flask(__name__, static_folder="./resources/js", template_folder="./resources/html")
+from dotenv import load_dotenv
 
-@app.route('/')
-def index():
-    return getpage("index")
+load_dotenv()
+
+ors_api_key = os.getenv("ORS_API_KEY")
+
+app = Flask(__name__,
+    static_folder="./resources",
+    template_folder="./resources"
+)
 
 @app.route('/routejson')
-def routejson(): 
-    #*coordsStartLon = request.args.get("coordsStartLon")
-    #*coordsStartLat = request.args.get("coordsStartLat")
-    #*coordsEndLon = request.args.get("coordsEndLon")
-    #*coordsEndLat = request.args.get("coordsEndLat")
+def routejson():
     startaddress = request.args.get("startaddress")
     endaddress = request.args.get("endaddress")
-    routemode = request.args.get("routemode")  
-    
+    routemode = request.args.get("routemode")
 
-    
     if (startaddress==None or endaddress==None):
         return {
             "error": "Mancano gli indirizzi di partenza o di arrivo."
         }
     if routemode==None:
         routemode="driving-car"  # default mode
-    ors_api_key = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjYzNjJmMmZlNDJkZTRmM2Y5NzYwODI3YWZjMDFhNmMzIiwiaCI6Im11cm11cjY0In0="
-    # pos to coords
 
+    # pos to coords
     coords = None
-    # try:
-    coords = asyncio.run(get_coordinates(startaddress, endaddress))
-    #except:
-    #    return jsonify({
-    #        "error": "Non è stato possibile ricavare le coordinate geografiche dagli indirizzi forniti"
-    #    })
-    #
+    try:
+        coords = asyncio.run(get_coordinates(startaddress, endaddress))
+    except:
+        return jsonify({
+            "error": "Non è stato possibile ricavare le coordinate geografiche dagli indirizzi forniti"
+        })
+
     print (f"lat:{coords["Start"]["Lat"]}")
     openrouteservice_url = "https://api.openrouteservice.org/v2/directions/" + routemode + "/geojson"
     request_body = {
@@ -58,7 +57,7 @@ def routejson():
 
         data = response.json()
         return data
-    
+
     except requests.exceptions.RequestException as error:
         print("Errore nella ricerca del percorso:", error)
         return jsonify({
@@ -100,8 +99,8 @@ async def get_coordinates(address_start, address_end):
                     coords_start.append(data[0]["lon"])
                 else:
                     raise ValueError("Indirizzo di partenza non trovato")
-       
-       
+
+
         except Exception as error:
             raise RuntimeError(
                 "Errore nella richiesta conversione indirizzo partenza"
@@ -137,10 +136,8 @@ async def get_coordinates(address_start, address_end):
             "Lon": coords_end[1]
         }
     }
-    
+
     return coords
 
-def getpage(pagename):
-    return render_template(pagename + ".html")
 if __name__ == '__main__':
-    app.run('127.0.0.1', 5000, debug=True)
+    app.run('127.0.0.1', 5001, debug=True)
