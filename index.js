@@ -167,6 +167,7 @@ async function suggestion() {
     }
 }
 
+// GESTIONE TOGGLE PANNELLO CON ROTAZIONE FRECCIA
 document.addEventListener("DOMContentLoaded", () => {
     const panel = document.getElementById("controlPanel");
     const toggle = document.getElementById("togglePanel");
@@ -176,20 +177,43 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    // Event listener per aprire/chiudere il pannello
+    // La rotazione della freccia è gestita automaticamente dal CSS!
     toggle.addEventListener("click", () => {
         panel.classList.toggle("open");
-        console.log("toggle pannello");
+        
+        // Log opzionale per debug
+        if (panel.classList.contains("open")) {
+            console.log("Pannello aperto - Freccia ruotata ◀");
+        } else {
+            console.log("Pannello chiuso - Freccia normale ▶");
+        }
+    });
+
+    // Opzionale: chiudi il pannello premendo ESC
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && panel.classList.contains("open")) {
+            panel.classList.remove("open");
+            console.log("Pannello chiuso con ESC");
+        }
     });
 });
 
+// GESTIONE MEZZI DI TRASPORTO
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".transport-modes .mode").forEach(btn => {
+        btn.addEventListener("click", () => {
+            // Rimuovi active da tutti
+            document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
+            
+            // Aggiungi active a quello cliccato
+            btn.classList.add("active");
 
-document.querySelectorAll(".transport-modes .mode").forEach(btn => { // per il mezzo. bertu
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-
-        const mode = btn.dataset.mode;
-        console.log("Mezzo selezionato:", mode);
-        // qui in futuro colleghi il routing vero
+            const mode = btn.dataset.mode;
+            console.log("Mezzo selezionato:", mode);
+            
+            // Qui puoi aggiungere la logica per cambiare il tipo di routing
+            // Es: aggiorna il calcolo del percorso in base al mezzo
+        });
     });
 });
