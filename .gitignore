@@ -1,2 +1,7 @@
 .venv/
+<<<<<<< HEAD
 node_modules/
+=======
+node_modules/
+.env
+>>>>>>> c7955618209747677610685d7bd17761464aefbd

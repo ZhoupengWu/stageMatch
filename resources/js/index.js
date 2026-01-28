@@ -138,8 +138,8 @@ async function suggestion() {
                     longitudine: feature.geometry.coordinates[0],
                     latitudine: feature.geometry.coordinates[1]
                 },
-                indirizzo_via: feature.properties.street,
-                indirizzo_civico: feature.properties.housenumber,
+                indirizzo_via: feature.properties.street || feature.properties.name,
+                indirizzo_civico: feature.properties.housenumber || "",
                 indirizzo_cap: feature.properties.postcode,
                 indirizzo_city: feature.properties.city
             }
@@ -166,5 +166,56 @@ async function suggestion() {
         throw new Error(error);
     }
 }
+
+// GESTIONE TOGGLE PANNELLO CON ROTAZIONE FRECCIA
+document.addEventListener("DOMContentLoaded", () => {
+    const panel = document.getElementById("controlPanel");
+    const toggle = document.getElementById("togglePanel");
+
+    if (!panel || !toggle) {
+        console.error("Panel o toggle non trovati");
+        return;
+    }
+
+    // Event listener per aprire/chiudere il pannello
+    // La rotazione della freccia è gestita automaticamente dal CSS!
+    toggle.addEventListener("click", () => {
+        panel.classList.toggle("open");
+
+        // Log opzionale per debug
+        if (panel.classList.contains("open")) {
+            console.log("Pannello aperto - Freccia ruotata ◀");
+        } else {
+            console.log("Pannello chiuso - Freccia normale ▶");
+        }
+    });
+
+    // Opzionale: chiudi il pannello premendo ESC
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && panel.classList.contains("open")) {
+            panel.classList.remove("open");
+            console.log("Pannello chiuso con ESC");
+        }
+    });
+});
+
+// GESTIONE MEZZI DI TRASPORTO
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".transport-modes .mode").forEach(btn => {
+        btn.addEventListener("click", () => {
+            // Rimuovi active da tutti
+            document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
+
+            // Aggiungi active a quello cliccato
+            btn.classList.add("active");
+
+            const mode = btn.dataset.mode;
+            console.log("Mezzo selezionato:", mode);
+
+            // Qui puoi aggiungere la logica per cambiare il tipo di routing
+            // Es: aggiorna il calcolo del percorso in base al mezzo
+        });
+    });
+});
 
 input_address_end.addEventListener("blur", suggestion);
