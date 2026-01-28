@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // La rotazione della freccia è gestita automaticamente dal CSS!
     toggle.addEventListener("click", () => {
         panel.classList.toggle("open");
-        
+
         // Log opzionale per debug
         if (panel.classList.contains("open")) {
             console.log("Pannello aperto - Freccia ruotata ◀");
@@ -205,13 +205,13 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", () => {
             // Rimuovi active da tutti
             document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
-            
+
             // Aggiungi active a quello cliccato
             btn.classList.add("active");
 
             const mode = btn.dataset.mode;
             console.log("Mezzo selezionato:", mode);
-            
+
             // Qui puoi aggiungere la logica per cambiare il tipo di routing
             // Es: aggiorna il calcolo del percorso in base al mezzo
         });

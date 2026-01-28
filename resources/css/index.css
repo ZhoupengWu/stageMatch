@@ -230,10 +230,10 @@ body {
 .separator-line {
     width: 3px;
     height: 40px;
-    background: linear-gradient(to bottom, 
-        #667eea 0%, 
-        #667eea 25%, 
-        transparent 25%, 
+    background: linear-gradient(to bottom,
+        #667eea 0%,
+        #667eea 25%,
+        transparent 25%,
         transparent 50%,
         #764ba2 50%,
         #764ba2 75%,
@@ -418,32 +418,32 @@ body {
         min-width: 100vw;
         transform: translateX(100%);
     }
-    
+
     .control-panel.open {
         transform: translateX(0);
     }
-    
+
     .control-panel.open ~ .toggle-button {
         right: 15px;
     }
-    
+
     .header-title {
         top: 15px;
         padding: 12px 24px;
     }
-    
+
     .header-title h1 {
         font-size: 24px;
     }
-    
+
     .header-title p {
         font-size: 12px;
     }
-    
+
     .transport-modes {
         padding: 20px;
     }
-    
+
     .panel-content {
         padding: 30px 20px;
     }
