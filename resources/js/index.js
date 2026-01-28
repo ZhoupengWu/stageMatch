@@ -217,3 +217,5 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+input_address_end.addEventListener("blur", suggestion);
