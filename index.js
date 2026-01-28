@@ -2,6 +2,7 @@ const button = document.getElementById("percorso");
 
 const input_address_start = document.getElementById("address_start");
 const input_address_end = document.getElementById("address_end");
+const div_suggestion_end = document.getElementById("suggestions_end");
 const initial_coordinates = [45.695, 9.67];
 
 const map = L.map("map").setView([initial_coordinates[0], initial_coordinates[1]], 13);
@@ -122,11 +123,11 @@ async function getCoordinates(addressStart, addressEnd) {
 }
 
 async function suggestion() {
-    const address = input_address_start.value;
+    const address = input_address_end.value.trim();
 
     try {
         const response = await fetch(
-            `photon.komoot.io/api/?q=${encodeURIComponent(address)}&lat=${initial_coordinates[0]}&lon=${initial_coordinates[1]}&limit=5&lang=it`
+            `https://photon.komoot.io/api/?q=${encodeURIComponent(address)}&lat=${initial_coordinates[0]}&lon=${initial_coordinates[1]}&limit=5&lang=en`
         );
 
         const data = await response.json();
@@ -137,8 +138,8 @@ async function suggestion() {
                     longitudine: feature.geometry.coordinates[0],
                     latitudine: feature.geometry.coordinates[1]
                 },
-                indirizzo_via: feature.properties.street,
-                indirizzo_civico: feature.properties.housenumber,
+                indirizzo_via: feature.properties.street || feature.properties.name,
+                indirizzo_civico: feature.properties.housenumber || "",
                 indirizzo_cap: feature.properties.postcode,
                 indirizzo_city: feature.properties.city
             }
@@ -149,7 +150,46 @@ async function suggestion() {
                 <a href="#" id="${data.id}">${data.indirizzo_via} ${data.indirizzo_civico} ${data.indirizzo_cap} ${data.indirizzo_city}</a>
             `
         });
+
+        div_suggestion_end.innerHTML = data_address_html.join('');
+        div_suggestion_end.classList.remove("not-visible");
+
+        for (let i = 0; i < data_address_html.length; ++i) {
+            const dah = document.getElementById(`${i}`);
+            dah.addEventListener("click", () => {
+                input_address_end.value = dah.textContent;
+                div_suggestion_end.classList.add("not-visible");
+                div_suggestion_end.innerHTML = "";
+            });
+        }
     } catch (error) {
         throw new Error(error);
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const panel = document.getElementById("controlPanel");
+    const toggle = document.getElementById("togglePanel");
+
+    if (!panel || !toggle) {
+        console.error("Panel o toggle non trovati");
+        return;
+    }
+
+    toggle.addEventListener("click", () => {
+        panel.classList.toggle("open");
+        console.log("toggle pannello");
+    });
+});
+
+
+document.querySelectorAll(".transport-modes .mode").forEach(btn => { // per il mezzo. bertu
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const mode = btn.dataset.mode;
+        console.log("Mezzo selezionato:", mode);
+        // qui in futuro colleghi il routing vero
+    });
+});

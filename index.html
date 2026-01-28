@@ -34,12 +34,56 @@
 
     <!-- Pannello di controllo laterale -->
     <div id="controlPanel" class="control-panel">
-        <button id="togglePanel" class="toggle-button" aria-label="Espandi/Comprimi pannello">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-        </button>
-        
+
+        <!-- mezzi di trasporto -->
+        <div class="transport-modes">
+            <button class="mode active" data-mode="car">🚗 Auto</button>
+            <button class="mode" data-mode="walk">🚶 A piedi</button>
+            <button class="mode" data-mode="bike">🚴 Bici</button>
+        </div>
+    
+        <!-- CONTENUTO VERO DEL PANNELLO -->
+        <div class="panel-content">
+    
+            <h3>Pianifica il tuo viaggio</h3>
+    
+            <div class="input-section">
+                <!-- partenza -->
+                <label for="address_start">Partenza</label>
+                <input
+                    type="text"
+                    id="address_start"
+                    class="form-control"
+                    placeholder="Inserisci indirizzo di partenza"
+                >
+            </div>
+    
+            <div class="route-separator"></div>
+    
+            <div class="input-section">
+                <!-- destinazione -->
+                <label for="address_end">Destinazione</label>
+                <input
+                    type="text"
+                    id="address_end"
+                    class="form-control"
+                    placeholder="Inserisci indirizzo di destinazione"
+                >
+            </div>
+    
+            <button id="percorso" class="btn-route">
+                Mostra Percorso
+            </button>
+    
+        </div>
+    </div>
+    
+    <!-- FRECCIA SEMPRE FUORI -->
+    <button id="togglePanel" class="toggle-button">
+        ▶
+    </button>
+    
+    
         <div class="panel-content">
             <h3>Pianifica il tuo viaggio</h3>
             
@@ -53,7 +97,7 @@
                 </label>
                 <div class="input-wrapper">
                     <input type="text" class="form-control" id="address_start" placeholder="Inserisci indirizzo di partenza" aria-label="Indirizzo partenza">
-                    <div id="suggestions_start" class="suggestions-dropdown"></div>
+                    <div id="suggestions_start" class="suggestions-dropdown not-visible"></div>
                 </div>
             </div>
 
@@ -71,7 +115,7 @@
                 </label>
                 <div class="input-wrapper">
                     <input type="text" class="form-control" id="address_end" placeholder="Inserisci indirizzo di destinazione" aria-label="Indirizzo destinazione">
-                    <div id="suggestions_end" class="suggestions-dropdown"></div>
+                    <div id="suggestions_end" class="suggestions-dropdown not-visible"></div>
                 </div>
             </div>
 
