@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import requests
 import aiohttp
 import urllib.parse
@@ -14,6 +15,9 @@ app = Flask(__name__,
     static_folder="./resources",
     template_folder="./resources"
 )
+
+# Enable CORS for all routes
+CORS(app, origins=["http://127.0.0.1:5000"])
 
 @app.route('/routejson')
 def routejson():

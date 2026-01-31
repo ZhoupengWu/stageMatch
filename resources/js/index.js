@@ -1,5 +1,6 @@
 const button = document.getElementById("percorso");
 
+let mode = "";
 const input_address_start = document.getElementById("address_start");
 const input_address_end = document.getElementById("address_end");
 const div_suggestion_start = document.getElementById("suggestions_start");
@@ -7,39 +8,41 @@ const div_suggestion_end = document.getElementById("suggestions_end");
 const initial_coordinates = [45.695, 9.67];
 
 const map = L.map("map").setView([initial_coordinates[0], initial_coordinates[1]], 13);
-const intre = L.marker([45.592, 9.301]).addTo(map);
+// const intre = L.marker([45.592, 9.301]).addTo(map);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributori',
 }).addTo(map);
 
-const marker = L.marker([45.695, 9.67]).addTo(map);
+const marker = L.marker(initial_coordinates).addTo(map);
 marker.bindPopup('Questa è Bergamo').openPopup();
 
 async function calcolaPercorso() {
-    const API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjY5NzY4MGNiZWViZjQ5MGQ4ZjNhNWFiZjBkZTBmZGMxIiwiaCI6Im11cm11cjY0In0=";
+    const address_start = input_address_start.value.trim();
+    const address_end = input_address_end.value.trim();
 
-    // coordinate in formato [lon, lat]
-    const start = [9.66, 45.697];
-    const end = [9.703, 45.672];
+    if (address_start === "") {
+        console.error("Devi inserire gli indirizzi!");
 
-    const response = await fetch( "https://api.openrouteservice.org/v2/directions/driving-car/geojson", {
-        method: "POST",
-        headers: {
-            Authorization: API_KEY,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            coordinates: [
-                start,
-                end
-            ]
-        })
-    });
+        return;
+    }
+
+    if (address_end === "") {
+        console.error("Devi inserire gli indirizzi!");
+
+        return;
+    }
+
+    if (mode === "") {
+        console.error("Devi scegliere il mezzo con cui arrivi in destinazione!");
+
+        return;
+    }
+
+    const response = await fetch(`http://127.0.0.1:5001/routejson?startaddress=${encodeURIComponent(address_start)}&endaddress=${encodeURIComponent(address_end)}&routemode=${encodeURIComponent(mode)}`);
 
     if (!response.ok) {
-        throw new Error(`Code error ${response.status}`);
-
+        throw new Error(`Code error: ${response.status} --- ${response}`);
     }
 
     const data = await response.json();
@@ -150,17 +153,11 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".transport-modes .mode").forEach(btn => {
         btn.addEventListener("click", () => {
-            // Rimuovi active da tutti
             document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
 
-            // Aggiungi active a quello cliccato
             btn.classList.add("active");
-
-            const mode = btn.dataset.mode;
+            mode = btn.dataset.mode;
             console.log("Mezzo selezionato:", mode);
-
-            // Qui puoi aggiungere la logica per cambiare il tipo di routing
-            // Es: aggiorna il calcolo del percorso in base al mezzo
         });
     });
 });

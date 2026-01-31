@@ -107,15 +107,13 @@ body {
 }
 
 /* Freccia dentro il toggle button - ROTAZIONE */
-.toggle-button::before {
-    content: '◀';
-    font-size: 20px;
+.toggle-button svg {
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: block;
 }
 
 /* Quando il pannello è aperto, ruota la freccia */
-.control-panel.open ~ .toggle-button::before {
+.control-panel.open ~ .toggle-button svg {
     transform: rotate(180deg);
 }
 
@@ -259,6 +257,12 @@ body {
     z-index: 1000;
     margin-top: 8px;
     animation: slideDown 0.3s ease;
+}
+
+.control-panel .input-wrapper,
+.control-panel .suggestions-dropdown {
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 @keyframes slideDown {
