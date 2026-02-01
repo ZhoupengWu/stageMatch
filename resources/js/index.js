@@ -1,6 +1,7 @@
 const button = document.getElementById("percorso");
 
 let mode = "";
+let prev_layer = null;
 const input_address_start = document.getElementById("address_start");
 const input_address_end = document.getElementById("address_end");
 const div_suggestion_start = document.getElementById("suggestions_start");
@@ -17,6 +18,22 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 const marker = L.marker(initial_coordinates).addTo(map);
 marker.bindPopup('Questa è Bergamo').openPopup();
 
+/**
+ * Calcola e visualizza il percorso tra due indirizzi sulla mappa.
+ *
+ * @async
+ * @function calcolaPercorso
+ * @returns {Promise<void>}
+ * @throws {Error} Se la richiesta al backend fallisce, gli indirizzi non sono validi o il mezzo di trasporto non è selezionato
+ *
+ * @description
+ * - Recupera gli indirizzi di partenza e arrivo dagli input
+ * - Valida che entrambi gli indirizzi e il mezzo di trasporto siano stati inseriti
+ * - Effettua una richiesta al backend per ottenere il percorso in formato GeoJSON
+ * - Rimuove il percorso precedente se presente
+ * - Visualizza il nuovo percorso sulla mappa con stile rosso
+ * - Adatta la vista della mappa ai confini del percorso
+ */
 async function calcolaPercorso() {
     const address_start = input_address_start.value.trim();
     const address_end = input_address_end.value.trim();
@@ -47,27 +64,34 @@ async function calcolaPercorso() {
 
     const data = await response.json();
 
-    L.geoJSON(data, { style: { color: 'red', weight: 4 } }).addTo(map);
+    if (prev_layer) {
+        map.removeLayer(prev_layer);
+        prev_layer = null;
+    }
+
+    prev_layer = L.geoJSON(data, { style: { color: 'red', weight: 4 } }).addTo(map);
+
+    if (prev_layer.getBounds) map.fitBounds(prev_layer.getBounds());
 }
 
 button.addEventListener("click", calcolaPercorso);
 
 /**
- * Fetches address suggestions from the Photon Komoot API based on user input.
- * Displays matching addresses in a dropdown and handles selection.
+ * Recupera suggerimenti di indirizzi dall'API Photon Komoot in base all'input dell'utente.
+ * Mostra gli indirizzi corrispondenti in un menu a tendina e gestisce la selezione.
  *
  * @async
  * @function suggestion
- * @this {HTMLInputElement} - The input element whose value is used for the address query
+ * @this {HTMLInputElement} L'elemento input il cui valore viene usato per la ricerca dell'indirizzo
  * @returns {Promise<void>}
- * @throws {Error} If the API request fails or the response cannot be parsed
+ * @throws {Error} Se la richiesta all'API fallisce o la risposta non può essere elaborata
  *
- * @description
- * - Trims and encodes the input address
- * - Queries the Photon API with coordinates and language preferences
- * - Parses response features into address objects (street, number, postal code, city)
- * - Renders suggestions as clickable links in the appropriate suggestion div
- * - Attaches click listeners to populate the input field and hide suggestions on selection
+ * @descrizione
+ * - Pulisce e codifica l'indirizzo inserito dall'utente
+ * - Interroga l'API Photon con coordinate e lingua preferita
+ * - Estrae le informazioni degli indirizzi (via, civico, CAP, città) dalla risposta
+ * - Visualizza i suggerimenti come link cliccabili nel relativo menu a tendina
+ * - Gestisce il click sui suggerimenti per compilare l'input e nascondere il menu
  */
 async function suggestion() {
     const address = this.value.trim();
@@ -117,7 +141,7 @@ async function suggestion() {
 input_address_start.addEventListener("blur", suggestion);
 input_address_end.addEventListener("blur", suggestion);
 
-// GESTIONE TOGGLE PANNELLO CON ROTAZIONE FRECCIA
+// GESTIONE TOGGLE PANNELLO
 document.addEventListener("DOMContentLoaded", () => {
     const panel = document.getElementById("controlPanel");
     const toggle = document.getElementById("togglePanel");
@@ -127,20 +151,16 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // Event listener per aprire/chiudere il pannello
-    // La rotazione della freccia è gestita automaticamente dal CSS!
     toggle.addEventListener("click", () => {
         panel.classList.toggle("open");
 
-        // Log opzionale per debug
         if (panel.classList.contains("open")) {
-            console.log("Pannello aperto - Freccia ruotata ◀");
+            console.log("Pannello aperto");
         } else {
-            console.log("Pannello chiuso - Freccia normale ▶");
+            console.log("Pannello chiuso");
         }
     });
 
-    // Opzionale: chiudi il pannello premendo ESC
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && panel.classList.contains("open")) {
             panel.classList.remove("open");
