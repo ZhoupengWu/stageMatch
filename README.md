@@ -46,6 +46,7 @@ cd stageMatch
 python -m venv .venv
 
 # Attiva l'ambiente
+
 # Su Windows:
 .venv\Scripts\activate
 
@@ -154,14 +155,16 @@ Leggi le [Linee Guida per i Contributori](./CONTRIBUTING.md) per:
 ## 📄 Licenza
 
 Questo progetto è sotto licenza di the Apache License 2.0.
-See the [LICENSE](./LICENSE) file for details.
+Guarda il [LICENSE](./LICENSE) file per maggiori dettagli.
 
-This project uses third-party libraries and services.
-See the [NOTICE](./NOTICE) file for attributions.
+Questo progetto usa librerie e servizi di terze parti.
+Guarda il [NOTICE](./NOTICE) file per i riconoscimenti.
 
 ## 👨‍💻 Autori
 
-- Team di sviluppo stageMatch
+- [Zhoupeng Wu](https://github.com/ZhoupengWu) - Sviluppo front-end & back-end, documentazione
+- [Riccardo Bertuletti](https://github.com/Bertu08) - Sviluppo front-end
+- [Viktor Kachan](https://github.com/Relunax255) - Sviluppo back-end
 
 ## 🙏 Ringraziamenti
 
