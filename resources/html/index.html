@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>stageMatch</title>
 
     <!-- Bootstrap CSS -->
@@ -17,7 +17,7 @@
     />
 
     <!-- My CSS -->
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 <body>
     <!-- Header con titolo -->
@@ -27,7 +27,7 @@
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
             </svg>
-            StageMatch
+            stageMatch
         </h1>
         <p>Trova il percorso migliore verso la tua destinazione</p>
     </div>
@@ -35,56 +35,16 @@
     <!-- Pannello di controllo laterale -->
     <div id="controlPanel" class="control-panel">
 
-        <!-- mezzi di trasporto -->
+        <!-- Mezzi di trasporto -->
         <div class="transport-modes">
-            <button class="mode active" data-mode="car">🚗 Auto</button>
-            <button class="mode" data-mode="walk">🚶 A piedi</button>
-            <button class="mode" data-mode="bike">🚴 Bici</button>
+            <button class="mode" data-mode="driving-car">🚗 Auto</button>
+            <button class="mode" data-mode="foot-walking">🚶 A piedi</button>
+            <button class="mode" data-mode="cycling-regular">🚴 Bici</button>
         </div>
 
-        <!-- CONTENUTO VERO DEL PANNELLO -->
+        <!-- PANNELLO PRINCIPALE -->
         <div class="panel-content">
 
-            <h3>Pianifica il tuo viaggio</h3>
-
-            <div class="input-section">
-                <!-- partenza -->
-                <label for="address_start">Partenza</label>
-                <input
-                    type="text"
-                    id="address_start"
-                    class="form-control"
-                    placeholder="Inserisci indirizzo di partenza"
-                >
-            </div>
-
-            <div class="route-separator"></div>
-
-            <div class="input-section">
-                <!-- destinazione -->
-                <label for="address_end">Destinazione</label>
-                <input
-                    type="text"
-                    id="address_end"
-                    class="form-control"
-                    placeholder="Inserisci indirizzo di destinazione"
-                >
-            </div>
-
-            <button id="percorso" class="btn-route">
-                Mostra Percorso
-            </button>
-
-        </div>
-    </div>
-
-    <!-- FRECCIA SEMPRE FUORI -->
-    <button id="togglePanel" class="toggle-button">
-        ▶
-    </button>
-
-
-        <div class="panel-content">
             <h3>Pianifica il tuo viaggio</h3>
 
             <div class="input-section">
@@ -96,7 +56,7 @@
                     Partenza
                 </label>
                 <div class="input-wrapper">
-                    <input type="text" class="form-control" id="address_start" placeholder="Inserisci indirizzo di partenza" aria-label="Indirizzo partenza">
+                    <input type="text" id="address_start" class="form-control" placeholder="Inserisci indirizzo di partenza">
                     <div id="suggestions_start" class="suggestions-dropdown not-visible"></div>
                 </div>
             </div>
@@ -114,7 +74,7 @@
                     Destinazione
                 </label>
                 <div class="input-wrapper">
-                    <input type="text" class="form-control" id="address_end" placeholder="Inserisci indirizzo di destinazione" aria-label="Indirizzo destinazione">
+                    <input type="text" id="address_end" class="form-control" placeholder="Inserisci indirizzo di destinazione">
                     <div id="suggestions_end" class="suggestions-dropdown not-visible"></div>
                 </div>
             </div>
@@ -126,8 +86,15 @@
                 </svg>
                 Mostra Percorso
             </button>
+
         </div>
     </div>
+
+    <button id="togglePanel" class="toggle-button">
+        <svg id="toggleArrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </button>
 
     <!-- Mappa -->
     <div id="map"></div>
@@ -140,6 +107,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <script src="index.js"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 </html>

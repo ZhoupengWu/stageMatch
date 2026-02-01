@@ -11,7 +11,6 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-/* Header con titolo - Design migliorato */
 .header-title {
     position: absolute;
     top: 20px;
@@ -54,7 +53,6 @@ body {
     font-weight: 500;
 }
 
-/* Pannello laterale - Design completamente rinnovato */
 .control-panel {
     position: fixed;
     top: 0;
@@ -70,12 +68,10 @@ body {
     border-left: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-/* Pannello aperto */
 .control-panel.open {
     transform: translateX(0);
 }
 
-/* Pulsante toggle migliorato CON ROTAZIONE FRECCIA */
 .toggle-button {
     position: fixed;
     right: 15px;
@@ -106,25 +102,19 @@ body {
     transform: translateY(-50%) scale(0.95);
 }
 
-/* Freccia dentro il toggle button - ROTAZIONE */
-.toggle-button::before {
-    content: '◀';
-    font-size: 20px;
+.toggle-button svg {
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: block;
 }
 
-/* Quando il pannello è aperto, ruota la freccia */
-.control-panel.open ~ .toggle-button::before {
+.control-panel.open ~ .toggle-button svg {
     transform: rotate(180deg);
 }
 
-/* Sposta il pulsante quando il pannello è aperto */
 .control-panel.open ~ .toggle-button {
     right: 465px;
 }
 
-/* Contenuto del pannello */
 .panel-content {
     flex: 1;
     padding: 40px 30px;
@@ -139,6 +129,10 @@ body {
     margin-bottom: 30px;
     position: relative;
     padding-bottom: 12px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 .panel-content h3::after {
@@ -146,13 +140,12 @@ body {
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 60px;
+    width: 100%;
     height: 4px;
     background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
     border-radius: 2px;
 }
 
-/* Sezioni input migliorate */
 .input-section {
     margin-bottom: 24px;
     animation: fadeIn 0.5s ease;
@@ -189,7 +182,6 @@ body {
     width: 100%;
 }
 
-/* Input form migliorati */
 .form-control {
     width: 100%;
     padding: 14px 18px;
@@ -219,7 +211,6 @@ body {
     font-weight: 400;
 }
 
-/* Separatore migliorato */
 .route-separator {
     display: flex;
     align-items: center;
@@ -245,7 +236,6 @@ body {
     border-radius: 2px;
 }
 
-/* Dropdown suggerimenti migliorato */
 .suggestions-dropdown {
     position: absolute;
     left: 0;
@@ -257,8 +247,13 @@ body {
     overflow-y: auto;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
     z-index: 1000;
-    margin-top: 8px;
     animation: slideDown 0.3s ease;
+}
+
+.control-panel .input-wrapper,
+.control-panel .suggestions-dropdown {
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 @keyframes slideDown {
@@ -309,7 +304,6 @@ body {
     color: #667eea;
 }
 
-/* Pulsante percorso migliorato */
 .btn-route {
     width: 100%;
     padding: 16px 24px;
@@ -342,7 +336,6 @@ body {
     box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
 }
 
-/* Mezzi di trasporto completamente ridisegnati */
 .transport-modes {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -395,7 +388,6 @@ body {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Mappa */
 #map {
     position: fixed;
     top: 0;
@@ -405,12 +397,10 @@ body {
     z-index: 0;
 }
 
-/* Classe helper */
 .not-visible {
     display: none;
 }
 
-/* Responsive migliorato */
 @media (max-width: 768px) {
     .control-panel {
         width: 100%;
@@ -449,7 +439,6 @@ body {
     }
 }
 
-/* Accessibilità */
 @media (prefers-reduced-motion: reduce) {
     * {
         animation: none !important;
@@ -457,7 +446,6 @@ body {
     }
 }
 
-/* Focus visibile per accessibilità */
 .toggle-button:focus,
 .form-control:focus,
 .btn-route:focus,
@@ -468,7 +456,6 @@ body {
     outline-offset: 3px;
 }
 
-/* Scrollbar personalizzata migliorata */
 .panel-content::-webkit-scrollbar,
 .suggestions-dropdown::-webkit-scrollbar {
     width: 10px;
@@ -492,7 +479,6 @@ body {
     background: linear-gradient(180deg, #764ba2 0%, #667eea 100%);
 }
 
-/* Effetto glass morphism per il pannello (opzionale) */
 @supports (backdrop-filter: blur(10px)) {
     .control-panel {
         background: rgba(255, 255, 255, 0.95);

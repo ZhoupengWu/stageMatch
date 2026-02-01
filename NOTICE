@@ -1,0 +1,56 @@
+stageMatch
+
+Copyright 2025-2026 Zhoupeng Wu
+Copyright 2025-2026 Riccardo Bertuletti
+Copyright 2025-2026 Viktor Kachan
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+================================================================================
+THIRD-PARTY ATTRIBUTIONS
+================================================================================
+
+This product includes software developed by:
+
+* OpenStreetMap Contributors
+  - Data source for geographic information
+  - https://www.openstreetmap.org
+
+* Leaflet.js
+  - Interactive map library
+  - Copyright (c) 2010-2023, Leaflet contributors
+  - https://leafletjs.com
+
+* Bootstrap
+  - Frontend framework
+  - Copyright (c) 2011-2023 Bootstrap contributors
+  - https://getbootstrap.com
+
+* OpenRouteService
+  - Routing and optimization services
+  - https://openrouteservice.org
+
+* Photon by Komoot
+  - Geocoding and address suggestions
+  - https://photon.komoot.io
+
+* Flask
+  - Python web framework
+  - Copyright (c) 2010 by Armin Ronacher
+  - https://flask.palletsprojects.com
+
+* aiohttp
+  - Async HTTP client/server library
+  - https://github.com/aio-libs/aiohttp
+
+For the full licenses of these dependencies, please refer to their respective project repositories.
