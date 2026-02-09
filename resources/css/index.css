@@ -41,14 +41,17 @@ body {
 }
 
 .header-title h1 svg {
-    color: #ea4335;
+    color: #6e61c2;
     filter: drop-shadow(0 2px 4px rgba(234, 67, 53, 0.3));
 }
 
 .header-title p {
     margin: 8px 0 0 0;
     font-size: 14px;
-    color: #5f6368;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     text-align: center;
     font-weight: 500;
 }
@@ -125,7 +128,10 @@ body {
 .panel-content h3 {
     font-size: 28px;
     font-weight: 700;
-    color: #202124;
+    background: linear-gradient(90deg, #677ae5 0%, #754fa8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 30px;
     position: relative;
     padding-bottom: 12px;
