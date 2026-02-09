@@ -1,7 +1,54 @@
+const startIcon = L.divIcon({
+    className: 'custom-marker',
+    html: `
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+            <defs>
+                <linearGradient id="startGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#34a853;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#0f9d58;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                  fill="url(#startGradient)"
+                  stroke="#ffffff"
+                  stroke-width="1.5"/>
+            <circle cx="12" cy="10" r="3" fill="#ffffff"/>
+        </svg>
+    `,
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
+});
+
+const endIcon = L.divIcon({
+    className: 'custom-marker',
+    html: `
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+            <defs>
+                <linearGradient id="endGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ea4335;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#d33028;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                  fill="url(#endGradient)"
+                  stroke="#ffffff"
+                  stroke-width="1.5"/>
+            <circle cx="12" cy="10" r="3" fill="#ffffff"/>
+        </svg>
+    `,
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
+});
+
 const button = document.getElementById("percorso");
 
+let wait_time;
 let mode = "";
 let prev_layer = null;
+let prev_marker_start = null;
+let prev_marker_end = null;
 const input_address_start = document.getElementById("address_start");
 const input_address_end = document.getElementById("address_end");
 const div_suggestion_start = document.getElementById("suggestions_start");
@@ -64,12 +111,19 @@ async function calcolaPercorso() {
 
     const data = await response.json();
 
-    if (prev_layer) {
+    if (prev_layer/*  && prev_marker_start && prev_marker_end */) {
         map.removeLayer(prev_layer);
+        //prev_marker_start.remove();
+        //prev_marker_end.remove();
+
         prev_layer = null;
+        //prev_marker_start = null;
+        //prev_marker_end = null;
     }
 
     prev_layer = L.geoJSON(data, { style: { color: 'red', weight: 4 } }).addTo(map);
+    //prev_marker_start = L.marker([data.Start.Lat, data.Start.Lon], { icon: startIcon }).addTo(map);
+    //prev_marker_start = L.marker([data.End.Lat, data.End.Lon], { icon: endIcon }).addTo(map);
 
     if (prev_layer.getBounds) map.fitBounds(prev_layer.getBounds());
 }
@@ -96,9 +150,50 @@ button.addEventListener("click", calcolaPercorso);
 async function suggestion() {
     const address = this.value.trim();
     let div_suggestion;
+    let input_wrapper;
 
-    if (this === input_address_start) div_suggestion = div_suggestion_start;
-    else div_suggestion = div_suggestion_end;
+    if (this === input_address_start) {
+        div_suggestion = div_suggestion_start;
+        input_wrapper = input_address_start.parentElement;
+    }
+    else {
+        div_suggestion = div_suggestion_end;
+        input_wrapper = input_address_end.parentElement;
+    }
+
+    clearInterval(wait_time);
+
+    wait_time = setTimeout(async () => {
+        let input_spinner = input_wrapper.querySelector(".input-spinner");
+
+        if (!input_spinner) {
+            input_spinner = document.createElement("div");
+            input_spinner.className = "input-spinner";
+            input_spinner.innerHTML = `
+                <div class="sk-chase">
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                </div>
+            `;
+            input_wrapper.appendChild(input_spinner);
+        }
+
+        div_suggestion.innerHTML = `
+            <div class="sk-chase">
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+            </div>
+        `;
+        div_suggestion.classList.remove("not-visible");
+    }, 100);
 
     try {
         const response = await fetch(
@@ -123,7 +218,10 @@ async function suggestion() {
         });
 
         div_suggestion.innerHTML = data_address_html.join('');
-        div_suggestion.classList.remove("not-visible");
+
+        const input_spinner = input_wrapper.querySelector(".input-spinner");
+
+        if (input_spinner) input_spinner.remove();
 
         for (let i = 0; i < data_address_html.length; ++i) {
             const dah = document.getElementById(`${i}`);
@@ -135,6 +233,10 @@ async function suggestion() {
         }
     } catch (error) {
         throw new Error(error);
+    } finally {
+        const input_spinner = input_wrapper.querySelector(".input-spinner");
+
+        if (input_spinner) input_spinner.remove();
     }
 }
 
