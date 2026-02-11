@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, render_template
+from flask import Flask, render_template
 
 app = Flask(
     __name__,
@@ -10,6 +10,10 @@ app = Flask(
 @app.route('/')
 def helloWorld():
     return render_template("html/index.html")
+
+@app.route('/authentication')
+def authentication():
+    return render_template("/html/authentication.html")
 
 if __name__ == '__main__':
     app.run('127.0.0.1', 5000, debug=True)
