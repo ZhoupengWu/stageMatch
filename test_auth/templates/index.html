@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueprint App — Accesso SSO</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <style>
+        /* Landing page — layout standalone (no header autenticato) */
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+        }
+
+        .landing-nav {
+            padding: 20px 40px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .landing-brand {
+            display: flex; align-items: center; gap: 12px;
+            color: white; text-decoration: none;
+        }
+
+        .landing-brand-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; font-size: 20px; font-weight: 800; color: white;
+        }
+
+        .landing-brand-name { font-size: 20px; font-weight: 600; }
+
+        .nav-badge {
+            font-size: 11px;
+            background: rgba(102,126,234,0.3);
+            border: 1px solid rgba(102,126,234,0.45);
+            color: #a5b4fc; padding: 3px 12px; border-radius: 20px;
+        }
+
+        .hero {
+            flex: 1; display: flex; align-items: center;
+            justify-content: center; padding: 60px 24px;
+        }
+
+        .hero-inner { max-width: 720px; text-align: center; }
+
+        .hero-label {
+            display: inline-block;
+            font-size: 12px; font-weight: 600; letter-spacing: 2px;
+            text-transform: uppercase; color: #a5b4fc;
+            background: rgba(102,126,234,0.12);
+            border: 1px solid rgba(102,126,234,0.28);
+            padding: 6px 16px; border-radius: 20px; margin-bottom: 28px;
+        }
+
+        .hero-inner h1 {
+            font-size: clamp(34px, 6vw, 58px); font-weight: 700;
+            color: white; line-height: 1.15; margin-bottom: 20px;
+        }
+
+        .hero-inner h1 span {
+            background: linear-gradient(135deg, #667eea, #a78bfa);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: 18px; color: rgba(255,255,255,0.58);
+            line-height: 1.7; margin-bottom: 48px;
+            max-width: 540px; margin-left: auto; margin-right: auto;
+        }
+
+        .cta-group {
+            display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+        }
+
+        .btn-cta {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 15px 34px; border-radius: 12px;
+            font-size: 16px; font-weight: 600;
+            text-decoration: none; transition: all 0.2s;
+            border: none; cursor: pointer;
+        }
+
+        .btn-cta-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white; box-shadow: 0 4px 20px rgba(102,126,234,0.5);
+        }
+
+        .btn-cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(102,126,234,0.62);
+        }
+
+        .btn-cta-secondary {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .btn-cta-secondary:hover { background: rgba(255,255,255,0.14); }
+
+        .logged-banner {
+            background: rgba(102,126,234,0.14);
+            border: 1px solid rgba(102,126,234,0.28);
+            border-radius: 12px; padding: 18px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 16px; flex-wrap: wrap; margin-bottom: 36px;
+        }
+
+        .logged-banner-text { color: rgba(255,255,255,0.85); font-size: 15px; }
+        .logged-banner-text strong { color: white; }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px; margin-top: 56px;
+        }
+
+        .feature {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 20px; text-align: left;
+        }
+
+        .feature-icon { font-size: 26px; margin-bottom: 10px; }
+        .feature-title { font-size: 14px; font-weight: 600; color: white; margin-bottom: 5px; }
+        .feature-desc  { font-size: 13px; color: rgba(255,255,255,0.48); line-height: 1.5; }
+
+        .landing-footer {
+            padding: 18px; text-align: center;
+            color: rgba(255,255,255,0.22); font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="landing-nav">
+    <div class="landing-brand">
+        <div class="landing-brand-icon">B</div>
+        <span class="landing-brand-name">Blueprint App</span>
+    </div>
+    <span class="nav-badge">SSO Blueprint Template</span>
+</nav>
+
+<section class="hero">
+    <div class="hero-inner">
+
+        {% if logged_in %}
+        <div class="logged-banner">
+            <span class="logged-banner-text">
+                Bentornato, <strong>{{ user.name or user.email }}</strong>! Sei già autenticato.
+            </span>
+            <a href="{{ url_for('dashboard') }}" class="btn-cta btn-cta-primary"
+               style="padding:11px 22px; font-size:14px;">
+                Vai alla Dashboard →
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="hero-label">Template di esempio — Non per uso in produzione</div>
+
+        <h1>Un'applicazione <span>protetta da SSO</span> pronta all'uso</h1>
+
+        <p class="hero-desc">
+            Questo blueprint dimostra come integrare l'autenticazione SSO centralizzata,
+            la whitelist degli account e il rate limiting delle sessioni nella tua applicazione Flask.
+        </p>
+
+        <div class="cta-group">
+            {% if logged_in %}
+                <a href="{{ url_for('dashboard') }}" class="btn-cta btn-cta-primary">
+                    🏠 Vai alla Dashboard
+                </a>
+            {% elif sso_mode == 'dev' %}
+                <a href="{{ url_for('sso_login') }}" class="btn-cta btn-cta-primary">
+                    🔐 Accedi con SSO <span style="font-size:12px;opacity:0.75;">(dev: {{ dev_user_email }})</span>
+                </a>
+            {% else %}
+                <a href="{{ portal_url }}" class="btn-cta btn-cta-primary">
+                    🔐 Accedi con SSO
+                </a>
+            {% endif %}
+            <a href="#" class="btn-cta btn-cta-secondary">
+                📄 Documentazione
+            </a>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🔐</div>
+                <div class="feature-title">SSO Centralizzato</div>
+                <div class="feature-desc">Login unico tramite il portale checkin. Nessuna password locale.</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">✅</div>
+                <div class="feature-title">Whitelist Account</div>
+                <div class="feature-desc">Solo gli utenti autorizzati possono accedere, anche se passano dal portale.</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⏱️</div>
+                <div class="feature-title">Rate Limiting</div>
+                <div class="feature-desc">Limite sessioni per utente e globale. Protegge le risorse dell'applicazione.</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🚪</div>
+                <div class="feature-title">Logout sicuro</div>
+                <div class="feature-desc">Il logout pulisce la sessione e riporta l'utente al portale SSO.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="landing-footer">
+    Blueprint SSO App — Template di integrazione SSO per team di sviluppo
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

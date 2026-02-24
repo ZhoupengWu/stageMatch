@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block title %}Impostazioni — Blueprint App{% endblock %}
+
+{% block extra_head %}
+<style>
+.settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 768px) { .settings-grid { grid-template-columns: 1fr; } }
+
+.radio-group { display: flex; gap: 12px; flex-wrap: wrap; }
+.radio-option {
+    flex: 1; min-width: 110px;
+    border: 2px solid var(--border); border-radius: 10px;
+    padding: 14px 10px; cursor: pointer;
+    transition: all 0.2s; text-align: center;
+    background: var(--surface);
+}
+.radio-option:has(input:checked) { border-color: #667eea; background: var(--card-hover); }
+.radio-option input { display: none; }
+.radio-option-icon  { font-size: 24px; margin-bottom: 6px; }
+.radio-option-label { font-size: 13px; font-weight: 600; color: var(--text); }
+
+.info-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 0; border-bottom: 1px solid var(--border);
+}
+.info-row:last-child { border-bottom: none; }
+.info-label { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+.info-value { font-size: 14px; color: var(--text); font-weight: 500; text-align: right; }
+
+.sso-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #d1fae5; color: #065f46;
+    font-size: 12px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; border: none; padding: 11px 26px;
+    border-radius: 8px; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.35);
+    font-family: inherit;
+}
+.btn-save:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.btn-logout-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 8px;
+    border: 1px solid #fee2e2; background: #fff5f5;
+    color: #991b1b; font-size: 14px; font-weight: 500;
+    text-decoration: none; transition: background 0.2s;
+}
+.btn-logout-link:hover { background: #fee2e2; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>⚙️ Impostazioni</h1>
+    <p>Gestisci le preferenze del tuo account.</p>
+</div>
+
+{% if saved %}
+<div class="alert alert-success">✅ Impostazioni salvate con successo.</div>
+{% endif %}
+
+<div class="settings-grid">
+
+    <!-- Preferenze -->
+    <div class="card">
+        <div class="card-title">Preferenze</div>
+        <div class="card-subtitle">Personalizza la tua esperienza nell'applicazione.</div>
+
+        <form method="POST" action="{{ url_for('settings') }}">
+
+            <div class="form-group">
+                <label>
+                    Tema
+                    <span class="label-hint">Scegli l'aspetto visivo dell'applicazione</span>
+                </label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="light"
+                               {% if prefs.theme == 'light' %}checked{% endif %}>
+                        <div class="radio-option-icon">☀️</div>
+                        <div class="radio-option-label">Chiaro</div>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="dark"
+                               {% if prefs.theme == 'dark' %}checked{% endif %}>
+                        <div class="radio-option-icon">🌙</div>
+                        <div class="radio-option-label">Scuro</div>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="auto"
+                               {% if prefs.theme == 'auto' %}checked{% endif %}>
+                        <div class="radio-option-icon">🖥️</div>
+                        <div class="radio-option-label">Sistema</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    Notifiche
+                    <span class="label-hint">Modalità di invio delle notifiche</span>
+                </label>
+                <select name="notifications">
+                    <option value="on"    {% if prefs.notifications == 'on'    %}selected{% endif %}>Abilitate</option>
+                    <option value="email" {% if prefs.notifications == 'email' %}selected{% endif %}>Solo email</option>
+                    <option value="off"   {% if prefs.notifications == 'off'   %}selected{% endif %}>Disabilitate</option>
+                </select>
+            </div>
+
+            <hr class="divider">
+            <button type="submit" class="btn-save">💾 Salva preferenze</button>
+        </form>
+    </div>
+
+    <!-- Account & Sessione -->
+    <div>
+        <div class="card" style="margin-bottom: 20px;">
+            <div class="card-title">Informazioni account</div>
+            <div class="card-subtitle">Dati forniti dal portale SSO — non modificabili qui.</div>
+
+            <div class="info-row">
+                <span class="info-label">Email</span>
+                <span class="info-value">{{ user.email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Nome</span>
+                <span class="info-value">{{ user.name or '—' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Autenticazione</span>
+                <span class="info-value"><span class="sso-badge">✅ SSO</span></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Autenticato alle</span>
+                <span class="info-value text-small text-muted">
+                    {{ user.authenticated_at[:19] if user.authenticated_at else '—' }}
+                </span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title" style="margin-bottom: 10px;">Sessione</div>
+            <p class="text-small text-muted" style="margin-bottom: 18px; line-height: 1.7;">
+                La tua sessione è gestita dal sistema SSO centralizzato.
+                Per disconnetterti usa il pulsante qui sotto o "Esci" nell'header.
+            </p>
+            <a href="{{ url_for('logout') }}" class="btn-logout-link">
+                🚪 Esci e torna al portale
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
