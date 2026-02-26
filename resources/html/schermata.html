@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/schermata.css') }}" />
+  <!-- Icone: Phosphor Icons (CDN leggero) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/phosphor-icons/1.4.2/phosphor.min.js" defer></script>
+</head>
+<body>
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">NEXUS</span>
+      </div>
+      <!-- Toggle sidebar (mobile / collapse) -->
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">
+        <i class="ph ph-list"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <!-- Voce: Workspace (home) -->
+      <a href="#" class="nav-item active" data-section="workspace">
+        <i class="ph ph-squares-four"></i>
+        <span class="nav-label">Workspace</span>
+        <span class="nav-pill"></span>
+      </a>
+
+      <!-- Voce: Profilo utente -->
+      <a href="#" class="nav-item" data-section="profile">
+        <i class="ph ph-user-circle"></i>
+        <span class="nav-label">Profilo</span>
+      </a>
+
+      <!-- Voce: Mappa -->
+      <a href="#" class="nav-item" data-section="map">
+        <i class="ph ph-map-pin"></i>
+        <span class="nav-label">Mappa</span>
+      </a>
+
+      <!-- Voce: Impostazioni -->
+      <a href="#" class="nav-item" data-section="settings">
+        <i class="ph ph-gear-six"></i>
+        <span class="nav-label">Impostazioni</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar">U</div>
+        <div class="user-info">
+          <span class="user-name">Utente</span>
+          <span class="user-role">Admin</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========== OVERLAY (mobile) ========== -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main" id="main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <button class="topbar-menu-btn" id="topbarMenuBtn" aria-label="Apri menu">
+        <i class="ph ph-list"></i>
+      </button>
+      <div class="topbar-title" id="topbarTitle">Workspace</div>
+      <div class="topbar-actions">
+        <!-- Dark mode toggle -->
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Cambia tema">
+          <i class="ph ph-moon" id="themeIcon"></i>
+        </button>
+        <button class="icon-btn" aria-label="Notifiche">
+          <i class="ph ph-bell"></i>
+          <span class="badge">3</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ======== SEZIONE: WORKSPACE ======== -->
+    <section class="section active" id="section-workspace">
+      <div class="section-header">
+        <h1 class="section-title">Workspace</h1>
+        <p class="section-sub">Il tuo spazio di lavoro centrale</p>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="cards-grid">
+        <div class="card card--accent">
+          <div class="card-icon"><i class="ph ph-chart-line-up"></i></div>
+          <div class="card-content">
+            <span class="card-label">Attività</span>
+            <span class="card-value">128</span>
+          </div>
+          <div class="card-trend up">↑ 12%</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="ph ph-folder-open"></i></div>
+          <div class="card-content">
+            <span class="card-label">Progetti</span>
+            <span class="card-value">24</span>
+          </div>
+          <div class="card-trend up">↑ 4</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="ph ph-users"></i></div>
+          <div class="card-content">
+            <span class="card-label">Collaboratori</span>
+            <span class="card-value">7</span>
+          </div>
+          <div class="card-trend neutral">— 0</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="ph ph-clock"></i></div>
+          <div class="card-content">
+            <span class="card-label">Ore oggi</span>
+            <span class="card-value">5.2</span>
+          </div>
+          <div class="card-trend down">↓ 1h</div>
+        </div>
+      </div>
+
+      <!-- Workspace area placeholder -->
+      <div class="workspace-area">
+        <div class="workspace-placeholder">
+          <i class="ph ph-code-block"></i>
+          <p>Area di lavoro — aggiungi qui strumenti e contenuti dinamici</p>
+          <button class="btn btn--outline">+ Aggiungi widget</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== SEZIONE: PROFILO ======== -->
+    <section class="section" id="section-profile">
+      <div class="section-header">
+        <h1 class="section-title">Profilo Utente</h1>
+        <p class="section-sub">Gestisci le tue informazioni personali</p>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar" id="profileAvatar">U</div>
+          <button class="avatar-edit-btn" title="Cambia immagine">
+            <i class="ph ph-camera"></i>
+          </button>
+        </div>
+        <div class="profile-fields">
+          <div class="field-group">
+            <label class="field-label">Nome completo</label>
+            <input type="text" class="field-input" placeholder="Es. Mario Rossi" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Email</label>
+            <input type="email" class="field-input" placeholder="mario@esempio.it" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Ruolo</label>
+            <input type="text" class="field-input" placeholder="Es. Sviluppatore" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Bio</label>
+            <textarea class="field-input" rows="3" placeholder="Scrivi qualcosa su di te..."></textarea>
+          </div>
+          <div class="profile-actions">
+            <button class="btn btn--primary">Salva modifiche</button>
+            <button class="btn btn--ghost">Annulla</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== SEZIONE: MAPPA ======== -->
+    <section class="section" id="section-map">
+      <div class="section-header">
+        <h1 class="section-title">Mappa</h1>
+        <p class="section-sub">Visualizzazione geografica</p>
+      </div>
+
+      <div class="map-container">
+        <div class="map-topbar">
+          <input type="text" class="field-input map-search" placeholder="🔍  Cerca luogo..." />
+          <div class="map-controls">
+            <button class="btn btn--outline btn--sm">Satellite</button>
+            <button class="btn btn--outline btn--sm active-btn">Mappa</button>
+          </div>
+        </div>
+        <!-- Placeholder mappa: sostituire con Leaflet / Mapbox / Google Maps -->
+        <div class="map-placeholder">
+          <div class="map-grid"></div>
+          <div class="map-pin-demo">
+            <i class="ph ph-map-pin-fill"></i>
+            <span>Integra qui la tua mappa (Leaflet, Mapbox…)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== SEZIONE: IMPOSTAZIONI ======== -->
+    <section class="section" id="section-settings">
+      <div class="section-header">
+        <h1 class="section-title">Impostazioni</h1>
+        <p class="section-sub">Personalizza la tua esperienza</p>
+      </div>
+
+      <div class="settings-groups">
+
+        <!-- Tema -->
+        <div class="settings-group">
+          <h3 class="settings-group-title"><i class="ph ph-paint-bucket"></i> Aspetto</h3>
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-name">Dark Mode</span>
+              <span class="setting-desc">Attiva la modalità scura dell'interfaccia</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="darkModeToggle" checked />
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Lingua -->
+        <div class="settings-group">
+          <h3 class="settings-group-title"><i class="ph ph-translate"></i> Lingua</h3>
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-name">Lingua dell'interfaccia</span>
+              <span class="setting-desc">Scegli la lingua preferita</span>
+            </div>
+            <select class="field-input select-sm" id="langSelect">
+              <option value="it">🇮🇹 Italiano</option>
+              <option value="en">🇬🇧 English</option>
+              <option value="fr">🇫🇷 Français</option>
+              <option value="de">🇩🇪 Deutsch</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Notifiche -->
+        <div class="settings-group">
+          <h3 class="settings-group-title"><i class="ph ph-bell"></i> Notifiche</h3>
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-name">Notifiche push</span>
+              <span class="setting-desc">Ricevi aggiornamenti in tempo reale</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="pushToggle" checked />
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-name">Notifiche email</span>
+              <span class="setting-desc">Riepilogo giornaliero via email</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="emailToggle" />
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-name">Suoni</span>
+              <span class="setting-desc">Audio per gli avvisi</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="soundToggle" />
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Account placeholder -->
+        <div class="settings-group">
+          <h3 class="settings-group-title"><i class="ph ph-shield-check"></i> Account</h3>
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-name">Cambia password</span>
+              <span class="setting-desc">Aggiorna le credenziali di accesso</span>
+            </div>
+            <button class="btn btn--outline btn--sm">Modifica</button>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-name">Autenticazione a 2 fattori</span>
+              <span class="setting-desc">Aumenta la sicurezza del tuo account</span>
+            </div>
+            <button class="btn btn--outline btn--sm">Configura</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='js/schermata.css') }}"></script>
+</body>
+</html>

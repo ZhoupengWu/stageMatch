@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>stageMatch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Jost:wght@200;400;500&display=swap"
+        rel="stylesheet" />
+</head>
+
+<body>
+    <div class="overlay"></div>
+
+    <div class="noise"></div>
+
+    <main class="hero">
+        <div class="hero__content">
+            <div class="hero__label">Bergamo</div>
+            <h1 class="hero__title">stageMatch</h1>
+            <p class="hero__sub">Trova il tuo stage ideale</p>
+            <button class="btn-login" id="loginBtn">Login</button>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+
+</html>
