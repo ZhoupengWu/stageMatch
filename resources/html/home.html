@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>stageMatch — Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+
+<body>
+
+    <!-- Overlay mobile (chiude sidebar al tap fuori) -->
+    <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <div class="shell">
+
+        <!-- ═══════════════════════════════════════ SIDEBAR ═══════════════════════════════════════════ -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </div>
+                <span class="logo-text">stageMatch</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Menu</div>
+
+                <a href="#" class="nav-item active" onclick="setActive(this); return false;">
+                    <div class="nav-icon">🏠</div>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+
+                <a href="index.html" class="nav-item">
+                    <div class="nav-icon">🗺️</div>
+                    <span class="nav-label">Mappa</span>
+                </a>
+
+                <a href="#" class="nav-item" onclick="setActive(this); return false;">
+                    <div class="nav-icon">📍</div>
+                    <span class="nav-label">I miei percorsi</span>
+                    <span class="nav-badge">3</span>
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-section-label">Account</div>
+
+                <!--
+          "Aziende Match" — apre il pannello slide-in.
+          Visivamente identico alle altre voci di menu.
+        -->
+                <button class="nav-item" id="navCompanies" onclick="openCompaniesPanel()">
+                    <div class="nav-icon">🏢</div>
+                    <span class="nav-label">Aziende Match</span>
+                    <span class="nav-badge" id="companiesBadge">4</span>
+                </button>
+
+                <a href="#" class="nav-item" onclick="setActive(this); return false;">
+                    <div class="nav-icon">👤</div>
+                    <span class="nav-label">Profilo</span>
+                </a>
+
+                <a href="#" class="nav-item" onclick="setActive(this); return false;">
+                    <div class="nav-icon">⚙️</div>
+                    <span class="nav-label">Impostazioni</span>
+                </a>
+
+                <a href="#" class="nav-item" onclick="setActive(this); return false;">
+                    <div class="nav-icon">🔓</div>
+                    <span class="nav-label">Logout</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-user">
+                <div class="user-avatar">MR</div>
+                <div class="user-info">
+                    <div class="user-name">Marco Rossi</div>
+                    <div class="user-role">Studente</div>
+                </div>
+                <div class="user-menu-btn">⋯</div>
+            </div>
+
+        </aside>
+
+        <!-- ═══════════════════════════════════════
+         PANNELLO AZIENDE MATCH (slide-in)
+         Solo struttura — nessun dato hardcoded.
+         Il contenuto è iniettato da home.js → renderCompanies().
+    ═══════════════════════════════════════════ -->
+        <div class="companies-panel" id="companiesPanel">
+
+            <div class="cp-header">
+                <div>
+                    <div class="cp-title">
+                        <div class="cp-live-dot"></div>
+                        Aziende Match
+                    </div>
+                    <div class="cp-subtitle" id="cpSubtitle">Caricamento in corso…</div>
+                </div>
+                <div class="cp-close" onclick="closeCompaniesPanel()" title="Chiudi">✕</div>
+            </div>
+
+            <!-- Stato: caricamento -->
+            <div class="cp-loading" id="cpLoading">
+                <div class="spinner"></div>
+                <span>Analisi compatibilità…</span>
+            </div>
+
+            <!-- Stato: lista vuota -->
+            <div class="cp-empty" id="cpEmpty">
+                <div class="cp-empty-icon">🔍</div>
+                <strong style="color:white;">Nessuna azienda trovata</strong>
+                <span>Completa il tuo profilo per ricevere i match.</span>
+            </div>
+
+            <!-- Lista dinamica — popolata da renderCompanies() -->
+            <div class="cp-list" id="cpList" style="display:none;"></div>
+
+        </div>
+
+        <!-- ═══════════════════════════════════════
+         CONTENUTO PRINCIPALE
+    ═══════════════════════════════════════════ -->
+        <div class="main" id="mainContent">
+
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+                        <span></span><span></span><span></span>
+                    </button>
+                    <div class="topbar-greeting">Buonasera, <span>Marco</span> 👋</div>
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-chip">
+                        <div class="chip-dot"></div>
+                        Gio, 5 Marzo 2026
+                    </div>
+                    <div class="topbar-icon-btn" title="Notifiche">🔔</div>
+                    <div class="topbar-icon-btn" title="Profilo">👤</div>
+                </div>
+            </header>
+
+            <div class="content">
+
+                <!-- Intestazione pagina -->
+                <div class="page-header animate-in">
+                    <div>
+                        <div class="page-title">Dashboard</div>
+                        <div class="page-subtitle">Bentornato nel tuo pannello personale</div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-ghost" onclick="openCompaniesPanel()">🏢 Aziende Match</button>
+                        <a href="index.html" class="btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                            Nuovo Percorso
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Statistiche -->
+                <div class="stats-row">
+                    <div class="stat-card animate-in">
+                        <div class="stat-icon">🛣️</div>
+                        <div>
+                            <div class="stat-num">247</div>
+                            <div class="stat-label">km percorsi</div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-in">
+                        <div class="stat-icon">🗺️</div>
+                        <div>
+                            <div class="stat-num">12</div>
+                            <div class="stat-label">Percorsi totali</div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-in">
+                        <div class="stat-icon">🏢</div>
+                        <div>
+                            <div class="stat-num">4</div>
+                            <div class="stat-label">Aziende match</div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-in">
+                        <div class="stat-icon">🚗</div>
+                        <div>
+                            <div class="stat-num">Auto</div>
+                            <div class="stat-label">Mezzo preferito</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero: calcola percorso -->
+                <div class="hero-card">
+                    <div class="hero-header">
+                        <div>
+                            <div class="hero-title">Calcola il tuo percorso</div>
+                            <div class="hero-desc">
+                                Trova il tragitto ottimale verso l'azienda di stage.
+                                Scegli il mezzo e visualizza la rotta sulla mappa interattiva.
+                            </div>
+                        </div>
+                        <div class="hero-icon">🗺️</div>
+                    </div>
+
+                    <!-- Anteprima mappa decorativa -->
+                    <div class="map-preview">
+                        <div class="map-grid"></div>
+                        <div class="map-route"></div>
+                        <div class="map-pin s"></div>
+                        <div class="map-pin e"></div>
+                        <div class="map-overlay">
+                            <div class="map-overlay-chip">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                Ultimo: Bergamo → Milano · 46 km
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selezione mezzo -->
+                    <div class="transport-pills">
+                        <div class="t-pill active">🚗 Auto</div>
+                        <div class="t-pill">🚶 A piedi</div>
+                        <div class="t-pill">🚴 Bicicletta</div>
+                    </div>
+
+                    <div style="margin-top:16px;">
+                        <a href="index.html" class="btn-primary" style="width:100%;justify-content:center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                            Vai alla Mappa
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Percorsi recenti -->
+                <div class="routes-card animate-in">
+                    <div class="card-section-title">Percorsi recenti</div>
+
+                    <div class="route-item">
+                        <div class="route-icon">🚗</div>
+                        <div class="route-info">
+                            <div class="route-from-to">Bergamo → Dalmine (Azienda Alpha)</div>
+                            <div class="route-meta">Ieri · 12.4 km · 18 min</div>
+                        </div>
+                        <span class="route-badge car">Auto</span>
+                    </div>
+
+                    <div class="route-item">
+                        <div class="route-icon">🚶</div>
+                        <div class="route-info">
+                            <div class="route-from-to">Stazione FS → Seriate (Beta Srl)</div>
+                            <div class="route-meta">2 giorni fa · 3.1 km · 38 min</div>
+                        </div>
+                        <span class="route-badge walk">A piedi</span>
+                    </div>
+
+                    <div class="route-item">
+                        <div class="route-icon">🚴</div>
+                        <div class="route-info">
+                            <div class="route-from-to">Bergamo → Curno (Gamma Tech)</div>
+                            <div class="route-meta">5 giorni fa · 7.8 km · 28 min</div>
+                        </div>
+                        <span class="route-badge bike">Bici</span>
+                    </div>
+                </div>
+
+            </div><!-- /content -->
+        </div><!-- /main -->
+    </div><!-- /shell -->
+
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+
+</html>

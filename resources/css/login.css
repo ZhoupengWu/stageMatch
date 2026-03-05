@@ -22,7 +22,7 @@
 body {
     min-height: 100dvh;
     background:
-        url('https://www.visitbergamo.net/wp-content/uploads/2024/06/9f2e57ac59c349a9f1f3fe3b44401858_75576a0b-1.jpg') center center / cover no-repeat fixed;
+        url('../img/bergamoalto.jpg') center center / cover no-repeat fixed;
     font-family: var(--font-ui);
     overflow: hidden;
 }
