@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Reports — Blueprint App{% endblock %}
+
+{% block extra_head %}
+<style>
+.status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 500;
+}
+.status-badge.completato  { background: #d1fae5; color: #065f46; }
+.status-badge.in-corso    { background: #fef3c7; color: #92400e; }
+.status-badge.pianificato { background: #e0e7ff; color: #3730a3; }
+
+.dev-note {
+    background: var(--card-hover); border: 2px dashed var(--border); border-radius: 10px;
+    padding: 18px 22px; margin-top: 24px;
+    display: flex; align-items: flex-start; gap: 12px;
+}
+.dev-note-icon { font-size: 22px; flex-shrink: 0; }
+.dev-note p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.dev-note code { background: #e0e7ff; padding: 1px 5px; border-radius: 4px; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>📊 Reports</h1>
+    <p>Elenco dei report disponibili — pagina ad accesso riservato.</p>
+</div>
+
+<div class="card">
+    <div class="card-title">Report disponibili</div>
+    <div class="card-subtitle">
+        Dati fittizi di esempio. Sostituiscili con i dati reali della tua applicazione.
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome Report</th>
+                    <th>Data</th>
+                    <th>Stato</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td class="text-muted text-small">{{ report.id }}</td>
+                    <td style="font-weight:500; color:#1a1a2e;">{{ report.name }}</td>
+                    <td>{{ report.date }}</td>
+                    <td>
+                        <span class="status-badge {{ report.status | lower | replace(' ', '-') }}">
+                            {% if report.status == 'Completato' %}✅
+                            {% elif report.status == 'In corso' %}🔄
+                            {% else %}📅{% endif %}
+                            {{ report.status }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if report.status == 'Completato' %}
+                            <a href="#" style="color:#667eea; text-decoration:none; font-size:13px; font-weight:500;">
+                                Scarica →
+                            </a>
+                        {% else %}
+                            <span class="text-muted text-small">N/D</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="dev-note">
+        <span class="dev-note-icon">🏗️</span>
+        <p>
+            <strong>Per i team di sviluppo:</strong> questa pagina dimostra una seconda area ad accesso
+            riservato. La protezione SSO è garantita dal decorator
+            <code>@sso_middleware.sso_login_required</code> applicato alla route
+            <code>/reports</code> in <code>app.py</code>.
+            Sostituisci i dati fittizi con la tua fonte dati reale.
+        </p>
+    </div>
+</div>
+
+{% endblock %}
