@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>stageMatch — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+
+  <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <div class="shell">
+
+    <!-- ══════════════════════ SIDEBAR ══════════════════════ -->
+    <aside class="sidebar" id="sidebar">
+
+      <div class="sidebar-logo">
+        <div class="logo-mark">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+               fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <span class="logo-text">stageMatch</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-label-section">Menu</div>
+
+        <a href="#" class="nav-item active" id="navDashboard"
+           onclick="showSection('dashboard'); setActive(this); return false;">
+          <span class="nav-icon">🏠</span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🗺️</span>
+          <span>Mappa</span>
+        </a>
+
+        <a href="#" class="nav-item" id="navPercorsi"
+           onclick="showSection('percorsi'); setActive(this); return false;">
+          <span class="nav-icon">📍</span>
+          <span>I miei percorsi</span>
+          <span class="nav-badge" id="badgePercorsi">3</span>
+        </a>
+
+        <div class="nav-divider"></div>
+        <div class="nav-label-section">Account</div>
+
+        <a href="#" class="nav-item" id="navAziende"
+           onclick="showSection('aziende'); setActive(this); return false;">
+          <span class="nav-icon">🏢</span>
+          <span>Aziende Match</span>
+          <span class="nav-badge" id="badgeAziende">4</span>
+        </a>
+
+        <a href="#" class="nav-item" onclick="setActive(this); return false;">
+          <span class="nav-icon">👤</span>
+          <span>Profilo</span>
+        </a>
+
+        <a href="#" class="nav-item" onclick="setActive(this); return false;">
+          <span class="nav-icon">⚙️</span>
+          <span>Impostazioni</span>
+        </a>
+
+        <a href="#" class="nav-item" onclick="setActive(this); return false;">
+          <span class="nav-icon">🔓</span>
+          <span>Logout</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar">MR</div>
+        <div class="user-info">
+          <div class="user-name">Marco Rossi</div>
+          <div class="user-role">Studente · 5ª IT</div>
+        </div>
+        <span class="user-dots">⋯</span>
+      </div>
+
+    </aside>
+
+    <!-- ══════════════════════ MAIN ══════════════════════════ -->
+    <div class="main">
+
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="topbar-greeting">Buonasera, <span>Marco</span> 👋</div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-chip"><div class="chip-dot"></div>Online</div>
+          <div class="topbar-icon-btn" title="Notifiche">🔔</div>
+          <div class="topbar-icon-btn" title="Profilo">👤</div>
+        </div>
+      </header>
+
+      <!-- ════════════════════════════════════════════════════
+           SEZIONE: DASHBOARD  (visibile di default)
+      ════════════════════════════════════════════════════ -->
+      <div class="content" id="sectionDashboard">
+
+        <div class="page-header animate-in">
+          <div>
+            <div class="page-title">Dashboard</div>
+            <div class="page-subtitle">Bentornato nel tuo pannello personale</div>
+          </div>
+          <div class="header-actions">
+            <button class="btn-ghost"
+              onclick="showSection('aziende'); setActive(document.getElementById('navAziende'));">
+              🏢 Aziende Match
+            </button>
+            <a href="index.html" class="btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                   fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              Nuovo Percorso
+            </a>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card animate-in">
+            <div class="stat-icon">🛣️</div>
+            <div><div class="stat-num">247</div><div class="stat-lbl">km percorsi</div></div>
+          </div>
+          <div class="stat-card animate-in">
+            <div class="stat-icon">🗺️</div>
+            <div><div class="stat-num">12</div><div class="stat-lbl">Percorsi totali</div></div>
+          </div>
+          <div class="stat-card animate-in">
+            <div class="stat-icon">🏢</div>
+            <div><div class="stat-num">4</div><div class="stat-lbl">Aziende match</div></div>
+          </div>
+          <div class="stat-card animate-in">
+            <div class="stat-icon">🚗</div>
+            <div><div class="stat-num">Auto</div><div class="stat-lbl">Mezzo preferito</div></div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+
+          <!-- Hero: calcola percorso -->
+          <div class="hero-card">
+            <div class="hero-header">
+              <div>
+                <div class="hero-title">Calcola il tuo percorso</div>
+                <div class="hero-desc">Trova il tragitto ottimale verso l'azienda di stage. Scegli il mezzo e visualizza la rotta interattiva.</div>
+              </div>
+              <div class="hero-icon">🗺️</div>
+            </div>
+            <div class="map-preview">
+              <div class="map-grid"></div>
+              <div class="map-route"></div>
+              <div class="map-pin s"></div>
+              <div class="map-pin e"></div>
+              <div class="map-overlay">
+                <div class="map-chip">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
+                       fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  Ultimo: Bergamo → Dalmine · 12 km
+                </div>
+              </div>
+            </div>
+            <div class="transport-pills">
+              <div class="t-pill active">🚗 Auto</div>
+              <div class="t-pill">🚶 A piedi</div>
+              <div class="t-pill">🚴 Bicicletta</div>
+            </div>
+            <div style="margin-top:16px">
+              <a href="index.html" class="btn-primary" style="width:100%;justify-content:center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                     fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+                Vai alla Mappa
+              </a>
+            </div>
+          </div>
+
+          <!-- Ultimi percorsi (anteprima) -->
+          <div class="card">
+            <div class="card-head">
+              <span>📍 Percorsi recenti</span>
+              <button class="card-link"
+                onclick="showSection('percorsi'); setActive(document.getElementById('navPercorsi'));">
+                Vedi tutti →
+              </button>
+            </div>
+            <div id="recentRoutesList"></div>
+          </div>
+
+        </div>
+      </div><!-- /sectionDashboard -->
+
+      <!-- ════════════════════════════════════════════════════
+           SEZIONE: AZIENDE MATCH  (attivata dalla sidebar)
+      ════════════════════════════════════════════════════ -->
+      <div class="content hidden" id="sectionAziende">
+
+        <div class="page-header animate-in">
+          <div>
+            <div class="page-title">Aziende Match</div>
+            <div class="page-subtitle" id="aziendeSubtitle">Caricamento…</div>
+          </div>
+          <div class="header-actions">
+            <a href="index.html" class="btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                   fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              Nuovo Percorso
+            </a>
+          </div>
+        </div>
+
+        <div id="aziendeLoading" class="section-state">
+          <div class="spinner"></div>
+          <span>Analisi compatibilità in corso…</span>
+        </div>
+        <div id="aziendeEmpty" class="section-state" style="display:none;">
+          <div style="font-size:44px;margin-bottom:12px;opacity:.4;">🔍</div>
+          <strong style="color:white;">Nessuna azienda trovata</strong>
+          <span>Completa il tuo profilo per ricevere i match.</span>
+        </div>
+        <div id="aziendeList" class="companies-grid" style="display:none;"></div>
+
+      </div><!-- /sectionAziende -->
+
+      <!-- ════════════════════════════════════════════════════
+           SEZIONE: I MIEI PERCORSI  (attivata dalla sidebar)
+      ════════════════════════════════════════════════════ -->
+      <div class="content hidden" id="sectionPercorsi">
+
+        <div class="page-header animate-in">
+          <div>
+            <div class="page-title">I miei percorsi</div>
+            <div class="page-subtitle">Storico completo · <span id="percorsiCount">0</span> percorsi salvati</div>
+          </div>
+          <div class="header-actions">
+            <a href="index.html" class="btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                   fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              Nuovo Percorso
+            </a>
+          </div>
+        </div>
+
+        <div class="filter-row animate-in">
+          <button class="filter-btn active" data-filter="all">Tutti</button>
+          <button class="filter-btn" data-filter="driving-car">🚗 Auto</button>
+          <button class="filter-btn" data-filter="foot-walking">🚶 A piedi</button>
+          <button class="filter-btn" data-filter="cycling-regular">🚴 Bici</button>
+        </div>
+
+        <div id="percorsiList" class="routes-full-list animate-in"></div>
+
+      </div><!-- /sectionPercorsi -->
+
+    </div><!-- /main -->
+  </div><!-- /shell -->
+
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>
