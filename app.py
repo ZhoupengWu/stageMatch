@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import timedelta
 import auth.auth as au
+from database import database_helper
 
 load_dotenv()
 
@@ -26,6 +27,8 @@ if au.SSO_MODE == "production":
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax"
     )
+
+database_helper.init_db()
 
 def _completeLogin(user_data: dict):
     email = user_data.get("email", "")
