@@ -6,118 +6,206 @@
    In produzione sostituire con fetch() verso le API Flask.
    ─────────────────────────────────────────────────────── */
 
-   const MOCK_COMPANIES = [
+const MOCK_COMPANIES = [
     {
-        id: 1, initials: 'AT', name: 'Alpha Tech Srl',
-        sector: '💻 Sviluppo Software', matchPct: 94,
-        tags: ['Python', 'JavaScript', 'Flask'],
-        description: 'Azienda bergamasca specializzata nello sviluppo di applicazioni web e mobile per il settore industriale.',
-        distanceKm: 12, durationMin: 18, city: 'Dalmine',
-        address: 'Via Roma 12, Dalmine BG',
-        contacts: { email: 'stage@alphatech.it', web: 'www.alphatech.it', phone: '035 123 456' }
+        id: 1,
+        initials: "AT",
+        name: "Alpha Tech Srl",
+        sector: "💻 Sviluppo Software",
+        matchPct: 94,
+        tags: ["Python", "JavaScript", "Flask"],
+        description:
+            "Azienda bergamasca specializzata nello sviluppo di applicazioni web e mobile per il settore industriale.",
+        distanceKm: 12,
+        durationMin: 18,
+        city: "Dalmine",
+        address: "Via Roma 12, Dalmine BG",
+        contacts: {
+            email: "stage@alphatech.it",
+            web: "www.alphatech.it",
+            phone: "035 123 456",
+        },
     },
     {
-        id: 2, initials: 'BS', name: 'Beta Systems',
-        sector: '🔒 Cybersecurity', matchPct: 81,
-        tags: ['Networking', 'Linux', 'Python'],
-        description: 'Società di consulenza specializzata in sicurezza informatica e infrastrutture di rete per PMI lombarde.',
-        distanceKm: 8, durationMin: 12, city: 'Seriate',
-        address: 'Via Industria 5, Seriate BG',
-        contacts: { email: 'hr@betasystems.it', web: 'www.betasystems.it', phone: '035 654 321' }
+        id: 2,
+        initials: "BS",
+        name: "Beta Systems",
+        sector: "🔒 Cybersecurity",
+        matchPct: 81,
+        tags: ["Networking", "Linux", "Python"],
+        description:
+            "Società di consulenza specializzata in sicurezza informatica e infrastrutture di rete per PMI lombarde.",
+        distanceKm: 8,
+        durationMin: 12,
+        city: "Seriate",
+        address: "Via Industria 5, Seriate BG",
+        contacts: {
+            email: "hr@betasystems.it",
+            web: "www.betasystems.it",
+            phone: "035 654 321",
+        },
     },
     {
-        id: 3, initials: 'GI', name: 'Gamma Informatica',
-        sector: '☁️ Cloud & DevOps', matchPct: 74,
-        tags: ['Docker', 'AWS', 'CI/CD'],
-        description: 'Provider di servizi cloud e automazione per aziende del territorio bergamasco e bresciano.',
-        distanceKm: 7, durationMin: 10, city: 'Curno',
-        address: 'Via Milano 88, Curno BG',
-        contacts: { email: 'tirocini@gammainf.it', web: 'www.gammainformatica.it', phone: '035 789 000' }
+        id: 3,
+        initials: "GI",
+        name: "Gamma Informatica",
+        sector: "☁️ Cloud & DevOps",
+        matchPct: 74,
+        tags: ["Docker", "AWS", "CI/CD"],
+        description:
+            "Provider di servizi cloud e automazione per aziende del territorio bergamasco e bresciano.",
+        distanceKm: 7,
+        durationMin: 10,
+        city: "Curno",
+        address: "Via Milano 88, Curno BG",
+        contacts: {
+            email: "tirocini@gammainf.it",
+            web: "www.gammainformatica.it",
+            phone: "035 789 000",
+        },
     },
     {
-        id: 4, initials: 'DN', name: 'Delta Networks',
-        sector: '📡 Telecomunicazioni', matchPct: 61,
-        tags: ['SQL', 'Java', 'IoT'],
-        description: 'Azienda nel settore delle reti di telecomunicazione con focus su soluzioni IoT industriali.',
-        distanceKm: 15, durationMin: 22, city: 'Stezzano',
-        address: 'Via Orio 3, Stezzano BG',
-        contacts: { email: 'info@deltanetworks.it', web: 'www.deltanetworks.it', phone: '035 901 234' }
-    }
+        id: 4,
+        initials: "DN",
+        name: "Delta Networks",
+        sector: "📡 Telecomunicazioni",
+        matchPct: 61,
+        tags: ["SQL", "Java", "IoT"],
+        description:
+            "Azienda nel settore delle reti di telecomunicazione con focus su soluzioni IoT industriali.",
+        distanceKm: 15,
+        durationMin: 22,
+        city: "Stezzano",
+        address: "Via Orio 3, Stezzano BG",
+        contacts: {
+            email: "info@deltanetworks.it",
+            web: "www.deltanetworks.it",
+            phone: "035 901 234",
+        },
+    },
 ];
 
 const MOCK_ROUTES = [
     {
-        id: 1, mode: 'driving-car',
-        from: 'Bergamo Centro', to: 'Alpha Tech Srl — Dalmine',
-        distanceKm: 12.4, durationMin: 18, date: 'Ieri',
-        startaddress: 'Bergamo, BG', endaddress: 'Via Roma 12, Dalmine BG'
+        id: 1,
+        mode: "driving-car",
+        from: "Bergamo Centro",
+        to: "Alpha Tech Srl — Dalmine",
+        distanceKm: 12.4,
+        durationMin: 18,
+        date: "Ieri",
+        startaddress: "Bergamo, BG",
+        endaddress: "Via Roma 12, Dalmine BG",
     },
     {
-        id: 2, mode: 'foot-walking',
-        from: 'Stazione FS Bergamo', to: 'Beta Systems — Seriate',
-        distanceKm: 3.1, durationMin: 38, date: '2 giorni fa',
-        startaddress: 'Stazione di Bergamo, BG', endaddress: 'Via Industria 5, Seriate BG'
+        id: 2,
+        mode: "foot-walking",
+        from: "Stazione FS Bergamo",
+        to: "Beta Systems — Seriate",
+        distanceKm: 3.1,
+        durationMin: 38,
+        date: "2 giorni fa",
+        startaddress: "Stazione di Bergamo, BG",
+        endaddress: "Via Industria 5, Seriate BG",
     },
     {
-        id: 3, mode: 'cycling-regular',
-        from: 'Bergamo Centro', to: 'Gamma Informatica — Curno',
-        distanceKm: 7.8, durationMin: 28, date: '5 giorni fa',
-        startaddress: 'Bergamo, BG', endaddress: 'Via Milano 88, Curno BG'
+        id: 3,
+        mode: "cycling-regular",
+        from: "Bergamo Centro",
+        to: "Gamma Informatica — Curno",
+        distanceKm: 7.8,
+        durationMin: 28,
+        date: "5 giorni fa",
+        startaddress: "Bergamo, BG",
+        endaddress: "Via Milano 88, Curno BG",
     },
     {
-        id: 4, mode: 'driving-car',
-        from: 'Bergamo Nord', to: 'Delta Networks — Stezzano',
-        distanceKm: 15.2, durationMin: 22, date: '1 settimana fa',
-        startaddress: 'Bergamo Nord, BG', endaddress: 'Via Orio 3, Stezzano BG'
+        id: 4,
+        mode: "driving-car",
+        from: "Bergamo Nord",
+        to: "Delta Networks — Stezzano",
+        distanceKm: 15.2,
+        durationMin: 22,
+        date: "1 settimana fa",
+        startaddress: "Bergamo Nord, BG",
+        endaddress: "Via Orio 3, Stezzano BG",
     },
     {
-        id: 5, mode: 'driving-car',
-        from: 'Bergamo Centro', to: 'Alpha Tech Srl — Dalmine',
-        distanceKm: 12.4, durationMin: 17, date: '10 giorni fa',
-        startaddress: 'Bergamo, BG', endaddress: 'Via Roma 12, Dalmine BG'
+        id: 5,
+        mode: "driving-car",
+        from: "Bergamo Centro",
+        to: "Alpha Tech Srl — Dalmine",
+        distanceKm: 12.4,
+        durationMin: 17,
+        date: "10 giorni fa",
+        startaddress: "Bergamo, BG",
+        endaddress: "Via Roma 12, Dalmine BG",
     },
     {
-        id: 6, mode: 'foot-walking',
-        from: 'Bergamo Bassa', to: 'Beta Systems — Seriate',
-        distanceKm: 4.2, durationMin: 52, date: '2 settimane fa',
-        startaddress: 'Bergamo Bassa, BG', endaddress: 'Via Industria 5, Seriate BG'
-    }
+        id: 6,
+        mode: "foot-walking",
+        from: "Bergamo Bassa",
+        to: "Beta Systems — Seriate",
+        distanceKm: 4.2,
+        durationMin: 52,
+        date: "2 settimane fa",
+        startaddress: "Bergamo Bassa, BG",
+        endaddress: "Via Industria 5, Seriate BG",
+    },
 ];
 
 /* ─── HELPERS ─────────────────────────────────────────── */
-const modeLabel = { 'driving-car': 'Auto', 'foot-walking': 'A piedi', 'cycling-regular': 'Bici' };
-const modeIcon = { 'driving-car': '🚗', 'foot-walking': '🚶', 'cycling-regular': '🚴' };
-const modeBadge = { 'driving-car': 'car', 'foot-walking': 'walk', 'cycling-regular': 'bike' };
+const modeLabel = {
+    "driving-car": "Auto",
+    "foot-walking": "A piedi",
+    "cycling-regular": "Bici",
+};
+const modeIcon = {
+    "driving-car": "🚗",
+    "foot-walking": "🚶",
+    "cycling-regular": "🚴",
+};
+const modeBadge = {
+    "driving-car": "car",
+    "foot-walking": "walk",
+    "cycling-regular": "bike",
+};
 
 /* ════════════════════════════════════════════════════════
    NAVIGAZIONE SEZIONI
    showSection('dashboard' | 'aziende' | 'percorsi')
    Nasconde tutte le sezioni e mostra solo quella richiesta.
    ════════════════════════════════════════════════════════ */
-const SECTIONS = ['sectionDashboard', 'sectionAziende', 'sectionPercorsi', 'sectionProfilo', 'sectionImpostazioni'];
+const SECTIONS = [
+    "sectionDashboard",
+    "sectionAziende",
+    "sectionPercorsi",
+    "sectionProfilo",
+    "sectionImpostazioni",
+];
 let aziendeLoaded = false;
 let percorsiLoaded = false;
-let currentFilter = 'all';
+let currentFilter = "all";
 
 function showSection(name) {
     const map = {
-        dashboard: 'sectionDashboard',
-        aziende: 'sectionAziende',
-        percorsi: 'sectionPercorsi',
-        profilo: 'sectionProfilo',
-        impostazioni: 'sectionImpostazioni'
+        dashboard: "sectionDashboard",
+        aziende: "sectionAziende",
+        percorsi: "sectionPercorsi",
+        profilo: "sectionProfilo",
+        impostazioni: "sectionImpostazioni",
     };
-    SECTIONS.forEach(id => {
-        document.getElementById(id).classList.add('hidden');
+    SECTIONS.forEach((id) => {
+        document.getElementById(id).classList.add("hidden");
     });
-    document.getElementById(map[name]).classList.remove('hidden');
+    document.getElementById(map[name]).classList.remove("hidden");
 
     // Lazy-load al primo accesso
-    if (name === 'aziende' && !aziendeLoaded) {
+    if (name === "aziende" && !aziendeLoaded) {
         aziendeLoaded = true;
         loadCompanies();
     }
-    if (name === 'percorsi' && !percorsiLoaded) {
+    if (name === "percorsi" && !percorsiLoaded) {
         percorsiLoaded = true;
         renderRoutes(MOCK_ROUTES);
     }
@@ -128,8 +216,10 @@ function showSection(name) {
 
 /* ─── setActive ───────────────────────────────────────── */
 function setActive(el) {
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    if (el) el.classList.add('active');
+    document
+        .querySelectorAll(".nav-item")
+        .forEach((i) => i.classList.remove("active"));
+    if (el) el.classList.add("active");
 }
 
 /* ════════════════════════════════════════════════════════
@@ -137,33 +227,35 @@ function setActive(el) {
    Renderizza le card nella sezione principale (non panel).
    ════════════════════════════════════════════════════════ */
 function renderCompanies(companies) {
-    const list = document.getElementById('aziendeList');
-    const empty = document.getElementById('aziendeEmpty');
-    const badge = document.getElementById('badgeAziende');
-    const subtitle = document.getElementById('aziendeSubtitle');
+    const list = document.getElementById("aziendeList");
+    const empty = document.getElementById("aziendeEmpty");
+    const badge = document.getElementById("badgeAziende");
+    const subtitle = document.getElementById("aziendeSubtitle");
 
     badge.textContent = companies.length;
 
     if (!companies || companies.length === 0) {
-        list.style.display = 'none';
-        empty.style.display = 'flex';
-        subtitle.textContent = 'Nessuna azienda compatibile trovata';
+        list.style.display = "none";
+        empty.style.display = "flex";
+        subtitle.textContent = "Nessuna azienda compatibile trovata";
         return;
     }
 
     const n = companies.length;
-    subtitle.textContent = `${n} aziend${n === 1 ? 'a' : 'e'} compatibil${n === 1 ? 'e' : 'i'} con il tuo profilo`;
-    empty.style.display = 'none';
-    list.style.display = 'grid';
-    list.innerHTML = '';
+    subtitle.textContent = `${n} aziend${n === 1 ? "a" : "e"} compatibil${n === 1 ? "e" : "i"} con il tuo profilo`;
+    empty.style.display = "none";
+    list.style.display = "grid";
+    list.innerHTML = "";
 
     companies.forEach((c, i) => {
         const isBest = i === 0;
-        const tags = c.tags.map(t => `<span class="co-tag">${t}</span>`).join('');
+        const tags = c.tags
+            .map((t) => `<span class="co-tag">${t}</span>`)
+            .join("");
         const safeC = encodeURIComponent(JSON.stringify(c));
 
-        const card = document.createElement('div');
-        card.className = `co-card${isBest ? ' best' : ''}`;
+        const card = document.createElement("div");
+        card.className = `co-card${isBest ? " best" : ""}`;
         card.dataset.id = c.id;
 
         card.innerHTML = `
@@ -213,35 +305,36 @@ function renderCompanies(companies) {
 }
 
 async function loadCompanies() {
-    document.getElementById('aziendeLoading').style.display = 'flex';
-    document.getElementById('aziendeList').style.display = 'none';
+    document.getElementById("aziendeLoading").style.display = "flex";
+    document.getElementById("aziendeList").style.display = "none";
 
     /* ── Sostituire con fetch reale: ──────────────────────────
        const res  = await fetch('/api/companies/matches');
        const data = await res.json();
        renderCompanies(data);
        ─────────────────────────────────────────────────────── */
-    await new Promise(r => setTimeout(r, 700));
+    await new Promise((r) => setTimeout(r, 700));
 
-    document.getElementById('aziendeLoading').style.display = 'none';
+    document.getElementById("aziendeLoading").style.display = "none";
     renderCompanies(MOCK_COMPANIES);
 }
 
 function toggleCard(card) {
-    card.classList.toggle('expanded');
+    card.classList.toggle("expanded");
 }
 
 /* ════════════════════════════════════════════════════════
    I MIEI PERCORSI
    Renderizza la lista completa con filtri per mezzo.
    ════════════════════════════════════════════════════════ */
-function renderRoutes(routes, filter = 'all') {
-    const list = document.getElementById('percorsiList');
-    const count = document.getElementById('percorsiCount');
+function renderRoutes(routes, filter = "all") {
+    const list = document.getElementById("percorsiList");
+    const count = document.getElementById("percorsiCount");
 
-    const filtered = filter === 'all' ? routes : routes.filter(r => r.mode === filter);
+    const filtered =
+        filter === "all" ? routes : routes.filter((r) => r.mode === filter);
     count.textContent = routes.length;
-    document.getElementById('badgePercorsi').textContent = routes.length;
+    document.getElementById("badgePercorsi").textContent = routes.length;
 
     if (filtered.length === 0) {
         list.innerHTML = `
@@ -252,13 +345,14 @@ function renderRoutes(routes, filter = 'all') {
         return;
     }
 
-    list.innerHTML = filtered.map(r => {
-        const label = modeLabel[r.mode] || r.mode;
-        const icon = modeIcon[r.mode] || '🚗';
-        const badge = modeBadge[r.mode] || 'car';
-        const safeR = encodeURIComponent(JSON.stringify(r));
+    list.innerHTML = filtered
+        .map((r) => {
+            const label = modeLabel[r.mode] || r.mode;
+            const icon = modeIcon[r.mode] || "🚗";
+            const badge = modeBadge[r.mode] || "car";
+            const safeR = encodeURIComponent(JSON.stringify(r));
 
-        return `
+            return `
         <div class="route-card" data-mode="${r.mode}">
           <div class="route-card-icon">${icon}</div>
           <div class="route-card-info">
@@ -280,7 +374,8 @@ function renderRoutes(routes, filter = 'all') {
             </button>
           </div>
         </div>`;
-    }).join('');
+        })
+        .join("");
 }
 
 function repeatRoute(routeJSON) {
@@ -288,9 +383,9 @@ function repeatRoute(routeJSON) {
     const params = new URLSearchParams({
         startaddress: r.startaddress,
         endaddress: r.endaddress,
-        routemode: r.mode
+        routemode: r.mode,
     });
-    window.location.href = `index.html?${params.toString()}`;
+    window.location.href = `/logged/map?${params.toString()}`;
 }
 
 /* ════════════════════════════════════════════════════════
@@ -300,84 +395,100 @@ function goToMap(event, companyJSON) {
     event.stopPropagation();
     const c = JSON.parse(companyJSON);
     const params = new URLSearchParams({
-        startaddress: 'Bergamo, BG',   // ← sostituire con indirizzo da sessione utente
+        startaddress: "Bergamo, BG", // ← sostituire con indirizzo da sessione utente
         endaddress: c.address,
         endname: c.name,
-        routemode: 'driving-car'
+        routemode: "driving-car",
     });
-    window.location.href = `index.html?${params.toString()}`;
+    window.location.href = `/logged/map?${params.toString()}`;
 }
 
 /* ─── ANTEPRIMA PERCORSI RECENTI (nella dashboard) ───── */
 function renderRecentRoutes() {
-    const list = document.getElementById('recentRoutesList');
+    const list = document.getElementById("recentRoutesList");
     const recent = MOCK_ROUTES.slice(0, 3);
 
-    list.innerHTML = recent.map(r => `
+    list.innerHTML = recent
+        .map(
+            (r) => `
       <div class="route-item">
-        <div class="route-icon">${modeIcon[r.mode] || '🚗'}</div>
+        <div class="route-icon">${modeIcon[r.mode] || "🚗"}</div>
         <div class="route-info">
           <div class="route-from-to">${r.from} → ${r.to}</div>
           <div class="route-meta">${r.date} · ${r.distanceKm} km · ${r.durationMin} min</div>
         </div>
-        <span class="route-badge ${modeBadge[r.mode] || 'car'}">${modeLabel[r.mode] || 'Auto'}</span>
-      </div>`).join('');
+        <span class="route-badge ${modeBadge[r.mode] || "car"}">${modeLabel[r.mode] || "Auto"}</span>
+      </div>`,
+        )
+        .join("");
 }
 
 /* ════════════════════════════════════════════════════════
    PROFILO — dati in memoria (in produzione: fetch /api/profile)
    ════════════════════════════════════════════════════════ */
 let profiloData = {
-    nome: 'Marco', cognome: 'Rossi',
-    nascita: '2007-03-14', cf: 'RSSMRC07C14A794Z',
-    comune: 'Bergamo (BG)', tel: '+39 333 456 7890',
-    email: 'marco.rossi@student.it',
-    dispDal: '2025-03-01', dispAl: '2025-06-30',
-    ore: '40', distMax: '25',
-    settori: 'Sviluppo web, Cybersecurity, Cloud',
+    nome: "Marco",
+    cognome: "Rossi",
+    nascita: "2007-03-14",
+    cf: "RSSMRC07C14A794Z",
+    comune: "Bergamo (BG)",
+    tel: "+39 333 456 7890",
+    email: "marco.rossi@student.it",
+    dispDal: "2025-03-01",
+    dispAl: "2025-06-30",
+    ore: "40",
+    distMax: "25",
+    settori: "Sviluppo web, Cybersecurity, Cloud",
     skills: [
-        { nome: 'Python',     livello: 'Avanzato' },
-        { nome: 'JavaScript', livello: 'Intermedio' },
-        { nome: 'C / C++',    livello: 'Intermedio' },
-        { nome: 'SQL',        livello: 'Base' },
-        { nome: 'Flask',      livello: 'Intermedio' },
-        { nome: 'Linux',      livello: 'Base' }
+        { nome: "Python", livello: "Avanzato" },
+        { nome: "JavaScript", livello: "Intermedio" },
+        { nome: "C / C++", livello: "Intermedio" },
+        { nome: "SQL", livello: "Base" },
+        { nome: "Flask", livello: "Intermedio" },
+        { nome: "Linux", livello: "Base" },
     ],
-    softSkills: ['Problem solving', 'Lavoro in team', 'Gestione del tempo', 'Comunicazione', 'Attenzione ai dettagli', 'Creatività']
+    softSkills: [
+        "Problem solving",
+        "Lavoro in team",
+        "Gestione del tempo",
+        "Comunicazione",
+        "Attenzione ai dettagli",
+        "Creatività",
+    ],
 };
 
 const ALL_SOFT_SKILLS = [
-    { icon: '🧩', label: 'Problem solving' },
-    { icon: '🤝', label: 'Lavoro in team' },
-    { icon: '🎯', label: 'Gestione del tempo' },
-    { icon: '💬', label: 'Comunicazione' },
-    { icon: '🔍', label: 'Attenzione ai dettagli' },
-    { icon: '💡', label: 'Creatività' },
-    { icon: '📣', label: 'Public speaking' },
-    { icon: '🔄', label: 'Adattabilità' },
-    { icon: '🧭', label: 'Leadership' },
-    { icon: '📚', label: 'Autoapprendimento' }
+    { icon: "🧩", label: "Problem solving" },
+    { icon: "🤝", label: "Lavoro in team" },
+    { icon: "🎯", label: "Gestione del tempo" },
+    { icon: "💬", label: "Comunicazione" },
+    { icon: "🔍", label: "Attenzione ai dettagli" },
+    { icon: "💡", label: "Creatività" },
+    { icon: "📣", label: "Public speaking" },
+    { icon: "🔄", label: "Adattabilità" },
+    { icon: "🧭", label: "Leadership" },
+    { icon: "📚", label: "Autoapprendimento" },
 ];
 
-const SKILL_LV_MAP = { 'Base': 33, 'Intermedio': 65, 'Avanzato': 90 };
+const SKILL_LV_MAP = { Base: 33, Intermedio: 65, Avanzato: 90 };
 
 /* ─── Apre il modal e popola i form ──────────────────── */
 function openProfiloModal() {
     // Anagrafica
-    document.getElementById('fNome').value    = profiloData.nome;
-    document.getElementById('fCognome').value = profiloData.cognome;
-    document.getElementById('fNascita').value = profiloData.nascita;
-    document.getElementById('fCF').value      = profiloData.cf;
-    document.getElementById('fComune').value  = profiloData.comune;
-    document.getElementById('fTel').value     = profiloData.tel;
-    document.getElementById('fEmail').value   = profiloData.email;
+    document.getElementById("fNome").value = profiloData.nome;
+    document.getElementById("fCognome").value = profiloData.cognome;
+    document.getElementById("fNascita").value = profiloData.nascita;
+    document.getElementById("fCF").value = profiloData.cf;
+    document.getElementById("fComune").value = profiloData.comune;
+    document.getElementById("fTel").value = profiloData.tel;
+    document.getElementById("fEmail").value = profiloData.email;
 
     // Disponibilità
-    document.getElementById('fDispDal').value  = profiloData.dispDal;
-    document.getElementById('fDispAl').value   = profiloData.dispAl;
-    document.getElementById('fOre').value      = profiloData.ore;
-    document.getElementById('fDistMax').value  = profiloData.distMax;
-    document.getElementById('fSettori').value  = profiloData.settori;
+    document.getElementById("fDispDal").value = profiloData.dispDal;
+    document.getElementById("fDispAl").value = profiloData.dispAl;
+    document.getElementById("fOre").value = profiloData.ore;
+    document.getElementById("fDistMax").value = profiloData.distMax;
+    document.getElementById("fSettori").value = profiloData.settori;
 
     // Skills editor
     renderSkillsEditor();
@@ -386,45 +497,55 @@ function openProfiloModal() {
     renderSoftEditor();
 
     // Reset status
-    setApiStatus('', '');
+    setApiStatus("", "");
 
-    document.getElementById('profiloOverlay').classList.add('active');
+    document.getElementById("profiloOverlay").classList.add("active");
     // Attiva prima tab
-    switchTab('anagrafica');
+    switchTab("anagrafica");
 }
 
 function closeProfiloModal() {
-    document.getElementById('profiloOverlay').classList.remove('active');
+    document.getElementById("profiloOverlay").classList.remove("active");
 }
 
 /* ─── Tab switching ──────────────────────────────────── */
 function switchTab(name) {
-    document.querySelectorAll('.pro-tab').forEach(t => {
-        t.classList.toggle('active', t.dataset.tab === name);
+    document.querySelectorAll(".pro-tab").forEach((t) => {
+        t.classList.toggle("active", t.dataset.tab === name);
     });
-    document.querySelectorAll('.pro-tab-panel').forEach(p => {
-        p.classList.toggle('active', p.id === 'tab' + name.charAt(0).toUpperCase() + name.slice(1));
+    document.querySelectorAll(".pro-tab-panel").forEach((p) => {
+        p.classList.toggle(
+            "active",
+            p.id === "tab" + name.charAt(0).toUpperCase() + name.slice(1),
+        );
     });
 }
 
 /* ─── Skill editor ───────────────────────────────────── */
 function renderSkillsEditor() {
-    const el = document.getElementById('proSkillsEditor');
-    el.innerHTML = profiloData.skills.map((s, i) => `
+    const el = document.getElementById("proSkillsEditor");
+    el.innerHTML = profiloData.skills
+        .map(
+            (s, i) => `
       <div class="pro-skill-edit-row">
         <input type="text" value="${s.nome}" placeholder="Es. Python"
                onchange="profiloData.skills[${i}].nome = this.value"/>
         <select onchange="profiloData.skills[${i}].livello = this.value">
-          ${['Base','Intermedio','Avanzato'].map(lv =>
-              `<option value="${lv}"${s.livello === lv ? ' selected' : ''}>${lv}</option>`
-          ).join('')}
+          ${["Base", "Intermedio", "Avanzato"]
+              .map(
+                  (lv) =>
+                      `<option value="${lv}"${s.livello === lv ? " selected" : ""}>${lv}</option>`,
+              )
+              .join("")}
         </select>
         <button class="pro-del-btn" onclick="removeSkill(${i})">✕</button>
-      </div>`).join('');
+      </div>`,
+        )
+        .join("");
 }
 
 function addSkillRow() {
-    profiloData.skills.push({ nome: '', livello: 'Base' });
+    profiloData.skills.push({ nome: "", livello: "Base" });
     renderSkillsEditor();
 }
 
@@ -435,20 +556,20 @@ function removeSkill(i) {
 
 /* ─── Soft skills editor ─────────────────────────────── */
 function renderSoftEditor() {
-    const el = document.getElementById('proSoftEditor');
-    el.innerHTML = ALL_SOFT_SKILLS.map(s => {
+    const el = document.getElementById("proSoftEditor");
+    el.innerHTML = ALL_SOFT_SKILLS.map((s) => {
         const sel = profiloData.softSkills.includes(s.label);
         return `
-        <div class="pro-soft-check${sel ? ' selected' : ''}" onclick="toggleSoft(this, '${s.label}')">
-          <input type="checkbox"${sel ? ' checked' : ''}/>
+        <div class="pro-soft-check${sel ? " selected" : ""}" onclick="toggleSoft(this, '${s.label}')">
+          <input type="checkbox"${sel ? " checked" : ""}/>
           <span class="pro-soft-check-icon">${s.icon}</span>
           <span class="pro-soft-check-label">${s.label}</span>
         </div>`;
-    }).join('');
+    }).join("");
 }
 
 function toggleSoft(el, label) {
-    el.classList.toggle('selected');
+    el.classList.toggle("selected");
     const idx = profiloData.softSkills.indexOf(label);
     if (idx === -1) profiloData.softSkills.push(label);
     else profiloData.softSkills.splice(idx, 1);
@@ -456,84 +577,53 @@ function toggleSoft(el, label) {
 
 /* ─── Status helper ──────────────────────────────────── */
 function setApiStatus(msg, cls) {
-    const el = document.getElementById('proApiStatus');
+    const el = document.getElementById("proApiStatus");
     el.textContent = msg;
-    el.className = 'pro-api-status' + (cls ? ' ' + cls : '');
+    el.className = "pro-api-status" + (cls ? " " + cls : "");
 }
 
 /* ════════════════════════════════════════════════════════
-   SALVA PROFILO — chiamata API Claude
-   Invia i dati del profilo a Claude e aggiorna la UI
-   con eventuali suggerimenti restituiti dal modello.
+   SALVA PROFILO — salvataggio locale
+   In produzione sostituire con: fetch('/api/profile', { method: 'POST', body: JSON.stringify(profiloData) })
    ════════════════════════════════════════════════════════ */
 async function salvaProfilo() {
     // Leggi valori dal form anagrafica
-    profiloData.nome     = document.getElementById('fNome').value.trim();
-    profiloData.cognome  = document.getElementById('fCognome').value.trim();
-    profiloData.nascita  = document.getElementById('fNascita').value;
-    profiloData.cf       = document.getElementById('fCF').value.trim().toUpperCase();
-    profiloData.comune   = document.getElementById('fComune').value.trim();
-    profiloData.tel      = document.getElementById('fTel').value.trim();
-    profiloData.email    = document.getElementById('fEmail').value.trim();
-    profiloData.dispDal  = document.getElementById('fDispDal').value;
-    profiloData.dispAl   = document.getElementById('fDispAl').value;
-    profiloData.ore      = document.getElementById('fOre').value;
-    profiloData.distMax  = document.getElementById('fDistMax').value;
-    profiloData.settori  = document.getElementById('fSettori').value.trim();
+    profiloData.nome = document.getElementById("fNome").value.trim();
+    profiloData.cognome = document.getElementById("fCognome").value.trim();
+    profiloData.nascita = document.getElementById("fNascita").value;
+    profiloData.cf = document.getElementById("fCF").value.trim().toUpperCase();
+    profiloData.comune = document.getElementById("fComune").value.trim();
+    profiloData.tel = document.getElementById("fTel").value.trim();
+    profiloData.email = document.getElementById("fEmail").value.trim();
+    profiloData.dispDal = document.getElementById("fDispDal").value;
+    profiloData.dispAl = document.getElementById("fDispAl").value;
+    profiloData.ore = document.getElementById("fOre").value;
+    profiloData.distMax = document.getElementById("fDistMax").value;
+    profiloData.settori = document.getElementById("fSettori").value.trim();
 
-    const btn = document.getElementById('btnSalvaProfilo');
-    btn.textContent = '⏳ Salvataggio…';
+    const btn = document.getElementById("btnSalvaProfilo");
+    btn.textContent = "⏳ Salvataggio…";
     btn.disabled = true;
-    setApiStatus('Analisi profilo in corso…', '');
+    setApiStatus("Salvataggio in corso…", "");
 
     try {
-        const prompt = `
-Sei un assistente per una piattaforma di stage scolastici chiamata stageMatch.
-Analizza il seguente profilo studente e restituisci SOLO un oggetto JSON con questa struttura:
-{
-  "completezza": <numero 0-100>,
-  "suggerimento": "<stringa breve, max 80 caratteri, su cosa migliorare>",
-  "settoriConsigliati": ["<settore1>", "<settore2>", "<settore3>"]
-}
-Non aggiungere nulla al di fuori del JSON.
+        /* ── Sostituire con chiamata reale al backend: ────────────
+           await fetch('/api/profile', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify(profiloData)
+           });
+           ──────────────────────────────────────────────────────── */
+        await new Promise((r) => setTimeout(r, 600)); // simula latenza rete
 
-Profilo:
-- Nome: ${profiloData.nome} ${profiloData.cognome}
-- Competenze: ${profiloData.skills.map(s => s.nome + ' (' + s.livello + ')').join(', ')}
-- Soft skills: ${profiloData.softSkills.join(', ')}
-- Settori di interesse: ${profiloData.settori}
-- Disponibilità: ${profiloData.ore}h/sett, entro ${profiloData.distMax}km
-`.trim();
-
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 300,
-                messages: [{ role: 'user', content: prompt }]
-            })
-        });
-
-        const data = await response.json();
-        const raw = data.content.map(b => b.text || '').join('').trim();
-        const clean = raw.replace(/```json|```/g, '').trim();
-        const parsed = JSON.parse(clean);
-
-        // Aggiorna UI con risultati API
-        updateProfiloUI(parsed);
-        setApiStatus('✅ Profilo aggiornato con successo!', 'ok');
-
-        setTimeout(closeProfiloModal, 1200);
-
-    } catch (err) {
-        console.error('API error:', err);
-        // Salva comunque i dati localmente
         updateProfiloUI(null);
-        setApiStatus('⚠️ Salvato in locale (API non disponibile)', 'err');
-        setTimeout(closeProfiloModal, 1500);
+        setApiStatus("✅ Profilo aggiornato!", "ok");
+        setTimeout(closeProfiloModal, 1000);
+    } catch (err) {
+        console.error("Errore salvataggio profilo:", err);
+        setApiStatus("⚠️ Errore nel salvataggio. Riprova.", "err");
     } finally {
-        btn.textContent = 'Salva modifiche';
+        btn.textContent = "Salva modifiche";
         btn.disabled = false;
     }
 }
@@ -541,30 +631,30 @@ Profilo:
 /* ─── Aggiorna la sezione profilo con i nuovi dati ───── */
 function updateProfiloUI(apiResult) {
     // Nome hero
-    document.querySelector('.profilo-hero-name').textContent =
-        profiloData.nome + ' ' + profiloData.cognome;
+    document.querySelector(".profilo-hero-name").textContent =
+        profiloData.nome + " " + profiloData.cognome;
 
     // Completezza (da API o default)
     const pct = apiResult ? apiResult.completezza : 82;
-    document.querySelector('.pro-circ-num').textContent = pct + '%';
+    document.querySelector(".pro-circ-num").textContent = pct + "%";
 
     // Aggiorna suggerimento come tag (se presente)
     if (apiResult && apiResult.suggerimento) {
-        const tagsEl = document.querySelector('.profilo-hero-tags');
-        const existing = tagsEl.querySelector('.pro-tag-suggerimento');
+        const tagsEl = document.querySelector(".profilo-hero-tags");
+        const existing = tagsEl.querySelector(".pro-tag-suggerimento");
         if (existing) existing.remove();
-        const tag = document.createElement('span');
-        tag.className = 'pro-tag pro-tag-suggerimento';
-        tag.textContent = '💡 ' + apiResult.suggerimento;
+        const tag = document.createElement("span");
+        tag.className = "pro-tag pro-tag-suggerimento";
+        tag.textContent = "💡 " + apiResult.suggerimento;
         tagsEl.appendChild(tag);
     }
 
     // Ri-renderizza skills bar
-    const skillsEl = document.getElementById('proSkills');
+    const skillsEl = document.getElementById("proSkills");
     if (skillsEl) {
         skillsEl.innerHTML = profiloData.skills
-            .filter(s => s.nome)
-            .map(s => {
+            .filter((s) => s.nome)
+            .map((s) => {
                 const pct = SKILL_LV_MAP[s.livello] || 50;
                 return `
                 <div class="pro-skill-row">
@@ -572,21 +662,24 @@ function updateProfiloUI(apiResult) {
                   <div class="pro-skill-bar"><div class="pro-skill-fill" style="width:${pct}%"></div></div>
                   <span class="pro-skill-lv">${s.livello}</span>
                 </div>`;
-            }).join('');
+            })
+            .join("");
     }
 
     // Ri-renderizza soft skills
-    const softEl = document.getElementById('proSoftSkills');
+    const softEl = document.getElementById("proSoftSkills");
     if (softEl) {
-        softEl.innerHTML = profiloData.softSkills.map(label => {
-            const found = ALL_SOFT_SKILLS.find(s => s.label === label);
-            const icon = found ? found.icon : '⭐';
-            return `
+        softEl.innerHTML = profiloData.softSkills
+            .map((label) => {
+                const found = ALL_SOFT_SKILLS.find((s) => s.label === label);
+                const icon = found ? found.icon : "⭐";
+                return `
             <div class="pro-soft-item">
               <span class="pro-soft-icon">${icon}</span>
               <span>${label}</span>
             </div>`;
-        }).join('');
+            })
+            .join("");
     }
 }
 
@@ -594,73 +687,97 @@ function updateProfiloUI(apiResult) {
    IMPOSTAZIONI
    ════════════════════════════════════════════════════════ */
 let impostazioniData = {
-    notifMatch: true, notifPercorsi: true, notifScuola: true,
-    notifScadenze: false, notifEmail: true,
-    privVisibilita: 'school', privCondividi: true, privLink: false,
-    tema: 'dark', mezzoDefault: 'driving-car', lingua: 'it', reduceMotion: false
+    notifMatch: true,
+    notifPercorsi: true,
+    notifScuola: true,
+    notifScadenze: false,
+    notifEmail: true,
+    privVisibilita: "school",
+    privCondividi: true,
+    privLink: false,
+    tema: "dark",
+    mezzoDefault: "driving-car",
+    lingua: "it",
+    reduceMotion: false,
 };
 
 /* ─── Salva toggle/select cambiati direttamente nella pagina ─ */
 function saveImpostazioni() {
-    impostazioniData.notifMatch      = document.getElementById('notifMatch')?.checked;
-    impostazioniData.notifPercorsi   = document.getElementById('notifPercorsi')?.checked;
-    impostazioniData.notifScuola     = document.getElementById('notifScuola')?.checked;
-    impostazioniData.notifScadenze   = document.getElementById('notifScadenze')?.checked;
-    impostazioniData.notifEmail      = document.getElementById('notifEmail')?.checked;
-    impostazioniData.privVisibilita  = document.getElementById('privVisibilita')?.value;
-    impostazioniData.privCondividi   = document.getElementById('privCondividi')?.checked;
-    impostazioniData.privLink        = document.getElementById('privLink')?.checked;
-    impostazioniData.mezzoDefault    = document.getElementById('mezzoDefault')?.value;
-    impostazioniData.lingua          = document.getElementById('lingua')?.value;
-    impostazioniData.reduceMotion    = document.getElementById('reduceMotion')?.checked;
-    showToast('✅ Impostazione salvata');
+    impostazioniData.notifMatch =
+        document.getElementById("notifMatch")?.checked;
+    impostazioniData.notifPercorsi =
+        document.getElementById("notifPercorsi")?.checked;
+    impostazioniData.notifScuola =
+        document.getElementById("notifScuola")?.checked;
+    impostazioniData.notifScadenze =
+        document.getElementById("notifScadenze")?.checked;
+    impostazioniData.notifEmail =
+        document.getElementById("notifEmail")?.checked;
+    impostazioniData.privVisibilita =
+        document.getElementById("privVisibilita")?.value;
+    impostazioniData.privCondividi =
+        document.getElementById("privCondividi")?.checked;
+    impostazioniData.privLink = document.getElementById("privLink")?.checked;
+    impostazioniData.mezzoDefault =
+        document.getElementById("mezzoDefault")?.value;
+    impostazioniData.lingua = document.getElementById("lingua")?.value;
+    impostazioniData.reduceMotion =
+        document.getElementById("reduceMotion")?.checked;
+    showToast("✅ Impostazione salvata");
 }
 
 /* ─── Tema segmented ─────────────────────────────────────── */
 function setTema(btn) {
-    document.querySelectorAll('.imp-seg').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+    document
+        .querySelectorAll(".imp-seg")
+        .forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
     impostazioniData.tema = btn.dataset.val;
-    showToast('🎨 Tema aggiornato');
+    showToast("🎨 Tema aggiornato");
 }
 
 /* ─── Toast ──────────────────────────────────────────────── */
 let toastTimer;
 function showToast(msg) {
-    const t = document.getElementById('impToast');
+    const t = document.getElementById("impToast");
     if (!t) return;
     t.textContent = msg;
-    t.classList.add('show');
+    t.classList.add("show");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
 }
 
 /* ─── Esporta dati GDPR ──────────────────────────────────── */
 function esportaDati() {
-    const payload = { profilo: profiloData, impostazioni: impostazioniData, esportato: new Date().toISOString() };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
+    const payload = {
+        profilo: profiloData,
+        impostazioni: impostazioniData,
+        esportato: new Date().toISOString(),
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+        type: "application/json",
+    });
+    const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = 'stagematch_dati.json';
+    a.download = "stagematch_dati.json";
     a.click();
-    showToast('📦 Download avviato');
+    showToast("📦 Download avviato");
 }
 
 /* ─── Esporta CV PDF (stub) ──────────────────────────────── */
 function esportaCV() {
-    showToast('📄 Generazione PDF in corso…');
-    setTimeout(() => showToast('✅ CV pronto per il download'), 1800);
+    showToast("📄 Generazione PDF in corso…");
+    setTimeout(() => showToast("✅ CV pronto per il download"), 1800);
 }
 
 /* ════════════════════════════════════════════════════════
-   MODAL IMPOSTAZIONI (email, password, sessioni, elimina)
-   Con chiamata API Claude per feedback contestuale
+   MODAL IMPOSTAZIONI (sessioni)
    ════════════════════════════════════════════════════════ */
 let currentImpModal = null;
 
 const IMP_MODAL_CONFIGS = {
     sessioni: {
-        title: '📱 Sessioni attive',
+        title: "📱 Sessioni attive",
         body: `
           <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:4px">
             <div class="imp-sessione-row">
@@ -677,62 +794,47 @@ const IMP_MODAL_CONFIGS = {
               <button class="imp-btn-sm danger" onclick="this.closest('.imp-sessione-row').style.opacity='.4';this.textContent='Disconnesso'">Disconnetti</button>
             </div>
           </div>`,
-        save: async () => { showToast('🔒 Sessioni aggiornate'); return null; }
-    },
-    elimina: {
-        title: '⚠️ Elimina account',
-        body: `
-          <div style="display:flex;flex-direction:column;gap:14px">
-            <div style="background:rgba(234,67,53,.1);border:1px solid rgba(234,67,53,.25);border-radius:10px;padding:14px;font-size:13px;color:rgba(255,255,255,.7);line-height:1.6">
-              Questa azione è <strong style="color:var(--red)">irreversibile</strong>. Tutti i tuoi dati, percorsi e match verranno eliminati permanentemente.
-            </div>
-            <div class="pro-field">
-              <label>Scrivi <strong style="color:var(--red)">ELIMINA</strong> per confermare</label>
-              <input type="text" id="impEliminaConfirm" placeholder="ELIMINA"/>
-            </div>
-          </div>`,
         save: async () => {
-            const v = document.getElementById('impEliminaConfirm').value.trim();
-            if (v !== 'ELIMINA') return 'Scrivi esattamente ELIMINA per procedere.';
-            showToast('🗑️ Account eliminato');
+            showToast("🔒 Sessioni aggiornate");
             return null;
-        }
+        },
     }
-};
+}
 
 function openImpModal(type) {
     currentImpModal = type;
     const cfg = IMP_MODAL_CONFIGS[type];
-    document.getElementById('impModalTitle').textContent = cfg.title;
-    document.getElementById('impModalBody').innerHTML = cfg.body;
-    document.getElementById('impApiStatus').textContent = '';
-    document.getElementById('impApiStatus').className = 'pro-api-status';
-    document.getElementById('impOverlay').classList.add('active');
+    document.getElementById("impModalTitle").textContent = cfg.title;
+    document.getElementById("impModalBody").innerHTML = cfg.body;
+    document.getElementById("impApiStatus").textContent = "";
+    document.getElementById("impApiStatus").className = "pro-api-status";
+    document.getElementById("impOverlay").classList.add("active");
 }
 
 function closeImpModal() {
-    document.getElementById('impOverlay').classList.remove('active');
+    document.getElementById("impOverlay").classList.remove("active");
     currentImpModal = null;
 }
 
 async function salvaImpModal() {
     if (!currentImpModal) return;
     const cfg = IMP_MODAL_CONFIGS[currentImpModal];
-    const btn = document.getElementById('btnSalvaImp');
-    btn.textContent = '⏳ Salvataggio…';
+    const btn = document.getElementById("btnSalvaImp");
+    btn.textContent = "⏳ Salvataggio…";
     btn.disabled = true;
 
     const err = await cfg.save();
     if (err) {
-        document.getElementById('impApiStatus').textContent = '⚠️ ' + err;
-        document.getElementById('impApiStatus').className = 'pro-api-status err';
+        document.getElementById("impApiStatus").textContent = "⚠️ " + err;
+        document.getElementById("impApiStatus").className =
+            "pro-api-status err";
     } else {
-        document.getElementById('impApiStatus').textContent = '✅ Salvato!';
-        document.getElementById('impApiStatus').className = 'pro-api-status ok';
+        document.getElementById("impApiStatus").textContent = "✅ Salvato!";
+        document.getElementById("impApiStatus").className = "pro-api-status ok";
         setTimeout(closeImpModal, 900);
     }
 
-    btn.textContent = 'Salva';
+    btn.textContent = "Salva";
     btn.disabled = false;
 }
 
@@ -740,83 +842,194 @@ async function salvaImpModal() {
    LOGOUT MODAL
    ════════════════════════════════════════════════════════ */
 function openLogoutModal() {
-    document.getElementById('logoutOverlay').classList.add('active');
-    document.getElementById('logoutCancel').focus();
+    document.getElementById("logoutOverlay").classList.add("active");
+    document.getElementById("logoutCancel").focus();
 }
 
 function closeLogoutModal() {
-    document.getElementById('logoutOverlay').classList.remove('active');
+    document.getElementById("logoutOverlay").classList.remove("active");
 }
 
 /* ─── SIDEBAR MOBILE ──────────────────────────────────── */
 function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('overlay').classList.toggle('active');
+    document.getElementById("sidebar").classList.toggle("open");
+    document.getElementById("overlay").classList.toggle("active");
 }
 
 function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('overlay').classList.remove('active');
+    document.getElementById("sidebar").classList.remove("open");
+    document.getElementById("overlay").classList.remove("active");
 }
 
-/* ─── INIZIALIZZAZIONE ────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', () => {
-
-    /* Anteprima percorsi nella dashboard */
+/* ════════════════════════════════════════════════════════
+   INIZIALIZZAZIONE — tutti gli event listener centralizzati
+   qui, nessun onclick/onchange nel markup HTML
+   ════════════════════════════════════════════════════════ */
+document.addEventListener("DOMContentLoaded", () => {
+    /* ── Render iniziale ─────────────────────────────────── */
     renderRecentRoutes();
 
-    /* Transport pills nella hero card */
-    document.querySelectorAll('.t-pill').forEach(pill => {
-        pill.addEventListener('click', () => {
-            document.querySelectorAll('.t-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
+    /* ── Sidebar overlay (chiudi cliccando fuori) ────────── */
+    document.getElementById("overlay").addEventListener("click", closeSidebar);
+
+    /* ── Hamburger (mobile) ──────────────────────────────── */
+    document
+        .querySelector(".hamburger")
+        .addEventListener("click", toggleSidebar);
+
+    /* ── Nav items sidebar ───────────────────────────────── */
+    document.getElementById("navDashboard").addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection("dashboard");
+        setActive(e.currentTarget);
+    });
+    document.getElementById("navPercorsi").addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection("percorsi");
+        setActive(e.currentTarget);
+    });
+    document.getElementById("navAziende").addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection("aziende");
+        setActive(e.currentTarget);
+    });
+    document.getElementById("navProfilo").addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection("profilo");
+        setActive(e.currentTarget);
+    });
+    document
+        .getElementById("navImpostazioni")
+        .addEventListener("click", (e) => {
+            e.preventDefault();
+            showSection("impostazioni");
+            setActive(e.currentTarget);
+        });
+    document.getElementById("navLogout").addEventListener("click", (e) => {
+        e.preventDefault();
+        openLogoutModal();
+    });
+
+    /* ── Bottoni dashboard ───────────────────────────────── */
+    document.getElementById("btnDashAziende").addEventListener("click", () => {
+        showSection("aziende");
+        setActive(document.getElementById("navAziende"));
+    });
+    document.getElementById("btnVediPercorsi").addEventListener("click", () => {
+        showSection("percorsi");
+        setActive(document.getElementById("navPercorsi"));
+    });
+
+    /* ── Transport pills (hero card) ─────────────────────── */
+    document.querySelectorAll(".t-pill").forEach((pill) => {
+        pill.addEventListener("click", () => {
+            document
+                .querySelectorAll(".t-pill")
+                .forEach((p) => p.classList.remove("active"));
+            pill.classList.add("active");
         });
     });
 
-    /* Filtri percorsi */
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+    /* ── Filtri percorsi ─────────────────────────────────── */
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            document
+                .querySelectorAll(".filter-btn")
+                .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
             currentFilter = btn.dataset.filter;
             if (percorsiLoaded) renderRoutes(MOCK_ROUTES, currentFilter);
         });
     });
 
-    /* ESC chiude sidebar mobile */
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
+    /* ── Profilo: apri modal ─────────────────────────────── */
+    document
+        .getElementById("btnEditProfilo")
+        .addEventListener("click", openProfiloModal);
+
+    /* ── Profilo modal: tab switching ────────────────────── */
+    document.querySelectorAll(".pro-tab").forEach((tab) => {
+        tab.addEventListener("click", () => switchTab(tab.dataset.tab));
+    });
+
+    /* ── Profilo modal: aggiungi competenza ──────────────── */
+    document
+        .querySelector(".pro-add-btn")
+        .addEventListener("click", addSkillRow);
+
+    /* ── Profilo modal: annulla e salva ──────────────────── */
+    document
+        .querySelector("#profiloOverlay .logout-btn-cancel")
+        .addEventListener("click", closeProfiloModal);
+    document
+        .getElementById("btnSalvaProfilo")
+        .addEventListener("click", salvaProfilo);
+
+    /* ── Profilo modal: chiudi cliccando fuori ───────────── */
+    document.getElementById("profiloOverlay").addEventListener("click", (e) => {
+        if (e.target === document.getElementById("profiloOverlay"))
+            closeProfiloModal();
+    });
+
+    /* ── Impostazioni modal: apri sessioni / elimina ─────── */
+    document
+        .querySelector('[data-modal="sessioni"]')
+        .addEventListener("click", () => openImpModal("sessioni"));
+
+    /* ── Impostazioni modal: chiudi e salva ──────────────── */
+    document
+        .querySelector("#impOverlay .logout-btn-cancel")
+        .addEventListener("click", closeImpModal);
+    document
+        .getElementById("btnSalvaImp")
+        .addEventListener("click", salvaImpModal);
+
+    /* ── Impostazioni modal: chiudi cliccando fuori ──────── */
+    document.getElementById("impOverlay").addEventListener("click", (e) => {
+        if (e.target === document.getElementById("impOverlay")) closeImpModal();
+    });
+
+    /* ── Impostazioni toggles e select ──────────────────────
+       Usa event delegation sull'intera sezione impostazioni
+       per intercettare qualsiasi checkbox/select cambiato.  */
+    document
+        .getElementById("sectionImpostazioni")
+        .addEventListener("change", saveImpostazioni);
+
+    /* ── Impostazioni tema segmented ─────────────────────── */
+    document.querySelectorAll(".imp-seg").forEach((btn) => {
+        btn.addEventListener("click", () => setTema(btn));
+    });
+
+    /* ── Impostazioni: esporta dati e CV ─────────────────── */
+    document
+        .querySelector('[data-action="esportaDati"]')
+        .addEventListener("click", esportaDati);
+    document
+        .querySelector('[data-action="esportaCV"]')
+        .addEventListener("click", esportaCV);
+
+    /* ── Logout modal ────────────────────────────────────── */
+    document
+        .getElementById("logoutCancel")
+        .addEventListener("click", closeLogoutModal);
+    document.getElementById("logoutConfirm").addEventListener("click", () => {
+        // Sostituire con: window.location.href = '/logout';
+        // oppure: fetch('/api/logout', { method: 'POST' }).then(...)
+        console.log("Logout confermato");
+    });
+    document.getElementById("logoutOverlay").addEventListener("click", (e) => {
+        if (e.target === document.getElementById("logoutOverlay"))
+            closeLogoutModal();
+    });
+
+    /* ── ESC: chiude tutti i modal ───────────────────────── */
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
             closeSidebar();
             closeLogoutModal();
             closeProfiloModal();
             closeImpModal();
         }
-    });
-
-    /* Chiudi imp modal cliccando fuori */
-    document.getElementById('impOverlay').addEventListener('click', e => {
-        if (e.target === document.getElementById('impOverlay')) closeImpModal();
-    });
-
-    /* Profilo modal — tab switching */
-    document.querySelectorAll('.pro-tab').forEach(tab => {
-        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
-    });
-
-    /* Chiudi profilo modal cliccando fuori */
-    document.getElementById('profiloOverlay').addEventListener('click', e => {
-        if (e.target === document.getElementById('profiloOverlay')) closeProfiloModal();
-    });
-
-    /* Logout modal */
-    document.getElementById('logoutCancel').addEventListener('click', closeLogoutModal);
-    document.getElementById('logoutConfirm').addEventListener('click', () => {
-        // Sostituisci con la tua logica di logout:
-        // window.location.href = '/logout';
-        // oppure: fetch('/api/logout', { method: 'POST' }).then(...)
-        console.log('Logout confermato');
-    });
-    document.getElementById('logoutOverlay').addEventListener('click', e => {
-        if (e.target === document.getElementById('logoutOverlay')) closeLogoutModal();
     });
 });
