@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>stageMatch — Trova il tuo stage</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a class="nav-logo" href="#">stage<span>Match</span></a>
+    <ul class="nav-links">
+      <li><a href="#features">Funzionalità</a></li>
+      <li><a href="#perchi">Per chi è</a></li>
+      <li><a href="#howto">Come funziona</a></li>
+      <li><a href="{{ url_for('index') }}">Mappa</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="{{ url_for('login') }}" class="btn btn-ghost">Accedi</a>
+      <a href="{{ url_for('register') }}" class="btn btn-primary">Registrati</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">Piattaforma per studenti e aziende</div>
+
+      <h1>
+        Trova lo stage<br>
+        <span class="highlight">giusto per te.</span>
+      </h1>
+
+      <p>
+        stageMatch collega studenti e neolaureati con aziende del territorio che
+        cercano talenti. Filtra, scopri e candidati in pochi click.
+      </p>
+
+      <div class="hero-actions">
+        <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg">Esplora opportunità</a>
+        <a href="{{ url_for('register') }}" class="btn btn-ghost btn-lg">Sei un'azienda?</a>
+      </div>
+
+      <!-- SEARCH BAR -->
+      <div class="search-wrap">
+        <div class="search-bar">
+          <input type="text" placeholder="Cerca per ruolo, settore o città…" />
+          <button type="button" aria-label="Cerca">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </button>
+        </div>
+        <div class="search-tags">
+          <span>🖥️ Informatica</span>
+          <span>📐 Ingegneria</span>
+          <span>📊 Marketing</span>
+          <span>🏛️ Legale</span>
+          <span>🎨 Design</span>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-strip">
+        <div class="stat-item">
+          <div class="stat-num">1.2<span>k+</span></div>
+          <div class="stat-label">Stage disponibili</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">340<span>+</span></div>
+          <div class="stat-label">Aziende partner</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">92<span>%</span></div>
+          <div class="stat-label">Soddisfazione studenti</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section-header">
+      <span class="section-eyebrow">Funzionalità</span>
+      <h2 class="section-title">Tutto quello che ti serve in un'unica piattaforma</h2>
+      <p class="section-desc">Dalla ricerca alla candidatura, stageMatch semplifica ogni passo del percorso.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🗺️</div>
+        <h3>Mappa interattiva</h3>
+        <p>Visualizza le opportunità su mappa e filtra per zona, distanza dalla tua università o modalità di lavoro.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Match istantaneo</h3>
+        <p>Il nostro algoritmo analizza il tuo profilo e ti suggerisce gli stage più coerenti con le tue competenze.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📬</div>
+        <h3>Candidatura semplice</h3>
+        <p>Invia la candidatura direttamente dalla piattaforma senza dover uscire dal flusso di ricerca.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔔</div>
+        <h3>Alert personalizzati</h3>
+        <p>Ricevi notifiche in tempo reale quando viene pubblicata un'opportunità che corrisponde ai tuoi criteri.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏢</div>
+        <h3>Profili aziendali verificati</h3>
+        <p>Ogni azienda viene verificata prima di poter pubblicare. Zero spam, solo opportunità reali.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <h3>Dashboard avanzata</h3>
+        <p>Tieni traccia delle candidature, dei messaggi e delle scadenze dal tuo pannello personale.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PER STUDENTI / AZIENDE -->
+  <section class="offer-section" id="perchi">
+    <div class="section-header">
+      <span class="section-eyebrow">Per chi è</span>
+      <h2 class="section-title">Due percorsi, un'unica piattaforma</h2>
+      <p class="section-desc">Che tu stia cercando uno stage o il candidato giusto, stageMatch ha la soluzione.</p>
+    </div>
+
+    <div class="offer-grid">
+      <div class="offer-card primary">
+        <span class="offer-tag">Studenti</span>
+        <h3>Trova il tuo<br>primo passo</h3>
+        <p>Esplora centinaia di opportunità reali, filtra per settore e candidati in pochi secondi.</p>
+        <ul class="offer-list">
+          <li>Profilo personalizzato e CV builder</li>
+          <li>Mappa delle opportunità vicino a te</li>
+          <li>Match con aziende compatibili</li>
+          <li>Tracciamento candidature</li>
+        </ul>
+        <a href="{{ url_for('register') }}" class="btn btn-primary" style="margin-top:0.5rem; width:fit-content;">Crea profilo gratuito</a>
+      </div>
+
+      <div class="offer-card secondary">
+        <span class="offer-tag purple">Aziende</span>
+        <h3>Pubblica e<br>trova talenti</h3>
+        <p>Raggiungi studenti qualificati e ricevi candidature mirate senza dispersione.</p>
+        <ul class="offer-list">
+          <li>Pubblicazione offerte illimitata</li>
+          <li>Filtro candidati per skill e università</li>
+          <li>Dashboard analytics avanzata</li>
+          <li>Badge "Azienda verificata"</li>
+        </ul>
+        <a href="{{ url_for('register') }}" class="btn btn-ghost offer-cta-ghost">Registra la tua azienda</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="howto">
+    <div class="section-header">
+      <span class="section-eyebrow">Come funziona</span>
+      <h2 class="section-title">Inizia in tre semplici passi</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Crea il tuo profilo</h4>
+          <p>Registrati gratuitamente, aggiungi le tue competenze, esperienze e preferenze. Il tuo profilo diventa il tuo biglietto da visita.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Esplora e filtra</h4>
+          <p>Usa la ricerca testuale, i filtri per settore e la mappa interattiva per trovare le opportunità più adatte a te.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Candidati e tieni traccia</h4>
+          <p>Invia la candidatura direttamente, ricevi feedback e monitora l'avanzamento dal tuo pannello personale.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINALE -->
+  <section class="cta-section">
+    <div class="cta-box">
+      <h2>Pronto a iniziare<br>la tua carriera?</h2>
+      <p>Unisciti a migliaia di studenti che hanno già trovato il loro stage con stageMatch.</p>
+      <div class="cta-actions">
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Inizia gratuitamente</a>
+        <a href="{{ url_for('home') }}" class="btn btn-ghost btn-lg">Guarda le offerte</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a class="nav-logo" href="#">stage<span>Match</span></a>
+    <ul class="footer-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Termini</a></li>
+      <li><a href="#">Contatti</a></li>
+      <li><a href="{{ url_for('home') }}">Dashboard</a></li>
+    </ul>
+    <span class="footer-copy">© 2025 stageMatch. Tutti i diritti riservati.</span>
+  </footer>
+
+  <!-- Script -->
+  <script src="{{ url_for('static', filename='js/landing.js') }}"></script>
+
+</body>
+</html>
