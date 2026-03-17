@@ -27,10 +27,17 @@ if au.SSO_MODE == "production":
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax"
     )
+try:
+    database_helper.init_users_db(os.getenv("DB_CONNECTION_STRING", "database.db"))
+except Exception as e:
+    app.logger.error(f"[ERROR] database initialization failed: {e}")
+    raise e
 
-database_helper.init_db()
+user = None
 
 def _completeLogin(user_data: dict):
+    global user
+
     email = user_data.get("email", "")
 
     # Check whitelist to be reviewed
@@ -49,13 +56,23 @@ def _completeLogin(user_data: dict):
             "Too many active sessions",
             "⏱️"
         )
+    
+    app.logger.info(f"[INFO] User {email} logged in with session ID: {session_id}")
+
+    try:
+        database_helper.add_user(user_data) 
+    except database_helper.UserAlreadyExistsError:
+        app.logger.info(f"[INFO] User {email} already exists in the database. Not adding again.")
+
+    from_database_user = database_helper.get_user_by_id(user_data["googleId"])
+
+    app.logger.info(f"[INFO] User info from database: {from_database_user.email}, {from_database_user.name}")
 
     au.sso_middleware.create_session(user_data, session, session_id)
 
-    # Upload preferences to be reviewed
-
+    user = from_database_user
+    
     return redirect(url_for("homepage"))
-
 
 @app.route('/')
 def mainPage():
@@ -76,7 +93,7 @@ def authLogin():
             "email": dev_email,
             "name": au.getUsername(dev_email).replace(".", " ").title(),
             "googleId": "dev-user-id",
-            "picture": ""
+            "picture": None
         }
 
         return _completeLogin(user_data)
@@ -113,12 +130,12 @@ def authLogout():
 @app.route("/logged/homepage")
 @au.sso_middleware.sso_login_required
 def homepage():
-    return render_template("/html/home.html")
+    return render_template("/html/home.html", user=user)
 
 @app.route('/logged/map')
 @au.sso_middleware.sso_login_required
 def map():
-    return render_template("/html/index.html")
+    return render_template("/html/index.html", user=user)
 
 @app.route("/dev/login")
 def devLogin():
