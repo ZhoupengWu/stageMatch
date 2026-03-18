@@ -1,7 +1,6 @@
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy import Column, String, LargeBinary
-
-Base = declarative_base()
+from .base import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -10,3 +9,10 @@ class User(Base):
     name = Column(String)
     email = Column(String, unique=True)
     picture = Column(LargeBinary)
+
+    preferences = relationship(
+        "UserPreferences",
+        back_populates="user",
+        uselist=False,          # relazione uno a uno
+        cascade="all, delete-orphan"
+    )
