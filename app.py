@@ -1,4 +1,5 @@
 import os
+import json
 import secrets
 from flask import Flask, render_template, redirect, request, session, url_for
 from dotenv import load_dotenv
@@ -28,12 +29,10 @@ if au.SSO_MODE == "production":
         SESSION_COOKIE_SAMESITE="Lax"
     )
 try:
-    database_helper.init_users_db(os.getenv("DB_CONNECTION_STRING", "database.db"))
+    database_helper.init_db(os.getenv("DB_CONNECTION_STRING", "database.db"))
 except Exception as e:
     app.logger.error(f"[ERROR] database initialization failed: {e}")
     raise e
-
-user = None
 
 def _completeLogin(user_data: dict):
     global user
@@ -62,21 +61,25 @@ def _completeLogin(user_data: dict):
     try:
         database_helper.add_user(user_data) 
     except database_helper.UserAlreadyExistsError:
-        app.logger.info(f"[INFO] User {email} already exists in the database. Not adding again.")
+        # app.logger.info(f"[INFO] User {email} already exists in the database. Not adding again.")
+        database_helper.update_user(user_data)
 
-    from_database_user = database_helper.get_user_by_id(user_data["googleId"])
+    user = database_helper.get_user_by_id(user_data["googleId"])
 
-    app.logger.info(f"[INFO] User info from database: {from_database_user.email}, {from_database_user.name}")
+    from_database_user = database_helper.model_to_dict(user)
 
-    au.sso_middleware.create_session(user_data, session, session_id)
+    print(json.dumps(user_data))
+    print(json.dumps(from_database_user))
 
-    user = from_database_user
+    app.logger.info(f"[INFO] User info from database: {from_database_user['email']}, {from_database_user['name']}")
+
+    au.sso_middleware.create_session(from_database_user, session, session_id)
     
     return redirect(url_for("homepage"))
 
 @app.route('/')
 def mainPage():
-    return "default..."
+    return "<a href=\"/login\">vai a login</a>"
 
 @app.route('/login')
 def login():
@@ -130,7 +133,13 @@ def authLogout():
 @app.route("/logged/homepage")
 @au.sso_middleware.sso_login_required
 def homepage():
-    return render_template("/html/home.html", user=user)
+    session_user = session['user']
+    googleId = session_user['googleId']
+    print(f"GOOGLE ID: {googleId}")
+    from_database_user = database_helper.get_user_by_id(googleId)
+    print("\r\n\r\n")
+    print("\r\n\r\n")
+    return render_template("/html/home.html", user=from_database_user)
 
 @app.route('/logged/map')
 @au.sso_middleware.sso_login_required
