@@ -600,3 +600,15 @@ footer .nav-logo { font-size: 1.1rem; }
   footer { flex-direction: column; text-align: center; }
   .footer-links { justify-content: center; }
 }
+.hero-content .hero-welcome {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  letter-spacing: -0.03em;
+  color: var(--c-text);
+  margin-bottom: 10rem;
+  animation: fadeUp 0.6s ease both;
+  max-width: none;        /* annulla il max-width di .hero p */
+  line-height: 1.08;
+  
+}

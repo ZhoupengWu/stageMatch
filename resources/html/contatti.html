@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contatti — stageMatch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a class="nav-logo" href="{{ url_for('landing') }}">stage<span>Match</span></a>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('home') }}">Dashboard</a></li>
+      <li><a href="{{ url_for('contatti') }}" class="active">Contatti</a></li>
+      <li><a href="{{ url_for('termini') }}">Termini</a></li>
+      <li><a href="{{ url_for('privacy') }}">Privacy</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="{{ url_for('login') }}" class="btn btn-ghost">Accedi</a>
+      <a href="{{ url_for('register') }}" class="btn btn-primary">Registrati</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="page-hero">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="page-hero-inner">
+      <span class="page-eyebrow">Supporto</span>
+      <h1>Contattaci</h1>
+      <p>Hai domande, segnalazioni o vuoi saperne di più? Siamo qui per te.</p>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- CONTENUTO -->
+  <div class="contact-wrap">
+
+    <!-- COLONNA SINISTRA: info + canali -->
+    <div class="contact-info">
+      <h2>Come possiamo aiutarti?</h2>
+      <p>Puoi raggiungerci tramite il modulo qui a fianco oppure direttamente attraverso uno dei canali qui sotto. Il nostro team risponde generalmente entro 24 ore nei giorni lavorativi.</p>
+
+      <div class="contact-channels">
+        <a href="mailto:info@stagematch.it" class="channel-card">
+          <div class="channel-icon blue">✉️</div>
+          <div>
+            <div class="channel-label">E-mail generale</div>
+            <div class="channel-value">info@stagematch.it</div>
+          </div>
+        </a>
+        <a href="mailto:privacy@stagematch.it" class="channel-card">
+          <div class="channel-icon teal">🔒</div>
+          <div>
+            <div class="channel-label">Privacy & GDPR</div>
+            <div class="channel-value">privacy@stagematch.it</div>
+          </div>
+        </a>
+        <a href="mailto:aziende@stagematch.it" class="channel-card">
+          <div class="channel-icon purple">🏢</div>
+          <div>
+            <div class="channel-label">Aziende & partnership</div>
+            <div class="channel-value">aziende@stagematch.it</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Orari -->
+      <div style="margin-top:2rem; background:var(--c-card-bg); border:1px solid var(--c-border); border-radius:var(--radius); padding:1.25rem;">
+        <div style="font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:700; color:var(--c-muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.8rem;">Orari di supporto</div>
+        <div style="display:flex; flex-direction:column; gap:0.5rem;">
+          <div style="display:flex; justify-content:space-between; font-size:0.875rem;">
+            <span style="color:var(--c-muted)">Lunedì – Venerdì</span>
+            <span style="color:var(--c-text); font-weight:500;">09:00 – 18:00</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.875rem;">
+            <span style="color:var(--c-muted)">Sabato</span>
+            <span style="color:var(--c-text); font-weight:500;">10:00 – 13:00</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.875rem;">
+            <span style="color:var(--c-muted)">Domenica e festivi</span>
+            <span style="color:var(--c-muted);">Chiuso</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLONNA DESTRA: form -->
+    <div class="contact-form-card">
+      <h3>Invia un messaggio</h3>
+      <form id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="Mario" required />
+          </div>
+          <div class="form-group">
+            <label for="cognome">Cognome</label>
+            <input type="text" id="cognome" name="cognome" placeholder="Rossi" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="mario@esempio.it" required />
+        </div>
+        <div class="form-group">
+          <label for="tipologia">Sei</label>
+          <select id="tipologia" name="tipologia">
+            <option value="">Seleziona…</option>
+            <option value="studente">Studente / Neolaureato</option>
+            <option value="azienda">Rappresentante aziendale</option>
+            <option value="altro">Altro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="oggetto">Oggetto</label>
+          <input type="text" id="oggetto" name="oggetto" placeholder="Di cosa si tratta?" required />
+        </div>
+        <div class="form-group">
+          <label for="messaggio">Messaggio</label>
+          <textarea id="messaggio" name="messaggio" rows="5" placeholder="Descrivi la tua richiesta…" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary form-submit">
+          Invia messaggio
+        </button>
+        <p id="formFeedback" class="form-feedback">
+          ✓ Messaggio ricevuto! Ti risponderemo entro 24 ore.
+        </p>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <a class="nav-logo" href="{{ url_for('landing') }}">stage<span>Match</span></a>
+    <ul class="footer-links">
+      <li><a href="{{ url_for('privacy') }}">Privacy</a></li>
+      <li><a href="{{ url_for('termini') }}">Termini</a></li>
+      <li><a href="{{ url_for('contatti') }}" class="current">Contatti</a></li>
+      <li><a href="{{ url_for('home') }}">Dashboard</a></li>
+    </ul>
+    <span class="footer-copy">© 2025 stageMatch. Tutti i diritti riservati.</span>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/pages.js') }}"></script>
+</body>
+</html>
