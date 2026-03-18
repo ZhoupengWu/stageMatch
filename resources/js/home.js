@@ -433,12 +433,6 @@ let profiloData = {
     cf: "RSSMRC07C14A794Z",
     comune: "Bergamo (BG)",
     tel: "+39 333 456 7890",
-    email: "marco.rossi@student.it",
-    dispDal: "2025-03-01",
-    dispAl: "2025-06-30",
-    ore: "40",
-    distMax: "25",
-    settori: "Sviluppo web, Cybersecurity, Cloud",
     skills: [
         { nome: "Python", livello: "Avanzato" },
         { nome: "JavaScript", livello: "Intermedio" },
@@ -481,14 +475,6 @@ function openProfiloModal() {
     document.getElementById("fCF").value = profiloData.cf;
     document.getElementById("fComune").value = profiloData.comune;
     document.getElementById("fTel").value = profiloData.tel;
-    document.getElementById("fEmail").value = profiloData.email;
-
-    // Disponibilità
-    document.getElementById("fDispDal").value = profiloData.dispDal;
-    document.getElementById("fDispAl").value = profiloData.dispAl;
-    document.getElementById("fOre").value = profiloData.ore;
-    document.getElementById("fDistMax").value = profiloData.distMax;
-    document.getElementById("fSettori").value = profiloData.settori;
 
     // Skills editor
     renderSkillsEditor();
@@ -594,13 +580,6 @@ async function salvaProfilo() {
     profiloData.cf = document.getElementById("fCF").value.trim().toUpperCase();
     profiloData.comune = document.getElementById("fComune").value.trim();
     profiloData.tel = document.getElementById("fTel").value.trim();
-    profiloData.email = document.getElementById("fEmail").value.trim();
-    profiloData.dispDal = document.getElementById("fDispDal").value;
-    profiloData.dispAl = document.getElementById("fDispAl").value;
-    profiloData.ore = document.getElementById("fOre").value;
-    profiloData.distMax = document.getElementById("fDistMax").value;
-    profiloData.settori = document.getElementById("fSettori").value.trim();
-
     const btn = document.getElementById("btnSalvaProfilo");
     btn.textContent = "⏳ Salvataggio…";
     btn.disabled = true;
@@ -798,8 +777,8 @@ const IMP_MODAL_CONFIGS = {
             showToast("🔒 Sessioni aggiornate");
             return null;
         },
-    }
-}
+    },
+};
 
 function openImpModal(type) {
     currentImpModal = type;
@@ -951,6 +930,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".pro-tab").forEach((tab) => {
         tab.addEventListener("click", () => switchTab(tab.dataset.tab));
     });
+
+    /* ── Profilo modal: tasto ✕ chiude il modal ─────────── */
+    document
+        .querySelector("#profiloOverlay .profilo-modal-close")
+        .addEventListener("click", closeProfiloModal);
 
     /* ── Profilo modal: aggiungi competenza ──────────────── */
     document

@@ -1705,6 +1705,9 @@ body {
   transform: translateY(20px) scale(.97);
   transition: transform .28s cubic-bezier(.34, 1.36, .64, 1);
   overflow: hidden;
+  /* clip bordi arrotondati */
+  min-height: 0;
+  /* permette ai figli flex di shrinkare */
 }
 
 .logout-overlay.active .profilo-modal {
@@ -1780,6 +1783,8 @@ body {
   padding: 18px 22px;
   overflow-y: auto;
   flex: 1;
+  min-height: 0;
+  /* fondamentale: senza questo flex:1 non limita l'altezza */
 }
 
 .pro-tab-panel.active {
@@ -1953,10 +1958,16 @@ body {
 .profilo-modal-footer {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
   padding: 14px 22px;
   border-top: 1px solid var(--border);
   flex-shrink: 0;
+  /* .pro-api-status deve tornare a sinistra */
+}
+
+.profilo-modal-footer .pro-api-status {
+  margin-right: auto;
 }
 
 .pro-api-status {
