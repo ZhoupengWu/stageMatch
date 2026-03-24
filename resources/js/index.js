@@ -218,9 +218,7 @@ async function suggestion() {
     }, 100);
 
     try {
-        const response = await fetch(
-            `https://photon.komoot.io/api/?q=${encodeURIComponent(address)}&lat=${initial_coordinates[0]}&lon=${initial_coordinates[1]}&limit=5&lang=en`
-        );
+        const response = await fetch(`/photon?q=${encodeURIComponent(address)}&lat=${initial_coordinates[0]}&lon=${initial_coordinates[1]}&limit=5&lang=en`);
 
         if (!response.ok) {
             throw new Error(`Code error: ${response.status} --- ${response}`);
@@ -239,7 +237,7 @@ async function suggestion() {
 
         const data_address_html = data_address.map(data => {
             return `
-            <a href="#" id="${data.id}">${data.indirizzo_via} ${data.indirizzo_civico} ${data.indirizzo_cap} ${data.indirizzo_city}</a>
+            <a href="#" data-index="${data.id}">${data.indirizzo_via} ${data.indirizzo_civico} ${data.indirizzo_cap} ${data.indirizzo_city}</a>
             `
         });
 
@@ -250,7 +248,7 @@ async function suggestion() {
         if (input_spinner) input_spinner.remove();
 
         for (let i = 0; i < data_address_html.length; ++i) {
-            const dah = document.getElementById(`${i}`);
+            const dah = div_suggestion.querySelector(`[data-index="${i}"]`);
             dah.addEventListener("click", () => {
                 this.value = dah.textContent;
                 div_suggestion.classList.add("not-visible");

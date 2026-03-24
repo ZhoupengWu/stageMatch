@@ -53,7 +53,6 @@ def _completeLogin(user_data: dict):
 
     return redirect(url_for("homepage"))
 
-
 @app.route('/')
 def mainPage():
     return "default..."
@@ -125,6 +124,16 @@ def devLogin():
         return "Not availble in production", 403
 
     return redirect(url_for("authLogin"))
+
+@app.route("/photon")
+@au.sso_middleware.sso_login_required
+def photon():
+    import requests
+
+    params = request.args.to_dict()
+    response = requests.get("http://127.0.0.1:5001/photon", params=params, timeout=5)
+
+    return response.json(), response.status_code
 
 @app.errorhandler(404)
 def notFound(e):
