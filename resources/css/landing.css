@@ -69,6 +69,9 @@ nav {
   display: flex;
   gap: 2rem;
   list-style: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .nav-links a {
   font-size: 0.875rem;
@@ -94,6 +97,9 @@ nav {
   border: none;
   cursor: pointer;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: all var(--transition);
 }
 .btn-ghost {
@@ -608,10 +614,10 @@ footer .nav-logo { font-size: 1.1rem; }
 .hero-content .hero-welcome {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-size: clamp(2rem, 4.8vw, 3.2rem);
   letter-spacing: -0.03em;
   color: var(--c-text);
-  margin-bottom: 10rem;
+  margin-bottom: 6rem;
   animation: fadeUp 0.6s ease both;
   max-width: none;        /* annulla il max-width di .hero p */
   line-height: 1.08;
