@@ -110,7 +110,9 @@ def authLogout():
 @app.route("/logged/homepage")
 @au.sso_middleware.sso_login_required
 def homepage():
-    return render_template("/html/home.html")
+    user = session["user"]
+
+    return render_template("/html/home.html", user=user)
 
 @app.route('/logged/map')
 @au.sso_middleware.sso_login_required
