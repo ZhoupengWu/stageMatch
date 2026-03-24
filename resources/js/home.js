@@ -6,12 +6,12 @@
    In produzione sostituire con fetch() verso le API Flask.
    ─────────────────────────────────────────────────────── */
 
-const MOCK_COMPANIES = [
+   const MOCK_COMPANIES = [
     {
         id: 1,
         initials: "AT",
         name: "Alpha Tech Srl",
-        sector: "💻 Sviluppo Software",
+        sector: "Sviluppo Software",
         matchPct: 94,
         tags: ["Python", "JavaScript", "Flask"],
         description:
@@ -30,7 +30,7 @@ const MOCK_COMPANIES = [
         id: 2,
         initials: "BS",
         name: "Beta Systems",
-        sector: "🔒 Cybersecurity",
+        sector: "Cybersecurity",
         matchPct: 81,
         tags: ["Networking", "Linux", "Python"],
         description:
@@ -49,7 +49,7 @@ const MOCK_COMPANIES = [
         id: 3,
         initials: "GI",
         name: "Gamma Informatica",
-        sector: "☁️ Cloud & DevOps",
+        sector: "Cloud & DevOps",
         matchPct: 74,
         tags: ["Docker", "AWS", "CI/CD"],
         description:
@@ -68,7 +68,7 @@ const MOCK_COMPANIES = [
         id: 4,
         initials: "DN",
         name: "Delta Networks",
-        sector: "📡 Telecomunicazioni",
+        sector: "Telecomunicazioni",
         matchPct: 61,
         tags: ["SQL", "Java", "IoT"],
         description:
@@ -155,15 +155,18 @@ const MOCK_ROUTES = [
 ];
 
 /* ─── HELPERS ─────────────────────────────────────────── */
+const svgIcon = (id, extraClass = "icon") =>
+    `<span class="${extraClass}"><svg><use href="#${id}"></use></svg></span>`;
+
 const modeLabel = {
     "driving-car": "Auto",
     "foot-walking": "A piedi",
     "cycling-regular": "Bici",
 };
 const modeIcon = {
-    "driving-car": "🚗",
-    "foot-walking": "🚶",
-    "cycling-regular": "🚴",
+    "driving-car": svgIcon("i-car"),
+    "foot-walking": svgIcon("i-walk"),
+    "cycling-regular": svgIcon("i-bike"),
 };
 const modeBadge = {
     "driving-car": "car",
@@ -274,9 +277,9 @@ function renderCompanies(companies) {
             <div class="co-bar-wrap"><div class="co-bar" style="width:${c.matchPct}%"></div></div>
             <div class="co-tags">${tags}</div>
             <div class="co-meta">
-              <div class="co-meta-item">📍 <span>${c.city} · ${c.distanceKm} km</span></div>
+              <div class="co-meta-item">${svgIcon("i-pin")}<span>${c.city} · ${c.distanceKm} km</span></div>
               <div class="co-meta-sep">·</div>
-              <div class="co-meta-item">⏱ <span>${c.durationMin} min in auto</span></div>
+              <div class="co-meta-item">${svgIcon("i-route")}<span>${c.durationMin} min in auto</span></div>
             </div>
           </div>
           <div class="co-toggle" onclick="toggleCard(this.closest('.co-card'))">
@@ -286,9 +289,9 @@ function renderCompanies(companies) {
             <div class="co-details-inner">
               <div class="co-desc">${c.description}</div>
               <div class="co-contacts">
-                <div class="co-contact-row">✉️ <a href="mailto:${c.contacts.email}">${c.contacts.email}</a></div>
-                <div class="co-contact-row">🌐 <a href="https://${c.contacts.web}" target="_blank">${c.contacts.web}</a></div>
-                <div class="co-contact-row">📞 <span>${c.contacts.phone}</span></div>
+                <div class="co-contact-row">${svgIcon("i-mail")}<a href="mailto:${c.contacts.email}">${c.contacts.email}</a></div>
+                <div class="co-contact-row">${svgIcon("i-link")}<a href="https://${c.contacts.web}" target="_blank">${c.contacts.web}</a></div>
+                <div class="co-contact-row">${svgIcon("i-phone")}<span>${c.contacts.phone}</span></div>
               </div>
               <button class="co-map-btn" onclick="goToMap(event, decodeURIComponent('${safeC}'))">
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
@@ -339,7 +342,7 @@ function renderRoutes(routes, filter = "all") {
     if (filtered.length === 0) {
         list.innerHTML = `
           <div class="routes-empty">
-            <div style="font-size:40px;opacity:.35;">📭</div>
+            <div class="empty-state-icon">${svgIcon("i-route")}</div>
             <span>Nessun percorso trovato per questo mezzo.</span>
           </div>`;
         return;
@@ -348,7 +351,7 @@ function renderRoutes(routes, filter = "all") {
     list.innerHTML = filtered
         .map((r) => {
             const label = modeLabel[r.mode] || r.mode;
-            const icon = modeIcon[r.mode] || "🚗";
+            const icon = modeIcon[r.mode] || svgIcon("i-car");
             const badge = modeBadge[r.mode] || "car";
             const safeR = encodeURIComponent(JSON.stringify(r));
 
@@ -358,9 +361,9 @@ function renderRoutes(routes, filter = "all") {
           <div class="route-card-info">
             <div class="route-card-title">${r.from} → ${r.to}</div>
             <div class="route-card-meta">
-              <span>📅 <strong>${r.date}</strong></span>
-              <span>📏 <strong>${r.distanceKm} km</strong></span>
-              <span>⏱ <strong>${r.durationMin} min</strong></span>
+              <span><strong>${r.date}</strong></span>
+              <span><strong>${r.distanceKm} km</strong></span>
+              <span><strong>${r.durationMin} min</strong></span>
               <span class="route-badge ${badge}">${label}</span>
             </div>
           </div>
@@ -412,7 +415,7 @@ function renderRecentRoutes() {
         .map(
             (r) => `
       <div class="route-item">
-        <div class="route-icon">${modeIcon[r.mode] || "🚗"}</div>
+        <div class="route-icon">${modeIcon[r.mode] || svgIcon("i-car")}</div>
         <div class="route-info">
           <div class="route-from-to">${r.from} → ${r.to}</div>
           <div class="route-meta">${r.date} · ${r.distanceKm} km · ${r.durationMin} min</div>
@@ -452,16 +455,16 @@ let profiloData = {
 };
 
 const ALL_SOFT_SKILLS = [
-    { icon: "🧩", label: "Problem solving" },
-    { icon: "🤝", label: "Lavoro in team" },
-    { icon: "🎯", label: "Gestione del tempo" },
-    { icon: "💬", label: "Comunicazione" },
-    { icon: "🔍", label: "Attenzione ai dettagli" },
-    { icon: "💡", label: "Creatività" },
-    { icon: "📣", label: "Public speaking" },
-    { icon: "🔄", label: "Adattabilità" },
-    { icon: "🧭", label: "Leadership" },
-    { icon: "📚", label: "Autoapprendimento" },
+    { icon: "i-brain", label: "Problem solving" },
+    { icon: "i-user", label: "Lavoro in team" },
+    { icon: "i-route", label: "Gestione del tempo" },
+    { icon: "i-bell", label: "Comunicazione" },
+    { icon: "i-pin", label: "Attenzione ai dettagli" },
+    { icon: "i-palette", label: "Creatività" },
+    { icon: "i-bell", label: "Public speaking" },
+    { icon: "i-route", label: "Adattabilità" },
+    { icon: "i-globe", label: "Leadership" },
+    { icon: "i-graduate", label: "Autoapprendimento" },
 ];
 
 const SKILL_LV_MAP = { Base: 33, Intermedio: 65, Avanzato: 90 };
@@ -548,7 +551,7 @@ function renderSoftEditor() {
         return `
         <div class="pro-soft-check${sel ? " selected" : ""}" onclick="toggleSoft(this, '${s.label}')">
           <input type="checkbox"${sel ? " checked" : ""}/>
-          <span class="pro-soft-check-icon">${s.icon}</span>
+          <span class="pro-soft-check-icon">${svgIcon(s.icon)}</span>
           <span class="pro-soft-check-label">${s.label}</span>
         </div>`;
     }).join("");
@@ -581,7 +584,7 @@ async function salvaProfilo() {
     profiloData.comune = document.getElementById("fComune").value.trim();
     profiloData.tel = document.getElementById("fTel").value.trim();
     const btn = document.getElementById("btnSalvaProfilo");
-    btn.textContent = "⏳ Salvataggio…";
+    btn.textContent = "Salvataggio...";
     btn.disabled = true;
     setApiStatus("Salvataggio in corso…", "");
 
@@ -596,11 +599,11 @@ async function salvaProfilo() {
         await new Promise((r) => setTimeout(r, 600)); // simula latenza rete
 
         updateProfiloUI(null);
-        setApiStatus("✅ Profilo aggiornato!", "ok");
+        setApiStatus("Profilo aggiornato", "ok");
         setTimeout(closeProfiloModal, 1000);
     } catch (err) {
         console.error("Errore salvataggio profilo:", err);
-        setApiStatus("⚠️ Errore nel salvataggio. Riprova.", "err");
+        setApiStatus("Errore nel salvataggio. Riprova.", "err");
     } finally {
         btn.textContent = "Salva modifiche";
         btn.disabled = false;
@@ -624,7 +627,7 @@ function updateProfiloUI(apiResult) {
         if (existing) existing.remove();
         const tag = document.createElement("span");
         tag.className = "pro-tag pro-tag-suggerimento";
-        tag.textContent = "💡 " + apiResult.suggerimento;
+        tag.textContent = apiResult.suggerimento;
         tagsEl.appendChild(tag);
     }
 
@@ -651,10 +654,10 @@ function updateProfiloUI(apiResult) {
         softEl.innerHTML = profiloData.softSkills
             .map((label) => {
                 const found = ALL_SOFT_SKILLS.find((s) => s.label === label);
-                const icon = found ? found.icon : "⭐";
+                const icon = found ? found.icon : "i-brain";
                 return `
             <div class="pro-soft-item">
-              <span class="pro-soft-icon">${icon}</span>
+              <span class="pro-soft-icon">${svgIcon(icon)}</span>
               <span>${label}</span>
             </div>`;
             })
@@ -702,7 +705,7 @@ function saveImpostazioni() {
     impostazioniData.lingua = document.getElementById("lingua")?.value;
     impostazioniData.reduceMotion =
         document.getElementById("reduceMotion")?.checked;
-    showToast("✅ Impostazione salvata");
+    showToast("Impostazione salvata");
 }
 
 /* ─── Tema segmented ─────────────────────────────────────── */
@@ -712,7 +715,7 @@ function setTema(btn) {
         .forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
     impostazioniData.tema = btn.dataset.val;
-    showToast("🎨 Tema aggiornato");
+    showToast("Tema aggiornato");
 }
 
 /* ─── Toast ──────────────────────────────────────────────── */
@@ -724,6 +727,30 @@ function showToast(msg) {
     t.classList.add("show");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+let notificationsMuted = false;
+let presenceOffline = false;
+
+function updateNotificationsToggle() {
+    const btn = document.getElementById("notificationsToggle");
+    if (!btn) return;
+    btn.classList.toggle("muted", notificationsMuted);
+    btn.setAttribute("aria-pressed", String(notificationsMuted));
+    btn.title = notificationsMuted
+        ? "Riattiva notifiche"
+        : "Disattiva notifiche";
+}
+
+function updatePresenceToggle() {
+    const chip = document.getElementById("presenceToggle");
+    if (!chip) return;
+    chip.classList.toggle("offline", presenceOffline);
+    chip.setAttribute("aria-pressed", String(presenceOffline));
+    chip.title = presenceOffline ? "Passa online" : "Passa offline";
+
+    const label = chip.querySelector(".chip-label");
+    if (label) label.textContent = presenceOffline ? "Offline" : "Online";
 }
 
 /* ─── Esporta dati GDPR ──────────────────────────────────── */
@@ -740,13 +767,13 @@ function esportaDati() {
     a.href = URL.createObjectURL(blob);
     a.download = "stagematch_dati.json";
     a.click();
-    showToast("📦 Download avviato");
+    showToast("Download avviato");
 }
 
 /* ─── Esporta CV PDF (stub) ──────────────────────────────── */
 function esportaCV() {
-    showToast("📄 Generazione PDF in corso…");
-    setTimeout(() => showToast("✅ CV pronto per il download"), 1800);
+    showToast("Generazione PDF in corso...");
+    setTimeout(() => showToast("CV pronto per il download"), 1800);
 }
 
 /* ════════════════════════════════════════════════════════
@@ -756,25 +783,25 @@ let currentImpModal = null;
 
 const IMP_MODAL_CONFIGS = {
     sessioni: {
-        title: "📱 Sessioni attive",
+        title: "Sessioni attive",
         body: `
           <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:4px">
             <div class="imp-sessione-row">
               <div>
-                <div class="imp-row-label">💻 Chrome · Windows 11</div>
+                <div class="imp-row-label">Chrome · Windows 11</div>
                 <div class="imp-row-sub">Bergamo · Adesso · <span style="color:var(--green)">Sessione corrente</span></div>
               </div>
             </div>
             <div class="imp-sessione-row">
               <div style="flex:1">
-                <div class="imp-row-label">📱 Safari · iPhone 15</div>
+                <div class="imp-row-label">Safari · iPhone 15</div>
                 <div class="imp-row-sub">Bergamo · 2 ore fa</div>
               </div>
               <button class="imp-btn-sm danger" onclick="this.closest('.imp-sessione-row').style.opacity='.4';this.textContent='Disconnesso'">Disconnetti</button>
             </div>
           </div>`,
         save: async () => {
-            showToast("🔒 Sessioni aggiornate");
+            showToast("Sessioni aggiornate");
             return null;
         },
     },
@@ -799,16 +826,16 @@ async function salvaImpModal() {
     if (!currentImpModal) return;
     const cfg = IMP_MODAL_CONFIGS[currentImpModal];
     const btn = document.getElementById("btnSalvaImp");
-    btn.textContent = "⏳ Salvataggio…";
+    btn.textContent = "Salvataggio...";
     btn.disabled = true;
 
     const err = await cfg.save();
     if (err) {
-        document.getElementById("impApiStatus").textContent = "⚠️ " + err;
+        document.getElementById("impApiStatus").textContent = err;
         document.getElementById("impApiStatus").className =
             "pro-api-status err";
     } else {
-        document.getElementById("impApiStatus").textContent = "✅ Salvato!";
+        document.getElementById("impApiStatus").textContent = "Salvato";
         document.getElementById("impApiStatus").className = "pro-api-status ok";
         setTimeout(closeImpModal, 900);
     }
@@ -847,6 +874,8 @@ function closeSidebar() {
 document.addEventListener("DOMContentLoaded", () => {
     /* ── Render iniziale ─────────────────────────────────── */
     renderRecentRoutes();
+    updateNotificationsToggle();
+    updatePresenceToggle();
 
     /* ── Sidebar overlay (chiudi cliccando fuori) ────────── */
     document.getElementById("overlay").addEventListener("click", closeSidebar);
@@ -898,6 +927,30 @@ document.addEventListener("DOMContentLoaded", () => {
         showSection("percorsi");
         setActive(document.getElementById("navPercorsi"));
     });
+
+    const notificationsToggle = document.getElementById("notificationsToggle");
+    if (notificationsToggle) {
+        notificationsToggle.addEventListener("click", () => {
+            notificationsMuted = !notificationsMuted;
+            updateNotificationsToggle();
+            showToast(
+                notificationsMuted
+                    ? "Notifiche silenziate"
+                    : "Notifiche riattivate",
+            );
+        });
+    }
+
+    const presenceToggle = document.getElementById("presenceToggle");
+    if (presenceToggle) {
+        presenceToggle.addEventListener("click", () => {
+            presenceOffline = !presenceOffline;
+            updatePresenceToggle();
+            showToast(
+                presenceOffline ? "Stato impostato su offline" : "Sei online",
+            );
+        });
+    }
 
     /* ── Transport pills (hero card) ─────────────────────── */
     document.querySelectorAll(".t-pill").forEach((pill) => {
