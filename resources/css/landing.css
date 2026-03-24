@@ -2,16 +2,21 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --c-bg:        #0d0f14;
-  --c-surface:   #161a24;
-  --c-border:    #252b3b;
-  --c-accent:    #3b82f6;
-  --c-accent2:   #06d6a0;
-  --c-text:      #e8ecf4;
-  --c-muted:     #7a869e;
-  --c-card-bg:   #1a1f2e;
-  --radius:      14px;
-  --transition:  0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  /* colori presi dalla home */
+  --c-bg: #0c0b18;
+  --c-surface: #111024;
+  --c-border: rgba(255, 255, 255, 0.07);
+
+  --c-accent: #667eea;
+  --c-accent2: #764ba2;
+
+  --c-text: #e8e6f4;
+  --c-muted: #7b74a0;
+
+  --c-card-bg: rgba(255, 255, 255, 0.042);
+}
+:root {
+  --grad: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 html { scroll-behavior: smooth; }
