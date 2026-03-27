@@ -55,8 +55,20 @@
                     </svg>
                     Partenza
                 </label>
-                <div class="input-wrapper">
-                    <input type="text" id="address_start" class="form-control" placeholder="Inserisci indirizzo di partenza">
+
+                <!-- Partenza -->
+                <div class="input-outer-wrapper">
+                    <div class="input-wrapper">
+                        <input type="text" id="address_start" class="form-control" placeholder="Inserisci indirizzo di partenza">
+                        <button class="btn-search" id="search_start" aria-label="Cerca indirizzo di partenza">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2.5"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </div>
                     <div id="suggestions_start" class="suggestions-dropdown not-visible"></div>
                 </div>
             </div>
@@ -73,8 +85,20 @@
                     </svg>
                     Destinazione
                 </label>
-                <div class="input-wrapper">
-                    <input type="text" id="address_end" class="form-control" placeholder="Inserisci indirizzo di destinazione">
+
+                <!-- Destinazione -->
+                <div class="input-outer-wrapper">
+                    <div class="input-wrapper">
+                        <input type="text" id="address_end" class="form-control" placeholder="Inserisci indirizzo di destinazione">
+                        <button class="btn-search" id="search_end" aria-label="Cerca indirizzo di destinazione">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2.5"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </div>
                     <div id="suggestions_end" class="suggestions-dropdown not-visible"></div>
                 </div>
             </div>

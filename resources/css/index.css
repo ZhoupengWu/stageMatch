@@ -183,9 +183,46 @@ body {
     color: #667eea;
 }
 
-.input-wrapper {
+.input-outer-wrapper {
     position: relative;
     width: 100%;
+}
+
+/* Bottone di ricerca accanto all'input */
+.input-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.input-wrapper .form-control {
+    flex: 1;
+    min-width: 0; /* evita overflow su mobile */
+}
+
+.btn-search {
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-search:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.55);
+}
+
+.btn-search:active {
+    transform: scale(0.95);
 }
 
 .form-control {
@@ -244,6 +281,7 @@ body {
 
 .suggestions-dropdown {
     position: absolute;
+    top: 100%;
     left: 0;
     width: 100%;
     background-color: white;
@@ -532,14 +570,10 @@ body {
 .sk-chase-dot:nth-child(5):before { animation-delay: -0.7s; }
 .sk-chase-dot:nth-child(6):before { animation-delay: -0.6s; }
 
-/* SpinKit Chase Spinner - Input (versione più piccola) */
 .input-spinner {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
+    position: static;
+    transform: none;
     pointer-events: none;
-    z-index: 10;
 }
 
 .input-spinner .sk-chase {

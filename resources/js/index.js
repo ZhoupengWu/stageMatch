@@ -264,8 +264,15 @@ async function suggestion() {
     }
 }
 
-input_address_start.addEventListener("blur", suggestion);
-input_address_end.addEventListener("blur", suggestion);
+document.getElementById("search_start").addEventListener("click", suggestion.bind(input_address_start));
+document.getElementById("search_end").addEventListener("click", suggestion.bind(input_address_end));
+
+input_address_start.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") suggestion.call(input_address_start);
+});
+input_address_end.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") suggestion.call(input_address_end);
+});
 
 // GESTIONE TOGGLE PANNELLO
 document.addEventListener("DOMContentLoaded", () => {
