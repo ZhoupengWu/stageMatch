@@ -1,7 +1,6 @@
 import os
-import json
 import secrets
-from flask import Flask, render_template, redirect, request, session, url_for
+from flask import Flask, render_template, redirect, request, session, url_for, jsonify
 from dotenv import load_dotenv
 from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import timedelta
@@ -58,22 +57,21 @@ def _completeLogin(user_data: dict):
     
     app.logger.info(f"[INFO] User {email} logged in with session ID: {session_id}")
 
-    try:
-        database_helper.add_user(user_data) 
-    except database_helper.UserAlreadyExistsError:
-        # app.logger.info(f"[INFO] User {email} already exists in the database. Not adding again.")
-        database_helper.update_user(user_data)
-
     user = database_helper.get_user_by_id(user_data["googleId"])
 
-    from_database_user = database_helper.model_to_dict(user)
+    if not user:
+        try:
+            database_helper.add_user(user_data) 
+            user = database_helper.get_user_by_id(user_data["googleId"])
+        except Exception:
+            app.logger.error(f"[ERROR] Failed adding user {user_data}")
+            return
 
-    print(json.dumps(user_data))
-    print(json.dumps(from_database_user))
+    dict_user = database_helper.model_to_dict(user)
 
-    app.logger.info(f"[INFO] User info from database: {from_database_user['email']}, {from_database_user['name']}")
+    app.logger.info(f"[INFO] User info from database: {dict_user['email']}, {dict_user['nome']}")
 
-    au.sso_middleware.create_session(from_database_user, session, session_id)
+    au.sso_middleware.create_session(dict_user, session, session_id)
     
     return redirect(url_for("homepage"))
 
@@ -93,10 +91,8 @@ def authLogin():
         dev_email: str = request.args.get("email") or au.DEV_USER_EMAIL
         app.logger.info(f"[INFO] authorised access for {dev_email}")
         user_data: dict[str, str] = {
-            "email": dev_email,
-            "name": au.getUsername(dev_email).replace(".", " ").title(),
             "googleId": "dev-user-id",
-            "picture": None
+            "immagine": None
         }
 
         return _completeLogin(user_data)
@@ -135,10 +131,7 @@ def authLogout():
 def homepage():
     session_user = session['user']
     googleId = session_user['googleId']
-    print(f"GOOGLE ID: {googleId}")
     from_database_user = database_helper.get_user_by_id(googleId)
-    print("\r\n\r\n")
-    print("\r\n\r\n")
     return render_template("/html/home.html", user=from_database_user)
 
 @app.route('/logged/map')
@@ -152,6 +145,31 @@ def devLogin():
         return "Not availble in production", 403
 
     return redirect(url_for("authLogin"))
+
+@app.route("/api/users", methods=["POST"])
+@au.sso_middleware.sso_login_required
+def update_user():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Invalid JSON"}), 400
+
+        session_user = session["user"]
+        data["googleId"] = session_user["googleId"]
+
+        print(data)
+        # update
+        user_dict = database_helper.update_user(data) 
+        message = "User updated"
+
+        return jsonify({"message": message, "user": user_dict}), 200
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+    except Exception as e:
+        app.logger.exception("[ERROR] user endpoint failed")
+        return jsonify({"error": "Internal server error"}), 500
 
 @app.errorhandler(404)
 def notFound(e):
