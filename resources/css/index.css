@@ -11,51 +11,6 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.header-title {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 500;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    padding: 16px 32px;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
-    pointer-events: none;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.header-title h1 {
-    font-size: 32px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #1a73e8 0%, #ea4335 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-content: center;
-}
-
-.header-title h1 svg {
-    color: #6e61c2;
-    filter: drop-shadow(0 2px 4px rgba(234, 67, 53, 0.3));
-}
-
-.header-title p {
-    margin: 8px 0 0 0;
-    font-size: 14px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-align: center;
-    font-weight: 500;
-}
-
 .control-panel {
     position: fixed;
     top: 0;
@@ -184,7 +139,6 @@ body {
 }
 
 .input-outer-wrapper {
-    position: relative;
     width: 100%;
 }
 
@@ -193,11 +147,24 @@ body {
     display: flex;
     gap: 8px;
     align-items: center;
+    position: static;
 }
 
 .input-wrapper .form-control {
     flex: 1;
     min-width: 0; /* evita overflow su mobile */
+}
+
+/* Questo è il nuovo anchor per il dropdown */
+.input-field-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+/* L'input occupa tutto lo spazio del field-wrapper */
+.input-field-wrapper .form-control {
+    width: 100%;
 }
 
 .btn-search {
@@ -281,7 +248,7 @@ body {
 
 .suggestions-dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 6px);
     left: 0;
     width: 100%;
     background-color: white;
@@ -446,6 +413,21 @@ body {
 }
 
 @media (max-width: 768px) {
+    .toggle-button {
+        top: auto;
+        bottom: 24px;
+        right: 50% !important;
+        transform: translateX(50%);
+    }
+
+    .toggle-button:hover {
+        transform: translateX(50%) scale(1.1);
+    }
+
+    .toggle-button:active {
+        transform: translateX(50%) scale(0.95);
+    }
+
     .control-panel {
         width: 100%;
         max-width: 100vw;
@@ -458,20 +440,9 @@ body {
     }
 
     .control-panel.open ~ .toggle-button {
-        right: 15px;
-    }
-
-    .header-title {
-        top: 15px;
-        padding: 12px 24px;
-    }
-
-    .header-title h1 {
-        font-size: 24px;
-    }
-
-    .header-title p {
-        font-size: 12px;
+        right: 50% !important;
+        bottom: 24px;
+        top: auto;
     }
 
     .transport-modes {
@@ -571,9 +542,12 @@ body {
 .sk-chase-dot:nth-child(6):before { animation-delay: -0.6s; }
 
 .input-spinner {
-    position: static;
-    transform: none;
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
     pointer-events: none;
+    z-index: 10;
 }
 
 .input-spinner .sk-chase {

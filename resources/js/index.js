@@ -135,7 +135,9 @@ async function calcolaPercorso() {
     panel.classList.remove("open");
     prev_layer = L.geoJSON(data, { style: { color: 'red', weight: 4 } }).addTo(map);
     prev_marker_start = L.marker([f_c[1], f_c[0]], { icon: startIcon }).addTo(map);
+    prev_marker_start.bindPopup(`${address_start}`);
     prev_marker_end = L.marker([l_c[1], l_c[0]], { icon: endIcon }).addTo(map);
+    prev_marker_end.bindPopup(`${address_end}`);
 
     if (prev_layer.getBounds) map.fitBounds(prev_layer.getBounds());
 }
@@ -176,11 +178,11 @@ async function suggestion() {
 
     if (this === input_address_start) {
         div_suggestion = div_suggestion_start;
-        input_wrapper = input_address_start.parentElement;
+        input_wrapper = input_address_start.closest(".input-field-wrapper");
     }
     else {
         div_suggestion = div_suggestion_end;
-        input_wrapper = input_address_end.parentElement;
+        input_wrapper = input_address_end.closest(".input-field-wrapper");
     }
 
     clearInterval(wait_time);
@@ -284,13 +286,29 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    document.addEventListener("click", (e) => {
+        const is_inside_start = input_address_start.closest(".input-field-wrapper").contains(e.target) || document.getElementById("search_start").contains(e.target);
+        const is_inside_end = input_address_end.closest(".input-field-wrapper").contains(e.target) || document.getElementById("search_end").contains(e.target);
+
+        if (!is_inside_start) {
+            div_suggestion_start.classList.add("not-visible");
+            div_suggestion_start.innerHTML = "";
+        }
+
+        if (!is_inside_end) {
+            div_suggestion_end.classList.add("not-visible");
+            div_suggestion_end.innerHTML = "";
+        }
+    });
+
     toggle.addEventListener("click", () => {
         panel.classList.toggle("open");
 
-        if (panel.classList.contains("open")) {
-            console.log("Pannello aperto");
-        } else {
-            console.log("Pannello chiuso");
+        if (!panel.classList.contains("open")) {
+            div_suggestion_start.classList.add("not-visible");
+            div_suggestion_start.innerHTML = "";
+            div_suggestion_end.classList.add("not-visible");
+            div_suggestion_end.innerHTML = "";
         }
     });
 
