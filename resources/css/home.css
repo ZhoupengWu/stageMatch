@@ -33,7 +33,7 @@
    html,
    body {
      height: 100%;
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      background: var(--dark);
      color: var(--text);
      overflow: hidden;
@@ -107,7 +107,7 @@
    }
    
    .logo-text {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-weight: 800;
      font-size: 16px;
      background: var(--grad);
@@ -162,7 +162,7 @@
      border: 1px solid transparent;
      width: 100%;
      text-align: left;
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      transition: color 0.18s, background 0.18s, border-color 0.18s;
      white-space: nowrap;
    }
@@ -320,7 +320,7 @@
    }
    
    .topbar-greeting {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 15px;
      font-weight: 700;
      white-space: nowrap;
@@ -351,7 +351,7 @@
      font-size: 12.5px;
      color: var(--muted);
      white-space: nowrap;
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      cursor: pointer;
      transition: background .24s ease, border-color .24s ease, color .24s ease, transform .24s ease, box-shadow .24s ease;
      appearance: none;
@@ -496,7 +496,7 @@
    }
    
    .page-title {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 25px;
      font-weight: 800;
      color: white;
@@ -524,7 +524,7 @@
      border: none;
      border-radius: 12px;
      color: white;
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13.5px;
      font-weight: 600;
      cursor: pointer;
@@ -548,7 +548,7 @@
      border: 1px solid var(--border);
      border-radius: 12px;
      color: var(--text);
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13.5px;
      font-weight: 500;
      cursor: pointer;
@@ -621,7 +621,7 @@
    }
    
    .stat-num {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 24px;
      font-weight: 800;
      background: var(--grad);
@@ -676,7 +676,7 @@
    }
    
    .hero-title {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 19px;
      font-weight: 800;
      color: white;
@@ -832,7 +832,7 @@
      align-items: center;
      justify-content: space-between;
      margin-bottom: 14px;
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13px;
      font-weight: 700;
      color: white;
@@ -845,7 +845,7 @@
    }
    
    .card-link {
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 12px;
      font-weight: 600;
      color: var(--v1);
@@ -942,7 +942,7 @@
      border: 1px solid var(--border);
      background: var(--surface);
      color: var(--muted);
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13px;
      font-weight: 500;
      cursor: pointer;
@@ -1048,7 +1048,7 @@
      border: none;
      border-radius: 9px;
      color: white;
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 12px;
      font-weight: 600;
      cursor: pointer;
@@ -1164,7 +1164,7 @@
      display: flex;
      align-items: center;
      justify-content: center;
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-weight: 800;
      font-size: 11px;
      color: white;
@@ -1177,7 +1177,7 @@
    }
    
    .co-name {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13.5px;
      font-weight: 700;
      color: white;
@@ -1200,7 +1200,7 @@
    }
    
    .co-pct {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 18px;
      font-weight: 800;
      background: var(--grad);
@@ -1372,7 +1372,7 @@
      border: none;
      border-radius: 10px;
      color: white;
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13px;
      font-weight: 600;
      cursor: pointer;
@@ -1560,7 +1560,7 @@
      display: flex;
      align-items: center;
      justify-content: center;
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-weight: 800;
      font-size: 20px;
      color: white;
@@ -1574,7 +1574,7 @@
    }
    
    .profilo-hero-name {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 20px;
      font-weight: 800;
      color: white;
@@ -1626,7 +1626,7 @@
    }
    
    .pro-circ-num {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 28px;
      font-weight: 800;
      background: var(--grad);
@@ -1661,7 +1661,7 @@
    }
    
    .pro-card-head {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13px;
      font-weight: 700;
      color: white;
@@ -1701,7 +1701,7 @@
    }
    
    .pro-mono {
-     font-family: 'DM Mono', monospace;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 11.5px;
      letter-spacing: .04em;
    }
@@ -1886,7 +1886,7 @@
    }
    
    .profilo-modal-title {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-weight: 700;
      font-size: 1.05rem;
      color: white;
@@ -1925,7 +1925,7 @@
      border: none;
      border-bottom: 2px solid transparent;
      color: var(--muted);
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13px;
      font-weight: 600;
      padding: 0 4px 10px;
@@ -1998,7 +1998,7 @@
      border-radius: 9px;
      padding: 9px 12px;
      color: var(--text);
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13.5px;
      outline: none;
      transition: border-color .2s;
@@ -2035,7 +2035,7 @@
      border-radius: 8px;
      padding: 7px 10px;
      color: var(--text);
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13px;
      outline: none;
    }
@@ -2069,7 +2069,7 @@
      border: 1px dashed var(--border-acc);
      border-radius: 9px;
      color: var(--v1);
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13px;
      font-weight: 600;
      padding: 9px;
@@ -2229,7 +2229,7 @@
    }
    
    .imp-card-head {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 13px;
      font-weight: 700;
      color: white;
@@ -2296,7 +2296,7 @@
    
    /* Bottoni piccoli */
    .imp-btn-sm {
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 12px;
      font-weight: 600;
      padding: 6px 14px;
@@ -2340,7 +2340,7 @@
      background: none;
      border: none;
      color: var(--v1);
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 12.5px;
      font-weight: 600;
      cursor: pointer;
@@ -2360,7 +2360,7 @@
      border-radius: 8px;
      padding: 6px 10px;
      color: var(--text);
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 12.5px;
      outline: none;
      cursor: pointer;
@@ -2433,7 +2433,7 @@
    }
    
    .imp-seg {
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 12px;
      font-weight: 600;
      padding: 5px 10px;
@@ -2567,7 +2567,7 @@
    }
    
    .logout-modal-title {
-     font-family: 'Syne', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 1.15rem;
      font-weight: 700;
      color: white;
@@ -2591,7 +2591,7 @@
      flex: 1;
      padding: 0.65rem 1rem;
      border-radius: 10px;
-     font-family: 'DM Sans', sans-serif;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
      font-size: 0.85rem;
      font-weight: 600;
      cursor: pointer;

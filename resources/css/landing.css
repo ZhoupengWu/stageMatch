@@ -22,7 +22,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   background-color: var(--c-bg);
   color: var(--c-text);
   min-height: 100vh;
@@ -56,7 +56,7 @@ nav {
 }
 
 .nav-logo {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-weight: 800;
   font-size: 1.35rem;
   letter-spacing: -0.03em;
@@ -89,7 +89,7 @@ nav {
 
 /* ── BUTTONS ─────────────────────────────────────────────── */
 .btn {
-  font-family: 'DM Sans', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-size: 0.875rem;
   font-weight: 500;
   padding: 0.5rem 1.2rem;
@@ -209,7 +209,7 @@ nav {
 }
 
 .hero h1 {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-weight: 800;
   font-size: clamp(2.6rem, 6vw, 4.5rem);
   line-height: 1.08;
@@ -272,7 +272,7 @@ nav {
   border: none;
   outline: none;
   padding: 0.9rem 1.2rem;
-  font-family: 'DM Sans', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-size: 0.95rem;
   color: var(--c-text);
 }
@@ -323,7 +323,7 @@ nav {
 }
 .stat-item { text-align: center; }
 .stat-num {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-size: 2rem;
   font-weight: 800;
   color: var(--c-text);
@@ -356,7 +356,7 @@ section {
   margin-bottom: 0.75rem;
 }
 .section-title {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-weight: 700;
   font-size: clamp(1.8rem, 3.5vw, 2.6rem);
   letter-spacing: -0.03em;
@@ -401,7 +401,7 @@ section {
   margin-bottom: 1.1rem;
 }
 .feature-card h3 {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-size: 1.05rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -456,7 +456,7 @@ section {
   border-color: rgba(99, 102, 241, 0.25);
 }
 .offer-card h3 {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -510,9 +510,9 @@ section {
   content: '';
   position: absolute;
   left: 22px;
-  top: 68px;
+  top: 80px;
   width: 2px;
-  height: calc(100% - 40px);
+  height: calc(100% - 50px);
   background: linear-gradient(to bottom, var(--c-border), transparent);
 }
 .step-num {
@@ -524,13 +524,13 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-weight: 800;
   font-size: 1rem;
   color: var(--c-accent);
 }
 .step-body h4 {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-size: 1rem;
   font-weight: 700;
   margin-bottom: 0.35rem;
@@ -555,7 +555,7 @@ section {
   padding: 3.5rem 2.5rem;
 }
 .cta-box h2 {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-weight: 800;
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   letter-spacing: -0.03em;
@@ -612,7 +612,7 @@ footer .nav-logo { font-size: 1.1rem; }
   .footer-links { justify-content: center; }
 }
 .hero-content .hero-welcome {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-weight: 800;
   font-size: clamp(2rem, 4.8vw, 3.2rem);
   letter-spacing: -0.03em;
@@ -621,5 +621,5 @@ footer .nav-logo { font-size: 1.1rem; }
   animation: fadeUp 0.6s ease both;
   max-width: none;        /* annulla il max-width di .hero p */
   line-height: 1.08;
-  
+
 }

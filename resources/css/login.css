@@ -13,8 +13,8 @@
     --white-80: rgba(255, 255, 255, 0.8);
     --black-40: rgba(0, 0, 0, 0.4);
     --black-60: rgba(0, 0, 0, 0.6);
-    --font-display: 'Cormorant Garamond', Georgia, serif;
-    --font-ui: 'Jost', sans-serif;
+    --font-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
+    --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 

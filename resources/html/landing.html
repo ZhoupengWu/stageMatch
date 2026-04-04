@@ -1,114 +1,115 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>stageMatch — Trova il tuo stage</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>stageMatch</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
-
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}" />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}" />
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav>
-    <a class="nav-logo" href="#">stage<span>Match</span></a>
-    <ul class="nav-links">
-      <li><a href="#features">Funzionalità</a></li>
-      <li><a href="#howto">Come funziona</a></li>
-    </ul>
-    <div class="nav-cta">
-      <a href="{{ url_for('login') }}" class="btn btn-ghost">Login</a>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-
-    <div class="hero-content">
-      <p class="hero-welcome">Benvenuto in stageMatch</p>
-      <div class="hero-badge">Piattaforma per studenti e aziende</div>
-
-      <h1>
-        Trova lo stage<br>
-        <span class="highlight">giusto per te.</span>
-      </h1>
-
-      <p>
-        La fortuna è ciò che accade quando la preparazione incontra l'opportunità.
-      </p>
-
-      <div class="hero-actions">
-        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Accedi</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section id="features">
-    <div class="section-header">
-      <span class="section-eyebrow">Funzionalità</span>
-      <h2 class="section-title">Strumenti per trovare lo stage giusto</h2>
-    </div>
-
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🗺️</div>
-        <h3>Mappa interattiva</h3>
-        <p>Visualizza le opportunità su mappa e filtra per zona, distanza o modalità di lavoro.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Ricerca avanzata</h3>
-        <p>Filtra per settore, ruolo, città e tipo di contratto per trovare subito quello che cerchi.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🏢</div>
-        <h3>Profili aziendali verificati</h3>
-        <p>Ogni azienda viene verificata prima di poter pubblicare. Solo opportunità reali.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section id="howto">
-    <div class="section-header">
-      <span class="section-eyebrow">Come funziona</span>
-      <h2 class="section-title">Inizia in due semplici passi</h2>
-    </div>
-
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h4>Accedi</h4>
-          <p>Entra con le tue credenziali e accedi alla piattaforma.</p>
+    <!-- NAVBAR -->
+    <nav>
+        <a class="nav-logo" href="#">stage<span>Match</span></a>
+        <ul class="nav-links">
+            <li><a href="#features">Funzionalità</a></li>
+            <li><a href="#howto">Come funziona</a></li>
+        </ul>
+        <div class="nav-cta">
+            <a href="{{ url_for('login') }}" class="btn btn-ghost">Accedi</a>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h4>Esplora e filtra</h4>
-          <p>Usa la ricerca testuale, i filtri per settore e la mappa interattiva per trovare le opportunità più adatte a te.</p>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+
+        <div class="hero-content">
+            <h1>
+                Trova lo stage<br>
+                <span class="highlight">giusto per te</span>
+            </h1>
+
+            <p>
+                La fortuna è ciò che accade quando la preparazione incontra l'opportunità
+            </p>
+
+            <div class="hero-actions">
+                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Accedi</a>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <a class="nav-logo" href="#">stage<span>Match</span></a>
-    <span class="footer-copy">© 2026 stageMatch. Tutti i diritti riservati.</span>
-  </footer>
+    <!-- FEATURES -->
+    <section id="features">
+        <div class="section-header">
+            <span class="section-eyebrow">Funzionalità</span>
+            <h2 class="section-title">Strumenti per trovare lo stage giusto</h2>
+        </div>
 
-  <!-- Script -->
-  <script src="{{ url_for('static', filename='js/landing.js') }}"></script>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🗺️</div>
+                <h3>Mappa interattiva</h3>
+                <p>Visualizza le opportunità su mappa e filtra per zona, distanza o modalità di lavoro</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Ricerca avanzata</h3>
+                <p>Filtra per settore, ruolo, città e tipo di contratto per trovare subito quello che cerchi</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏢</div>
+                <h3>Profili aziendali verificati</h3>
+                <p>Ogni azienda viene verificata prima di poter pubblicare. Solo opportunità reali</p>
+            </div>
+        </div>
+    </section>
 
+    <!-- HOW IT WORKS -->
+    <section id="howto">
+        <div class="section-header">
+            <span class="section-eyebrow">Come funziona</span>
+            <h2 class="section-title">Inizia in tre semplici passi</h2>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-body">
+                    <h4>Accedi</h4>
+                    <p>Entra con le tue credenziali e accedi alla piattaforma</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-body">
+                    <h4>Esplora e filtra</h4>
+                    <p>Usa la ricerca testuale, i filtri per settore e la mappa interattiva per trovare le opportunità
+                        più adatte a te</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-body">
+                    <h4>Invia candidature</h4>
+                    <p>Invia le tue candidature alle opportunità che ti interessano e monitora lo stato delle tue applicazioni</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <a class="nav-logo" href="#">stage<span>Match</span></a>
+        <span class="footer-copy">© 2025-2026 stageMatch. Tutti i diritti riservati</span>
+    </footer>
+
+    <!-- Script -->
+    <script src="{{ url_for('static', filename='js/landing.js') }}"></script>
 </body>
 </html>

@@ -24,7 +24,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   background-color: var(--c-bg);
   color: var(--c-text);
   min-height: 100vh;
@@ -60,7 +60,7 @@ nav {
 nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
 
 .nav-logo {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-weight: 800;
   font-size: 1.3rem;
   letter-spacing: -0.03em;
@@ -88,7 +88,7 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
 
 /* ── BUTTONS ─────────────────────────────────────────────── */
 .btn {
-  font-family: 'DM Sans', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-size: 0.875rem;
   font-weight: 500;
   padding: 0.5rem 1.2rem;
@@ -174,7 +174,7 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
   margin-bottom: 0.75rem;
 }
 .page-hero h1 {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-weight: 800;
   font-size: clamp(2rem, 5vw, 3.2rem);
   letter-spacing: -0.04em;
@@ -233,7 +233,7 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
   padding: 1.25rem;
 }
 .toc-title {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -279,7 +279,7 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
   transform: translateY(0);
 }
 .prose-section h2 {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-weight: 700;
   font-size: 1.3rem;
   letter-spacing: -0.02em;
@@ -355,7 +355,7 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
 }
 
 .contact-info h2 {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-weight: 700;
   font-size: 1.6rem;
   letter-spacing: -0.03em;
@@ -418,7 +418,7 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
   padding: 2rem;
 }
 .contact-form-card h3 {
-  font-family: 'Syne', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -448,7 +448,7 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
   border: 1px solid var(--c-border);
   border-radius: var(--radius-sm);
   padding: 0.65rem 0.9rem;
-  font-family: 'DM Sans', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
   font-size: 0.875rem;
   color: var(--c-text);
   outline: none;

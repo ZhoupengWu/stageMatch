@@ -55,7 +55,7 @@ def _completeLogin(user_data: dict):
 
 @app.route('/')
 def mainPage():
-    return "default..."
+    return render_template("html/landing.html")
 
 @app.route('/login')
 def login():
