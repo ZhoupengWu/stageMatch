@@ -850,6 +850,11 @@ document.addEventListener("DOMContentLoaded", () => {
         showSection("profilo");
         setActive(e.currentTarget);
     });
+    document.getElementById("profiloButton").addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection("profilo");
+        setActive(document.getElementById("navProfilo"));
+    });
     document
         .getElementById("navImpostazioni")
         .addEventListener("click", (e) => {

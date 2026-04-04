@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>stageMatch — Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap"
-        rel="stylesheet">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>stageMatch - Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
-
 <body>
 
     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
@@ -249,7 +245,7 @@
                         <span class="icon icon-bell-off"><svg><use href="#i-bell-off"></use></svg></span>
                         <span class="mute-bar" aria-hidden="true"></span>
                     </button>
-                    <div class="topbar-icon-btn" title="Profilo"><span class="icon"><svg><use href="#i-user"></use></svg></span></div>
+                    <div class="topbar-icon-btn" id="profiloButton" title="Profilo"><span class="icon"><svg><use href="#i-user"></use></svg></span></div>
                 </div>
             </header>
 
@@ -945,7 +941,6 @@
     </div>
     </div>
 
-
     <div class="logout-overlay" id="logoutOverlay">
         <div class="logout-modal">
             <div class="logout-modal-icon">
@@ -966,8 +961,6 @@
         </div>
     </div>
 
-
     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
-
 </html>
