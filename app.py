@@ -59,7 +59,7 @@ def mainPage():
 
 @app.route('/login')
 def login():
-    return redirect("/auth/login")
+    return render_template("/html/login.html")
 
 @app.route("/auth/login")
 def authLogin():

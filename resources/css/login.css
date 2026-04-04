@@ -8,11 +8,7 @@
 }
 
 :root {
-    --white: #ffffff;
-    --white-60: rgba(255, 255, 255, 0.6);
-    --white-80: rgba(255, 255, 255, 0.8);
-    --black-40: rgba(0, 0, 0, 0.4);
-    --black-60: rgba(0, 0, 0, 0.6);
+    --white-modern-cold: rgba(230, 240, 255, 1);
     --font-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
     --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -61,7 +57,7 @@ body {
     padding: 2rem;
 }
 
-.hero__content {
+.hero_content {
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -75,68 +71,58 @@ body {
 }
 
 /* ─── Label ─── */
-.hero__label {
+.hero_label {
     font-family: var(--font-ui);
     font-weight: 200;
     font-size: clamp(0.65rem, 1.5vw, 0.75rem);
     letter-spacing: 0.35em;
     text-transform: uppercase;
-    color: var(--white-60);
+    color: var(--white-modern-cold);
     margin-bottom: 1rem;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.28);
 }
 
 /* ─── Title ─── */
-.hero__title {
+.hero_title {
     font-family: var(--font-display);
     font-weight: 300;
     font-size: clamp(3.5rem, 12vw, 7rem);
     line-height: 0.95;
-    color: var(--white);
+    color: var(--white-modern-cold);
     letter-spacing: -0.01em;
     text-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
 }
 
 /* ─── Subtitle ─── */
-.hero__sub {
+.hero_sub {
     font-family: var(--font-ui);
     font-weight: 200;
     font-size: clamp(0.8rem, 2vw, 0.95rem);
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.88);
-    margin-top: -0.25rem;
+    color: var(--white-modern-cold);
+    margin-top: 1rem;
     margin-bottom: 2rem;
-}
-
-/* ─── Divider line ─── */
-.hero__content::after {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 48px;
-    background: linear-gradient(to bottom, var(--white-60), transparent);
-    margin: 0.5rem 0;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.3);
 }
 
 /* ─── Login Button ─── */
 .btn-login {
     appearance: none;
-    -webkit-appearance: none;
     width: clamp(220px, 60vw, 275px);
     height: 50px;
     border-radius: 30px;
-    border: 1.5px solid var(--white-60);
-    background: transparent;
-    color: var(--white-60);
+    border-style: hidden;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.24) 0%,
+            rgba(255, 255, 255, 0.1) 100%);
+    color: var(--white-modern-cold);
     font-family: var(--font-ui);
     font-size: 0.72rem;
     font-weight: 400;
     letter-spacing: 0.25em;
     text-transform: uppercase;
     cursor: pointer;
-    outline: none;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
     transition:
         border-color 0.3s var(--ease-out),
         color 0.3s var(--ease-out),
@@ -146,13 +132,13 @@ body {
 }
 
 .btn-login:hover {
-    border-color: var(--white);
-    color: var(--white);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow:
-        0 0 0 4px rgba(255, 255, 255, 0.06),
-        0 8px 24px rgba(0, 0, 0, 0.35);
+    border-color: var(--white-modern-cold);
+    color: var(--white-modern-cold);
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.32) 0%,
+            rgba(255, 255, 255, 0.14) 100%);
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
 }
 
 .btn-login:active {
@@ -169,7 +155,35 @@ body {
 
 /* ─── Responsive: mobile ─── */
 @media (max-width: 480px) {
-    .hero__content::after {
+    body {
+        background-attachment: scroll;
+    }
+
+    .hero {
+        padding: 1.5rem 1rem;
+    }
+
+    .hero_content {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .hero_label {
+        letter-spacing: 0.24em;
+        margin-bottom: 0.75rem;
+    }
+
+    .hero_title {
+        font-size: clamp(2.8rem, 16vw, 4.2rem);
+    }
+
+    .hero_sub {
+        font-size: 0.8rem;
+        letter-spacing: 0.12em;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero_content::after {
         height: 32px;
     }
 
