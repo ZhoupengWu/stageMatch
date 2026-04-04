@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
+            } else {
+                entry.target.classList.remove('visible');
             }
         });
     }, { threshold: 0.12 });
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     revealTargets.forEach((el, i) => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(24px)';
-        el.style.transition = `opacity 0.5s ease ${i * 0.06}s, transform 0.5s ease ${i * 0.06}s`;
+        el.style.transition = `opacity 0.4s ease ${i * 0.04}s, transform 0.4s ease ${i * 0.04}s`;
         observer.observe(el);
     });
 
