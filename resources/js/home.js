@@ -718,6 +718,15 @@ function setTema(btn) {
     showToast("Tema aggiornato");
 }
 
+function closeImpModal() {
+    document.getElementById("impOverlay").classList.remove("active");
+}
+
+function salvaImpModal() {
+    saveImpostazioni();
+    closeImpModal();
+}
+
 /* ─── Toast ──────────────────────────────────────────────── */
 let toastTimer;
 function showToast(msg) {
