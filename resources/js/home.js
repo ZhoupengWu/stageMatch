@@ -777,74 +777,6 @@ function esportaCV() {
 }
 
 /* ════════════════════════════════════════════════════════
-   MODAL IMPOSTAZIONI (sessioni)
-   ════════════════════════════════════════════════════════ */
-let currentImpModal = null;
-
-const IMP_MODAL_CONFIGS = {
-    sessioni: {
-        title: "Sessioni attive",
-        body: `
-          <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:4px">
-            <div class="imp-sessione-row">
-              <div>
-                <div class="imp-row-label">Chrome · Windows 11</div>
-                <div class="imp-row-sub">Bergamo · Adesso · <span style="color:var(--green)">Sessione corrente</span></div>
-              </div>
-            </div>
-            <div class="imp-sessione-row">
-              <div style="flex:1">
-                <div class="imp-row-label">Safari · iPhone 15</div>
-                <div class="imp-row-sub">Bergamo · 2 ore fa</div>
-              </div>
-              <button class="imp-btn-sm danger" onclick="this.closest('.imp-sessione-row').style.opacity='.4';this.textContent='Disconnesso'">Disconnetti</button>
-            </div>
-          </div>`,
-        save: async () => {
-            showToast("Sessioni aggiornate");
-            return null;
-        },
-    },
-};
-
-function openImpModal(type) {
-    currentImpModal = type;
-    const cfg = IMP_MODAL_CONFIGS[type];
-    document.getElementById("impModalTitle").textContent = cfg.title;
-    document.getElementById("impModalBody").innerHTML = cfg.body;
-    document.getElementById("impApiStatus").textContent = "";
-    document.getElementById("impApiStatus").className = "pro-api-status";
-    document.getElementById("impOverlay").classList.add("active");
-}
-
-function closeImpModal() {
-    document.getElementById("impOverlay").classList.remove("active");
-    currentImpModal = null;
-}
-
-async function salvaImpModal() {
-    if (!currentImpModal) return;
-    const cfg = IMP_MODAL_CONFIGS[currentImpModal];
-    const btn = document.getElementById("btnSalvaImp");
-    btn.textContent = "Salvataggio...";
-    btn.disabled = true;
-
-    const err = await cfg.save();
-    if (err) {
-        document.getElementById("impApiStatus").textContent = err;
-        document.getElementById("impApiStatus").className =
-            "pro-api-status err";
-    } else {
-        document.getElementById("impApiStatus").textContent = "Salvato";
-        document.getElementById("impApiStatus").className = "pro-api-status ok";
-        setTimeout(closeImpModal, 900);
-    }
-
-    btn.textContent = "Salva";
-    btn.disabled = false;
-}
-
-/* ════════════════════════════════════════════════════════
    LOGOUT MODAL
    ════════════════════════════════════════════════════════ */
 function openLogoutModal() {
@@ -1008,11 +940,6 @@ document.addEventListener("DOMContentLoaded", () => {
             closeProfiloModal();
     });
 
-    /* ── Impostazioni modal: apri sessioni / elimina ─────── */
-    document
-        .querySelector('[data-modal="sessioni"]')
-        .addEventListener("click", () => openImpModal("sessioni"));
-
     /* ── Impostazioni modal: chiudi e salva ──────────────── */
     document
         .querySelector("#impOverlay .logout-btn-cancel")
@@ -1051,9 +978,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .getElementById("logoutCancel")
         .addEventListener("click", closeLogoutModal);
     document.getElementById("logoutConfirm").addEventListener("click", () => {
-        // Sostituire con: window.location.href = '/logout';
-        // oppure: fetch('/api/logout', { method: 'POST' }).then(...)
-        console.log("Logout confermato");
+        window.location.href = "/auth/logout";
     });
     document.getElementById("logoutOverlay").addEventListener("click", (e) => {
         if (e.target === document.getElementById("logoutOverlay"))
