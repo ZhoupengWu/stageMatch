@@ -568,7 +568,10 @@ function toggleSoft(el, label) {
 function setApiStatus(msg, cls) {
     const el = document.getElementById("proApiStatus");
     el.textContent = msg;
-    el.className = "pro-api-status" + (cls ? " " + cls : "");
+    el.className =
+        "pro-api-status" +
+        (msg ? " show" : "") +
+        (cls ? " " + cls : "");
 }
 
 /* ════════════════════════════════════════════════════════
