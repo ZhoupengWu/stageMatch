@@ -568,8 +568,8 @@ function renderSkillsEditor() {
             (s, i) => `
       <div class="pro-skill-edit-row">
         <input type="text" value="${s.nome}" placeholder="Es. Python"
-               onchange="profiloData.skills[${i}].nome = this.value"/>
-        <select onchange="profiloData.skills[${i}].livello = this.value">
+               data-skill-index="${i}" data-skill-field="nome"/>
+        <select data-skill-index="${i}" data-skill-field="livello">
           ${["Base", "Intermedio", "Avanzato"]
               .map(
                   (lv) =>
@@ -577,7 +577,7 @@ function renderSkillsEditor() {
               )
               .join("")}
         </select>
-        <button class="pro-del-btn" onclick="removeSkill(${i})">✕</button>
+        <button class="pro-del-btn" data-skill-remove="${i}">✕</button>
       </div>`,
         )
         .join("");
@@ -1030,6 +1030,20 @@ document.addEventListener("DOMContentLoaded", () => {
     document
         .querySelector(".pro-add-btn")
         .addEventListener("click", addSkillRow);
+
+    /* ── Profilo modal: skill editor dinamico ───────────── */
+    document.getElementById("proSkillsEditor").addEventListener("change", (e) => {
+        const { skillIndex, skillField } = e.target.dataset;
+        if (skillIndex === undefined || !skillField) return;
+
+        profiloData.skills[Number(skillIndex)][skillField] = e.target.value;
+    });
+    document.getElementById("proSkillsEditor").addEventListener("click", (e) => {
+        const removeButton = e.target.closest("[data-skill-remove]");
+        if (!removeButton) return;
+
+        removeSkill(Number(removeButton.dataset.skillRemove));
+    });
 
     /* ── Profilo modal: annulla e salva ──────────────────── */
     document

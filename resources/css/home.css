@@ -1931,7 +1931,7 @@
      z-index: 1;
    }
 
-   .pro-exp-item:not(:last-child) .pro-exp-dot::after {
+   .pro-exp-item .pro-exp-dot::after {
      content: '';
      position: absolute;
      top: 10px;
