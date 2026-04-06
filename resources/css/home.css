@@ -1286,6 +1286,7 @@
      align-items: center;
      justify-content: center;
      gap: 5px;
+     width: 100%;
      padding: 8px;
      border-top: 1px solid rgba(255, 255, 255, 0.04);
      cursor: pointer;
@@ -1295,10 +1296,10 @@
      transition: background 0.15s;
      user-select: none;
      border-radius: 0 0 16px 16px;
-   }
-
-   .co-card.expanded .co-toggle {
-     border-radius: 0;
+     background: transparent;
+     border-left: none;
+     border-right: none;
+     border-bottom: none;
    }
 
    .co-toggle:hover {
@@ -1307,32 +1308,7 @@
 
    .co-chevron {
      font-size: 12px;
-     transition: transform 0.3s;
      display: inline-block;
-   }
-
-   .co-card.expanded .co-chevron {
-     transform: rotate(180deg);
-   }
-
-   /* Dettagli */
-   .co-details {
-     max-height: 0;
-     overflow: hidden;
-     transition: max-height 0.4s cubic-bezier(.4, 0, .2, 1);
-   }
-
-   .co-card.expanded .co-details {
-     max-height: 600px;
-   }
-
-   .co-details-inner {
-     padding: 13px 13px 12px;
-     border-top: 1px solid rgba(255, 255, 255, 0.05);
-     display: flex;
-     flex-direction: column;
-     gap: 11px;
-     border-radius: 0 0 16px 16px;
    }
 
    .co-desc {
@@ -1388,6 +1364,125 @@
    .co-map-btn:hover {
      transform: translateY(-1px);
      box-shadow: 0 6px 18px rgba(102, 126, 234, 0.5);
+   }
+
+   .company-details-modal {
+     width: min(720px, 92vw);
+     padding: 1.5rem;
+   }
+
+   .company-details-header {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+   }
+
+   .company-details-subtitle {
+     margin-bottom: 0;
+   }
+
+   .company-modal-hero {
+     display: grid;
+     grid-template-columns: auto 1fr auto;
+     gap: 14px;
+     align-items: center;
+     margin-bottom: 1rem;
+   }
+
+   .company-modal-logo {
+     width: 52px;
+     height: 52px;
+     border-radius: 16px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-weight: 800;
+     color: white;
+     background: var(--grad);
+     box-shadow: 0 12px 28px rgba(102, 126, 234, 0.28);
+   }
+
+   .company-modal-name {
+     font-size: 1rem;
+     font-weight: 700;
+     color: white;
+   }
+
+   .company-modal-sector {
+     margin-top: 4px;
+     font-size: 0.86rem;
+     color: var(--muted);
+   }
+
+   .company-modal-match {
+     text-align: right;
+   }
+
+   .company-modal-match-pct {
+     font-size: 1.1rem;
+     font-weight: 800;
+     color: white;
+   }
+
+   .company-modal-match-label {
+     font-size: 0.75rem;
+     color: var(--muted);
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+   }
+
+   .company-modal-tags {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 8px;
+     margin-bottom: 1rem;
+   }
+
+   .company-modal-grid {
+     display: grid;
+     gap: 12px;
+     margin-bottom: 1rem;
+   }
+
+   .company-modal-panel {
+     background: rgba(255, 255, 255, 0.03);
+     border: 1px solid rgba(255, 255, 255, 0.06);
+     border-radius: 16px;
+     padding: 14px;
+   }
+
+   .company-modal-section-title {
+     margin-bottom: 10px;
+     font-size: 0.77rem;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: rgba(255, 255, 255, 0.72);
+   }
+
+   .company-modal-info-list {
+     display: flex;
+     flex-direction: column;
+     gap: 8px;
+   }
+
+   @media (max-width: 640px) {
+     .company-details-modal {
+       padding: 1.1rem;
+     }
+
+     .company-details-header {
+       margin-bottom: 1rem;
+     }
+
+     .company-modal-hero {
+       grid-template-columns: 1fr;
+     }
+
+     .company-modal-match {
+       text-align: left;
+     }
    }
 
    /* Overlay mobile */

@@ -961,6 +961,19 @@
         </div>
     </div>
 
+    <div class="logout-overlay" id="companyDetailsOverlay">
+        <div class="logout-modal company-details-modal">
+            <div class="company-details-header">
+                <div>
+                    <div class="logout-modal-title">Dettagli azienda</div>
+                    <div class="logout-modal-desc company-details-subtitle">Informazioni e contatti del match selezionato.</div>
+                </div>
+                <button class="profilo-modal-close" id="companyDetailsClose" type="button">✕</button>
+            </div>
+            <div id="companyDetailsContent"></div>
+        </div>
+    </div>
+
     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
 </html>

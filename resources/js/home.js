@@ -154,6 +154,8 @@ const MOCK_ROUTES = [
     },
 ];
 
+let currentCompanies = [];
+
 /* ─── HELPERS ─────────────────────────────────────────── */
 const svgIcon = (id, extraClass = "icon") =>
     `<span class="${extraClass}"><svg><use href="#${id}"></use></svg></span>`;
@@ -235,6 +237,8 @@ function renderCompanies(companies) {
     const badge = document.getElementById("badgeAziende");
     const subtitle = document.getElementById("aziendeSubtitle");
 
+    currentCompanies = Array.isArray(companies) ? companies : [];
+
     badge.textContent = companies.length;
 
     if (!companies || companies.length === 0) {
@@ -255,14 +259,12 @@ function renderCompanies(companies) {
         const tags = c.tags
             .map((t) => `<span class="co-tag">${t}</span>`)
             .join("");
-        const safeC = encodeURIComponent(JSON.stringify(c));
-
         const card = document.createElement("div");
         card.className = `co-card${isBest ? " best" : ""}`;
         card.dataset.id = c.id;
 
         card.innerHTML = `
-          <div class="co-top" onclick="toggleCard(this.closest('.co-card'))">
+          <div class="co-top">
             <div class="co-row1">
               <div class="co-logo">${c.initials}</div>
               <div class="co-info">
@@ -282,26 +284,9 @@ function renderCompanies(companies) {
               <div class="co-meta-item">${svgIcon("i-route")}<span>${c.durationMin} min in auto</span></div>
             </div>
           </div>
-          <div class="co-toggle" onclick="toggleCard(this.closest('.co-card'))">
-            Dettagli e contatti <span class="co-chevron">▾</span>
-          </div>
-          <div class="co-details">
-            <div class="co-details-inner">
-              <div class="co-desc">${c.description}</div>
-              <div class="co-contacts">
-                <div class="co-contact-row">${svgIcon("i-mail")}<a href="mailto:${c.contacts.email}">${c.contacts.email}</a></div>
-                <div class="co-contact-row">${svgIcon("i-link")}<a href="https://${c.contacts.web}" target="_blank">${c.contacts.web}</a></div>
-                <div class="co-contact-row">${svgIcon("i-phone")}<span>${c.contacts.phone}</span></div>
-              </div>
-              <button class="co-map-btn" onclick="goToMap(event, decodeURIComponent('${safeC}'))">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
-                     fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-                Mostra percorso sulla mappa
-              </button>
-            </div>
-          </div>
+          <button class="co-toggle" type="button" data-action="open-company-details" data-company-id="${c.id}">
+            Dettagli e contatti
+          </button>
         `;
         list.appendChild(card);
     });
@@ -322,8 +307,73 @@ async function loadCompanies() {
     renderCompanies(MOCK_COMPANIES);
 }
 
-function toggleCard(card) {
-    card.classList.toggle("expanded");
+function getCompanyById(companyId) {
+    return currentCompanies.find((company) => String(company.id) === String(companyId));
+}
+
+function renderCompanyDetailsModal(company) {
+    const content = document.getElementById("companyDetailsContent");
+
+    content.innerHTML = `
+      <div class="company-modal-hero">
+        <div class="company-modal-logo">${company.initials}</div>
+        <div class="company-modal-head">
+          <div class="company-modal-name">${company.name}</div>
+          <div class="company-modal-sector">${company.sector}</div>
+        </div>
+        <div class="company-modal-match">
+          <div class="company-modal-match-pct">${company.matchPct}%</div>
+          <div class="company-modal-match-label">match</div>
+        </div>
+      </div>
+      <div class="company-modal-tags">
+        ${company.tags.map((tag) => `<span class="co-tag">${tag}</span>`).join("")}
+      </div>
+      <div class="company-modal-grid">
+        <div class="company-modal-panel">
+          <div class="company-modal-section-title">Descrizione</div>
+          <div class="co-desc">${company.description}</div>
+        </div>
+        <div class="company-modal-panel">
+          <div class="company-modal-section-title">Dettagli</div>
+          <div class="company-modal-info-list">
+            <div class="co-contact-row">${svgIcon("i-pin")}<span>${company.address}</span></div>
+            <div class="co-contact-row">${svgIcon("i-route")}<span>${company.city} · ${company.distanceKm} km · ${company.durationMin} min in auto</span></div>
+          </div>
+        </div>
+        <div class="company-modal-panel">
+          <div class="company-modal-section-title">Contatti</div>
+          <div class="co-contacts">
+            <div class="co-contact-row">${svgIcon("i-mail")}<a href="mailto:${company.contacts.email}">${company.contacts.email}</a></div>
+            <div class="co-contact-row">${svgIcon("i-link")}<a href="https://${company.contacts.web}" target="_blank" rel="noopener noreferrer">${company.contacts.web}</a></div>
+            <div class="co-contact-row">${svgIcon("i-phone")}<span>${company.contacts.phone}</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="co-map-btn" type="button" data-action="go-to-company-map" data-company-id="${company.id}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+             fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+        Mostra percorso sulla mappa
+      </button>
+    `;
+}
+
+function openCompanyDetails(companyId) {
+    const company = getCompanyById(companyId);
+    const overlay = document.getElementById("companyDetailsOverlay");
+
+    if (!company || !overlay) return;
+
+    renderCompanyDetailsModal(company);
+    overlay.classList.add("active");
+}
+
+function closeCompanyDetails() {
+    const overlay = document.getElementById("companyDetailsOverlay");
+    if (!overlay) return;
+    overlay.classList.remove("active");
 }
 
 /* ════════════════════════════════════════════════════════
@@ -394,9 +444,9 @@ function repeatRoute(routeJSON) {
 /* ════════════════════════════════════════════════════════
    REDIRECT MAPPA (da card azienda)
    ════════════════════════════════════════════════════════ */
-function goToMap(event, companyJSON) {
-    event.stopPropagation();
-    const c = JSON.parse(companyJSON);
+function goToMap(companyId) {
+    const c = getCompanyById(companyId);
+    if (!c) return;
     const params = new URLSearchParams({
         startaddress: "Bergamo, BG", // ← sostituire con indirizzo da sessione utente
         endaddress: c.address,
@@ -866,6 +916,30 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         openLogoutModal();
     });
+
+    document.getElementById("aziendeList").addEventListener("click", (e) => {
+        const detailsButton = e.target.closest('[data-action="open-company-details"]');
+        if (detailsButton) {
+            openCompanyDetails(detailsButton.dataset.companyId);
+        }
+    });
+
+    document
+        .getElementById("companyDetailsClose")
+        .addEventListener("click", closeCompanyDetails);
+    document
+        .getElementById("companyDetailsOverlay")
+        .addEventListener("click", (e) => {
+            if (e.target === e.currentTarget) closeCompanyDetails();
+        });
+    document
+        .getElementById("companyDetailsContent")
+        .addEventListener("click", (e) => {
+            const mapButton = e.target.closest('[data-action="go-to-company-map"]');
+            if (mapButton) {
+                goToMap(mapButton.dataset.companyId);
+            }
+        });
 
     /* ── Bottoni dashboard ───────────────────────────────── */
     document.getElementById("btnDashAziende").addEventListener("click", () => {
