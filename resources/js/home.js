@@ -216,7 +216,7 @@ function showSection(name) {
     }
 
     // Mobile: chiudi sidebar
-    if (window.innerWidth <= 820) closeSidebar();
+    if (window.innerWidth <= 1100) closeSidebar();
 }
 
 /* ─── setActive ───────────────────────────────────────── */
@@ -666,12 +666,7 @@ async function salvaProfilo() {
 /* ─── Aggiorna la sezione profilo con i nuovi dati ───── */
 function updateProfiloUI(apiResult) {
     // Nome hero
-    document.querySelector(".profilo-hero-name").textContent =
-        profiloData.nome + " " + profiloData.cognome;
-
-    // Completezza (da API o default)
-    const pct = apiResult ? apiResult.completezza : 82;
-    document.querySelector(".pro-circ-num").textContent = pct + "%";
+    document.querySelector(".profilo-hero-name").textContent = profiloData.nome + " " + profiloData.cognome;
 
     // Aggiorna suggerimento come tag (se presente)
     if (apiResult && apiResult.suggerimento) {
@@ -792,7 +787,6 @@ function showToast(msg) {
 }
 
 let notificationsMuted = false;
-let presenceOffline = false;
 
 function updateNotificationsToggle() {
     const btn = document.getElementById("notificationsToggle");
