@@ -921,7 +921,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const detailsButton = e.target.closest('[data-action="open-company-details"]');
         if (detailsButton) {
             openCompanyDetails(detailsButton.dataset.companyId);
+            return;
         }
+
+        const companyCard = e.target.closest(".co-card");
+        if (companyCard) openCompanyDetails(companyCard.dataset.id);
     });
 
     document
@@ -940,6 +944,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 goToMap(mapButton.dataset.companyId);
             }
         });
+    document.addEventListener("keydown", (e) => {
+        if (
+            e.key === "Escape" &&
+            document
+                .getElementById("companyDetailsOverlay")
+                .classList.contains("active")
+        ) {
+            closeCompanyDetails();
+        }
+    });
 
     /* ── Bottoni dashboard ───────────────────────────────── */
     document.getElementById("btnDashAziende").addEventListener("click", () => {
