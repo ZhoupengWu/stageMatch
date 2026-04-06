@@ -804,17 +804,6 @@ function updateNotificationsToggle() {
         : "Disattiva notifiche";
 }
 
-function updatePresenceToggle() {
-    const chip = document.getElementById("presenceToggle");
-    if (!chip) return;
-    chip.classList.toggle("offline", presenceOffline);
-    chip.setAttribute("aria-pressed", String(presenceOffline));
-    chip.title = presenceOffline ? "Passa online" : "Passa offline";
-
-    const label = chip.querySelector(".chip-label");
-    if (label) label.textContent = presenceOffline ? "Offline" : "Online";
-}
-
 /* ─── Esporta dati GDPR ──────────────────────────────────── */
 function esportaDati() {
     const payload = {
@@ -869,7 +858,6 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ── Render iniziale ─────────────────────────────────── */
     renderRecentRoutes();
     updateNotificationsToggle();
-    updatePresenceToggle();
 
     /* ── Sidebar overlay (chiudi cliccando fuori) ────────── */
     document.getElementById("overlay").addEventListener("click", closeSidebar);
@@ -974,17 +962,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 notificationsMuted
                     ? "Notifiche silenziate"
                     : "Notifiche riattivate",
-            );
-        });
-    }
-
-    const presenceToggle = document.getElementById("presenceToggle");
-    if (presenceToggle) {
-        presenceToggle.addEventListener("click", () => {
-            presenceOffline = !presenceOffline;
-            updatePresenceToggle();
-            showToast(
-                presenceOffline ? "Stato impostato su offline" : "Sei online",
             );
         });
     }

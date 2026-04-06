@@ -266,12 +266,6 @@
      color: var(--muted);
    }
 
-   .user-dots {
-     color: var(--muted);
-     font-size: 18px;
-     flex-shrink: 0;
-   }
-
    /* ─── MAIN ────────────────────────────────────────────── */
    .main {
      flex: 1;
@@ -338,61 +332,6 @@
      align-items: center;
      gap: 8px;
      flex-shrink: 0;
-   }
-
-   .topbar-chip {
-     display: flex;
-     align-items: center;
-     gap: 7px;
-     background: var(--surface);
-     border: 1px solid var(--border);
-     border-radius: 100px;
-     padding: 6px 13px;
-     font-size: 12.5px;
-     color: var(--muted);
-     white-space: nowrap;
-     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
-     cursor: pointer;
-     transition: background .24s ease, border-color .24s ease, color .24s ease, transform .24s ease, box-shadow .24s ease;
-     appearance: none;
-     -webkit-appearance: none;
-     outline: none;
-   }
-
-   .topbar-chip:hover {
-     background: var(--surface-hov);
-     border-color: var(--border-acc);
-   }
-
-   .topbar-chip:active {
-     transform: translateY(1px) scale(.985);
-   }
-
-   .topbar-chip.offline {
-     color: #f2b26b;
-     border-color: rgba(242, 178, 107, 0.28);
-     background: rgba(242, 178, 107, 0.08);
-   }
-
-   .chip-dot {
-     width: 6px;
-     height: 6px;
-     border-radius: 50%;
-     background: var(--green);
-     box-shadow: 0 0 6px var(--green);
-     animation: livePulse 2.5s ease-in-out infinite;
-     transition: background .3s ease, box-shadow .3s ease, transform .3s ease;
-   }
-
-   .topbar-chip.offline .chip-dot {
-     background: #f2b26b;
-     box-shadow: 0 0 8px rgba(242, 178, 107, 0.7);
-     animation: offlinePulse 2.8s ease-in-out infinite;
-   }
-
-   .chip-label {
-     display: inline-block;
-     min-width: 44px;
    }
 
    .topbar-icon-btn {
@@ -1614,10 +1553,6 @@
        padding: 0 16px;
      }
 
-     .topbar-chip {
-       display: none;
-     }
-
      .content {
        padding: 16px;
      }
@@ -1709,36 +1644,6 @@
      background: rgba(52, 168, 83, 0.12);
      border-color: rgba(52, 168, 83, 0.3);
      color: var(--green);
-   }
-
-   .profilo-completezza {
-     text-align: center;
-     flex-shrink: 0;
-   }
-
-   .pro-circ-label {
-     font-size: 10px;
-     color: var(--muted);
-     text-transform: uppercase;
-     letter-spacing: 1px;
-     margin-bottom: 2px;
-   }
-
-   .pro-circ-num {
-     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
-     font-size: 28px;
-     font-weight: 800;
-     background: var(--grad);
-     background-clip: text;
-     -webkit-background-clip: text;
-     -webkit-text-fill-color: transparent;
-     line-height: 1;
-   }
-
-   .pro-circ-sub {
-     font-size: 11px;
-     color: var(--muted);
-     margin-top: 2px;
    }
 
    /* Grid profilo */
