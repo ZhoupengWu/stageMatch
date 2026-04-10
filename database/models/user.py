@@ -14,6 +14,7 @@ class User(Base):
     cognome = Column(String)
     data_nascita = Column(Date)
     comune_nascita = Column(String)
+    indirizzo = Column(String)
     telefono = Column(String)
     email = Column(String, unique=True)
     immagine = Column(LargeBinary)
@@ -25,6 +26,17 @@ class User(Base):
         cascade="all, delete-orphan"
     )
 
+    skills = relationship(
+        "Skill",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+
+    soft_skills = relationship(
+        "SoftSkill", 
+        back_populates="user", 
+        cascade="all, delete-orphan"
+    )
     @validates("codice_fiscale")
     def validate_codice_fiscale(self, value):
         if value and not re.match(CF_REGEX, value):
