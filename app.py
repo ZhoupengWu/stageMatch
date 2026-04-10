@@ -51,7 +51,7 @@ def _completeLogin(user_data: dict):
 
     # Upload preferences to be reviewed
 
-    return redirect(url_for("homepage"))
+    return redirect(url_for("completeLogin"))
 
 @app.route('/')
 def mainPage():
@@ -105,6 +105,17 @@ def authLogout():
     session.clear()
 
     return redirect(au.sso_middleware.portal_url)
+
+@app.route("/logged/complete")
+def completeLogin():
+    user = session["user"]
+    user_data = {
+        "name": au.getName(user["email"]),
+        "surname": au.getSurname(user["email"]),
+        "email": user["email"]
+    }
+
+    return render_template("/html/complete_login.html", user=user_data)
 
 @app.route("/logged/homepage")
 @au.sso_middleware.sso_login_required

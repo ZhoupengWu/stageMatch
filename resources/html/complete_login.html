@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StageMatch — Completa il profilo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/complete_login.css') }}" />
+</head>
+<body>
+
+    <div class="bg"></div>
+    <div class="noise"></div>
+
+    <div class="hero">
+        <span class="hero-label">StageMatch</span>
+        <h1 class="hero-title">Benvenuto</h1>
+        <p class="hero-sub">Ci siamo quasi — completa il tuo profilo per accedere</p>
+        <button class="btn-open" id="openModal">Termina la registrazione</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal">
+
+            <div class="modal-header">
+                <div class="modal-header-text">
+                    <p class="modal-eyebrow">Profilo studente</p>
+                    <h2 class="modal-title" id="modalTitle">Dati personali</h2>
+                </div>
+                <button class="btn-close" id="closeModal" aria-label="Chiudi">
+                    <svg viewBox="0 0 14 14" fill="none" width="14" height="14">
+                        <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body" id="modalBody">
+                <form id="studentForm" action="/logged/complete" method="POST" novalidate>
+
+                    <div class="form-grid">
+
+                        <!-- ── Auto-compilati da JWT (disabilitati) ── -->
+                        <div class="field">
+                            <label for="nome">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 8a3 3 0 100-6 3 3 0 000 6zm-5 6a5 5 0 0110 0H3z" />
+                                </svg>
+                                Nome
+                                <span class="field-badge">Auto</span>
+                            </label>
+                            <input type="text" id="nome" name="nome" value="{{ user.name }}" disabled autocomplete="given-name" />
+                        </div>
+
+                        <div class="field">
+                            <label for="cognome">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 8a3 3 0 100-6 3 3 0 000 6zm-5 6a5 5 0 0110 0H3z" />
+                                </svg>
+                                Cognome
+                                <span class="field-badge">Auto</span>
+                            </label>
+                            <input type="text" id="cognome" name="cognome" value="{{ user.surname }}" disabled autocomplete="family-name" />
+                        </div>
+
+                        <div class="field col-full">
+                            <label for="email">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path
+                                        d="M0 4a2 2 0 012-2h12a2 2 0 012 2v.5L8 9 0 4.5V4zm0 1.9V12a2 2 0 002 2h12a2 2 0 002-2V5.9l-8 4.6-8-4.6z" />
+                                </svg>
+                                Email
+                                <span class="field-badge">Auto</span>
+                            </label>
+                            <input type="email" id="email" name="email" value="{{ user.email }}" disabled autocomplete="email" />
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <!-- ── Campi da compilare manualmente ── -->
+                        <div class="field">
+                            <label for="data_nascita">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path
+                                        d="M5 0a1 1 0 011 1v1h4V1a1 1 0 112 0v1h1a2 2 0 012 2v10a2 2 0 01-2 2H3a2 2 0 01-2-2V4a2 2 0 012-2h1V1a1 1 0 011-1zm7 5H4v8h8V5z" />
+                                </svg>
+                                Data di nascita
+                            </label>
+                            <input type="date" id="data_nascita" name="data_nascita" required />
+                            <span class="field-error" id="err-data_nascita"></span>
+                        </div>
+
+                        <div class="field">
+                            <label for="comune">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path
+                                        d="M8 1a5 5 0 00-5 5c0 3.5 5 9 5 9s5-5.5 5-9a5 5 0 00-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z" />
+                                </svg>
+                                Comune
+                            </label>
+                            <input type="text" id="comune" name="comune" placeholder="Milano" required
+                                autocomplete="address-level2" />
+                            <span class="field-error" id="err-comune"></span>
+                        </div>
+
+                        <div class="field col-full">
+                            <label for="codice_fiscale">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path
+                                        d="M3 2a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V3a1 1 0 00-1-1H3zm1 2h8v1H4V4zm0 3h5v1H4V7zm0 3h8v1H4v-1z" />
+                                </svg>
+                                Codice fiscale
+                            </label>
+                            <input type="text" id="codice_fiscale" name="codice_fiscale" placeholder="RSSMRA00A01F205X"
+                                maxlength="16" required autocomplete="off" spellcheck="false" />
+                            <span class="field-error" id="err-codice_fiscale"></span>
+                        </div>
+
+                        <div class="field">
+                            <label for="telefono">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path
+                                        d="M3.5 1A1.5 1.5 0 002 2.5v11A1.5 1.5 0 003.5 15h9a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0012.5 1h-9zM8 13a1 1 0 110-2 1 1 0 010 2z" />
+                                </svg>
+                                Telefono
+                            </label>
+                            <input type="tel" id="telefono" name="telefono" placeholder="+39 333 1234567" required
+                                autocomplete="tel" />
+                            <span class="field-error" id="err-telefono"></span>
+                        </div>
+
+                        <div class="field">
+                            <label for="indirizzo">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path
+                                        d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3A1.5 1.5 0 0115 10.5v3A1.5 1.5 0 0113.5 15h-3A1.5 1.5 0 019 13.5v-3z" />
+                                </svg>
+                                Indirizzo di studio
+                            </label>
+                            <div class="select-wrap">
+                                <select id="indirizzo" name="indirizzo" required>
+                                    <option value="" disabled selected>Seleziona…</option>
+                                    <option value="informatica">Informatica e Telecomunicazioni</option>
+                                    <option value="meccanica">Meccanica, Meccatronica ed Energia</option>
+                                    <option value="elettronica">Elettronica, Elettrotecnica ed Automazione</option>
+                                    <option value="moda">Sistema Moda Tessile</option>
+                                </select>
+                            </div>
+                            <span class="field-error" id="err-indirizzo"></span>
+                        </div>
+
+                    </div><!-- /form-grid -->
+                </form>
+
+                <!-- Messaggio di successo -->
+                <div class="success-msg" id="successMsg">
+                    <div class="success-icon">
+                        <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+                            <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <h3>Profilo completato!</h3>
+                    <p>I tuoi dati sono stati salvati. Stai per essere reindirizzato alla homepage…</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+            </div><!-- /modal-body -->
+
+            <div class="modal-footer" id="modalFooter">
+                <button class="btn-cancel" id="cancelBtn" type="button">Più tardi</button>
+                <button class="btn-submit" id="submitBtn" type="submit" form="studentForm">
+                    <svg viewBox="0 0 16 16" fill="currentColor" width="15" height="15">
+                        <path
+                            d="M8 0a8 8 0 100 16A8 8 0 008 0zm3.5 7.5l-4 4a.75.75 0 01-1.06 0l-2-2a.75.75 0 011.06-1.06L7 9.94l3.47-3.47a.75.75 0 011.06 1.06z" />
+                    </svg>
+                    <span id="submitLabel">Salva e continua</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/complete_login.js') }}"></script>
+</body>
+</html>
