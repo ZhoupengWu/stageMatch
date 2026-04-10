@@ -6,6 +6,7 @@ from .models.user_preferences import UserPreferences
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.inspection import inspect
 from datetime import datetime
+from .models.skill import Skill
 
 # global
 Session = None
@@ -22,11 +23,14 @@ def init_db(connstr: str):
 
 
 def get_user_by_id(user_id: str):
-    """Return a User object by id."""
     with Session() as session:
         return (
             session.query(User)
-            .options(selectinload(User.preferences))
+            .options(
+                selectinload(User.preferences),
+                selectinload(User.skills),
+                selectinload(User.soft_skills)
+            )
             .filter_by(googleId=user_id)
             .first()
         )
@@ -64,16 +68,19 @@ def add_user(user_data: dict):
 
 def update_user(user_data: dict):
     with Session() as session:
-        # Load user and eager-load preferences
         user = session.query(User).filter_by(googleId=user_data["googleId"]).options(
-            selectinload(User.preferences)
+            selectinload(User.preferences),
+            selectinload(User.skills),
+            selectinload(User.soft_skills)
         ).first()
+
+        print(f"\n\n{user}\n\n")
 
         if not user:
             return None
 
         # Update simple fields
-        for field in ["nome", "cognome", "codice_fiscale", "comune_nascita", "telefono", "email", "immagine"]:
+        for field in ["nome", "cognome", "codice_fiscale", "indirizzo" "comune_nascita", "telefono", "email", "immagine"]:
             if field in user_data:
                 setattr(user, field, user_data[field])
 
@@ -88,12 +95,35 @@ def update_user(user_data: dict):
         if user.preferences is None:
             user.preferences = UserPreferences(color_mode="light")
 
-        # Update preferences fields if provided
+        # Preferences
         pref_data = user_data.get("preferences")
         if pref_data:
             for key, value in pref_data.items():
                 if hasattr(user.preferences, key):
                     setattr(user.preferences, key, value)
+        
+        # Skills
+        skills = user_data.get("skills")
+        if skills:
+            user.skills.clear()
+            for skill_item in skills:
+                nuova_skill = Skill(
+                    nome=skill_item["nome"],
+                    livello=skill_item["livello"]
+                )
+                user.skills.append(nuova_skill)
+
+        # SoftSkills
+
+        sskills = user_data.get("soft_skills")
+        if sskills:
+            user.soft_skills.clear()
+            for skill_item in sskills:
+                nuova_skill = Skill(
+                    label=skill_item["label"],
+                    icon=skill_item["icon"]
+                )
+                user.soft_skills.append(nuova_skill)
 
         # Commit changes
         session.add(user)
