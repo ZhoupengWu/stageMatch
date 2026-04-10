@@ -154,6 +154,8 @@ const MOCK_ROUTES = [
     },
 ];
 
+let currentCompanies = [];
+
 /* ─── HELPERS ─────────────────────────────────────────── */
 const svgIcon = (id, extraClass = "icon") =>
     `<span class="${extraClass}"><svg><use href="#${id}"></use></svg></span>`;
@@ -214,7 +216,7 @@ function showSection(name) {
     }
 
     // Mobile: chiudi sidebar
-    if (window.innerWidth <= 820) closeSidebar();
+    if (window.innerWidth <= 1100) closeSidebar();
 }
 
 /* ─── setActive ───────────────────────────────────────── */
@@ -234,6 +236,8 @@ function renderCompanies(companies) {
     const empty = document.getElementById("aziendeEmpty");
     const badge = document.getElementById("badgeAziende");
     const subtitle = document.getElementById("aziendeSubtitle");
+
+    currentCompanies = Array.isArray(companies) ? companies : [];
 
     badge.textContent = companies.length;
 
@@ -255,14 +259,12 @@ function renderCompanies(companies) {
         const tags = c.tags
             .map((t) => `<span class="co-tag">${t}</span>`)
             .join("");
-        const safeC = encodeURIComponent(JSON.stringify(c));
-
         const card = document.createElement("div");
         card.className = `co-card${isBest ? " best" : ""}`;
         card.dataset.id = c.id;
 
         card.innerHTML = `
-          <div class="co-top" onclick="toggleCard(this.closest('.co-card'))">
+          <div class="co-top">
             <div class="co-row1">
               <div class="co-logo">${c.initials}</div>
               <div class="co-info">
@@ -282,26 +284,9 @@ function renderCompanies(companies) {
               <div class="co-meta-item">${svgIcon("i-route")}<span>${c.durationMin} min in auto</span></div>
             </div>
           </div>
-          <div class="co-toggle" onclick="toggleCard(this.closest('.co-card'))">
-            Dettagli e contatti <span class="co-chevron">▾</span>
-          </div>
-          <div class="co-details">
-            <div class="co-details-inner">
-              <div class="co-desc">${c.description}</div>
-              <div class="co-contacts">
-                <div class="co-contact-row">${svgIcon("i-mail")}<a href="mailto:${c.contacts.email}">${c.contacts.email}</a></div>
-                <div class="co-contact-row">${svgIcon("i-link")}<a href="https://${c.contacts.web}" target="_blank">${c.contacts.web}</a></div>
-                <div class="co-contact-row">${svgIcon("i-phone")}<span>${c.contacts.phone}</span></div>
-              </div>
-              <button class="co-map-btn" onclick="goToMap(event, decodeURIComponent('${safeC}'))">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
-                     fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-                Mostra percorso sulla mappa
-              </button>
-            </div>
-          </div>
+          <button class="co-toggle" type="button" data-action="open-company-details" data-company-id="${c.id}">
+            Dettagli e contatti
+          </button>
         `;
         list.appendChild(card);
     });
@@ -322,8 +307,73 @@ async function loadCompanies() {
     renderCompanies(MOCK_COMPANIES);
 }
 
-function toggleCard(card) {
-    card.classList.toggle("expanded");
+function getCompanyById(companyId) {
+    return currentCompanies.find((company) => String(company.id) === String(companyId));
+}
+
+function renderCompanyDetailsModal(company) {
+    const content = document.getElementById("companyDetailsContent");
+
+    content.innerHTML = `
+      <div class="company-modal-hero">
+        <div class="company-modal-logo">${company.initials}</div>
+        <div class="company-modal-head">
+          <div class="company-modal-name">${company.name}</div>
+          <div class="company-modal-sector">${company.sector}</div>
+        </div>
+        <div class="company-modal-match">
+          <div class="company-modal-match-pct">${company.matchPct}%</div>
+          <div class="company-modal-match-label">match</div>
+        </div>
+      </div>
+      <div class="company-modal-tags">
+        ${company.tags.map((tag) => `<span class="co-tag">${tag}</span>`).join("")}
+      </div>
+      <div class="company-modal-grid">
+        <div class="company-modal-panel">
+          <div class="company-modal-section-title">Descrizione</div>
+          <div class="co-desc">${company.description}</div>
+        </div>
+        <div class="company-modal-panel">
+          <div class="company-modal-section-title">Dettagli</div>
+          <div class="company-modal-info-list">
+            <div class="co-contact-row">${svgIcon("i-pin")}<span>${company.address}</span></div>
+            <div class="co-contact-row">${svgIcon("i-route")}<span>${company.city} · ${company.distanceKm} km · ${company.durationMin} min in auto</span></div>
+          </div>
+        </div>
+        <div class="company-modal-panel">
+          <div class="company-modal-section-title">Contatti</div>
+          <div class="co-contacts">
+            <div class="co-contact-row">${svgIcon("i-mail")}<a href="mailto:${company.contacts.email}">${company.contacts.email}</a></div>
+            <div class="co-contact-row">${svgIcon("i-link")}<a href="https://${company.contacts.web}" target="_blank" rel="noopener noreferrer">${company.contacts.web}</a></div>
+            <div class="co-contact-row">${svgIcon("i-phone")}<span>${company.contacts.phone}</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="co-map-btn" type="button" data-action="go-to-company-map" data-company-id="${company.id}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+             fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+        Mostra percorso sulla mappa
+      </button>
+    `;
+}
+
+function openCompanyDetails(companyId) {
+    const company = getCompanyById(companyId);
+    const overlay = document.getElementById("companyDetailsOverlay");
+
+    if (!company || !overlay) return;
+
+    renderCompanyDetailsModal(company);
+    overlay.classList.add("active");
+}
+
+function closeCompanyDetails() {
+    const overlay = document.getElementById("companyDetailsOverlay");
+    if (!overlay) return;
+    overlay.classList.remove("active");
 }
 
 /* ════════════════════════════════════════════════════════
@@ -394,9 +444,9 @@ function repeatRoute(routeJSON) {
 /* ════════════════════════════════════════════════════════
    REDIRECT MAPPA (da card azienda)
    ════════════════════════════════════════════════════════ */
-function goToMap(event, companyJSON) {
-    event.stopPropagation();
-    const c = JSON.parse(companyJSON);
+function goToMap(companyId) {
+    const c = getCompanyById(companyId);
+    if (!c) return;
     const params = new URLSearchParams({
         startaddress: "Bergamo, BG", // ← sostituire con indirizzo da sessione utente
         endaddress: c.address,
@@ -518,8 +568,8 @@ function renderSkillsEditor() {
             (s, i) => `
       <div class="pro-skill-edit-row">
         <input type="text" value="${s.nome}" placeholder="Es. Python"
-               onchange="profiloData.skills[${i}].nome = this.value"/>
-        <select onchange="profiloData.skills[${i}].livello = this.value">
+               data-skill-index="${i}" data-skill-field="nome"/>
+        <select data-skill-index="${i}" data-skill-field="livello">
           ${["Base", "Intermedio", "Avanzato"]
               .map(
                   (lv) =>
@@ -527,7 +577,7 @@ function renderSkillsEditor() {
               )
               .join("")}
         </select>
-        <button class="pro-del-btn" onclick="removeSkill(${i})">✕</button>
+        <button class="pro-del-btn" data-skill-remove="${i}">✕</button>
       </div>`,
         )
         .join("");
@@ -568,7 +618,10 @@ function toggleSoft(el, label) {
 function setApiStatus(msg, cls) {
     const el = document.getElementById("proApiStatus");
     el.textContent = msg;
-    el.className = "pro-api-status" + (cls ? " " + cls : "");
+    el.className =
+        "pro-api-status" +
+        (msg ? " show" : "") +
+        (cls ? " " + cls : "");
 }
 
 /* ════════════════════════════════════════════════════════
@@ -613,12 +666,7 @@ async function salvaProfilo() {
 /* ─── Aggiorna la sezione profilo con i nuovi dati ───── */
 function updateProfiloUI(apiResult) {
     // Nome hero
-    document.querySelector(".profilo-hero-name").textContent =
-        profiloData.nome + " " + profiloData.cognome;
-
-    // Completezza (da API o default)
-    const pct = apiResult ? apiResult.completezza : 82;
-    document.querySelector(".pro-circ-num").textContent = pct + "%";
+    document.querySelector(".profilo-hero-name").textContent = profiloData.nome + " " + profiloData.cognome;
 
     // Aggiorna suggerimento come tag (se presente)
     if (apiResult && apiResult.suggerimento) {
@@ -718,6 +766,15 @@ function setTema(btn) {
     showToast("Tema aggiornato");
 }
 
+function closeImpModal() {
+    document.getElementById("impOverlay").classList.remove("active");
+}
+
+function salvaImpModal() {
+    saveImpostazioni();
+    closeImpModal();
+}
+
 /* ─── Toast ──────────────────────────────────────────────── */
 let toastTimer;
 function showToast(msg) {
@@ -730,7 +787,6 @@ function showToast(msg) {
 }
 
 let notificationsMuted = false;
-let presenceOffline = false;
 
 function updateNotificationsToggle() {
     const btn = document.getElementById("notificationsToggle");
@@ -740,17 +796,6 @@ function updateNotificationsToggle() {
     btn.title = notificationsMuted
         ? "Riattiva notifiche"
         : "Disattiva notifiche";
-}
-
-function updatePresenceToggle() {
-    const chip = document.getElementById("presenceToggle");
-    if (!chip) return;
-    chip.classList.toggle("offline", presenceOffline);
-    chip.setAttribute("aria-pressed", String(presenceOffline));
-    chip.title = presenceOffline ? "Passa online" : "Passa offline";
-
-    const label = chip.querySelector(".chip-label");
-    if (label) label.textContent = presenceOffline ? "Offline" : "Online";
 }
 
 /* ─── Esporta dati GDPR ──────────────────────────────────── */
@@ -807,7 +852,6 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ── Render iniziale ─────────────────────────────────── */
     renderRecentRoutes();
     updateNotificationsToggle();
-    updatePresenceToggle();
 
     /* ── Sidebar overlay (chiudi cliccando fuori) ────────── */
     document.getElementById("overlay").addEventListener("click", closeSidebar);
@@ -838,6 +882,11 @@ document.addEventListener("DOMContentLoaded", () => {
         showSection("profilo");
         setActive(e.currentTarget);
     });
+    document.getElementById("profiloButton").addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection("profilo");
+        setActive(document.getElementById("navProfilo"));
+    });
     document
         .getElementById("navImpostazioni")
         .addEventListener("click", (e) => {
@@ -848,6 +897,44 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("navLogout").addEventListener("click", (e) => {
         e.preventDefault();
         openLogoutModal();
+    });
+
+    document.getElementById("aziendeList").addEventListener("click", (e) => {
+        const detailsButton = e.target.closest('[data-action="open-company-details"]');
+        if (detailsButton) {
+            openCompanyDetails(detailsButton.dataset.companyId);
+            return;
+        }
+
+        const companyCard = e.target.closest(".co-card");
+        if (companyCard) openCompanyDetails(companyCard.dataset.id);
+    });
+
+    document
+        .getElementById("companyDetailsClose")
+        .addEventListener("click", closeCompanyDetails);
+    document
+        .getElementById("companyDetailsOverlay")
+        .addEventListener("click", (e) => {
+            if (e.target === e.currentTarget) closeCompanyDetails();
+        });
+    document
+        .getElementById("companyDetailsContent")
+        .addEventListener("click", (e) => {
+            const mapButton = e.target.closest('[data-action="go-to-company-map"]');
+            if (mapButton) {
+                goToMap(mapButton.dataset.companyId);
+            }
+        });
+    document.addEventListener("keydown", (e) => {
+        if (
+            e.key === "Escape" &&
+            document
+                .getElementById("companyDetailsOverlay")
+                .classList.contains("active")
+        ) {
+            closeCompanyDetails();
+        }
     });
 
     /* ── Bottoni dashboard ───────────────────────────────── */
@@ -869,17 +956,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 notificationsMuted
                     ? "Notifiche silenziate"
                     : "Notifiche riattivate",
-            );
-        });
-    }
-
-    const presenceToggle = document.getElementById("presenceToggle");
-    if (presenceToggle) {
-        presenceToggle.addEventListener("click", () => {
-            presenceOffline = !presenceOffline;
-            updatePresenceToggle();
-            showToast(
-                presenceOffline ? "Stato impostato su offline" : "Sei online",
             );
         });
     }
@@ -925,6 +1001,20 @@ document.addEventListener("DOMContentLoaded", () => {
     document
         .querySelector(".pro-add-btn")
         .addEventListener("click", addSkillRow);
+
+    /* ── Profilo modal: skill editor dinamico ───────────── */
+    document.getElementById("proSkillsEditor").addEventListener("change", (e) => {
+        const { skillIndex, skillField } = e.target.dataset;
+        if (skillIndex === undefined || !skillField) return;
+
+        profiloData.skills[Number(skillIndex)][skillField] = e.target.value;
+    });
+    document.getElementById("proSkillsEditor").addEventListener("click", (e) => {
+        const removeButton = e.target.closest("[data-skill-remove]");
+        if (!removeButton) return;
+
+        removeSkill(Number(removeButton.dataset.skillRemove));
+    });
 
     /* ── Profilo modal: annulla e salva ──────────────────── */
     document

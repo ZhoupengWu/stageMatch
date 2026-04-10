@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>stageMatch — Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap"
-        rel="stylesheet">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>stageMatch - Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
-
 <body>
 
     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
@@ -224,7 +220,6 @@
                     <div class="user-name">Marco Rossi</div>
                     <div class="user-role">Studente · 5ª IT</div>
                 </div>
-                <span class="user-dots">⋯</span>
             </div>
 
         </aside>
@@ -240,16 +235,12 @@
                     <div class="topbar-greeting">Buonasera, <span>{{ user.name }}</span></div>
                 </div>
                 <div class="topbar-right">
-                    <button class="topbar-chip" id="presenceToggle" type="button" aria-pressed="false" title="Cambia stato">
-                        <div class="chip-dot"></div>
-                        <span class="chip-label">Online</span>
-                    </button>
                     <button class="topbar-icon-btn" id="notificationsToggle" type="button" aria-pressed="false" title="Disattiva notifiche">
                         <span class="icon icon-bell-on"><svg><use href="#i-bell"></use></svg></span>
                         <span class="icon icon-bell-off"><svg><use href="#i-bell-off"></use></svg></span>
                         <span class="mute-bar" aria-hidden="true"></span>
                     </button>
-                    <div class="topbar-icon-btn" title="Profilo"><span class="icon"><svg><use href="#i-user"></use></svg></span></div>
+                    <div class="topbar-icon-btn" id="profiloButton" title="Profilo"><span class="icon"><svg><use href="#i-user"></use></svg></span></div>
                 </div>
             </header>
 
@@ -472,11 +463,6 @@
                             <span class="pro-tag green"><span class="icon"><svg><use href="#i-check"></use></svg></span>Disponibile per stage</span>
                         </div>
                     </div>
-                    <div class="profilo-completezza">
-                        <div class="pro-circ-label">Profilo</div>
-                        <div class="pro-circ-num">82%</div>
-                        <div class="pro-circ-sub">completo</div>
-                    </div>
                 </div>
 
                 <div class="profilo-grid animate-in">
@@ -642,10 +628,9 @@
                         <div class="imp-row-item">
                             <div class="imp-row-info">
                                 <div class="imp-row-label">Email account</div>
-                                <div class="imp-row-sub">{{ user.email }} · <span style="color:var(--muted)">Gestita
-                                        dall'istituto</span></div>
+                                <div class="imp-row-sub">Gestita dall'istituto</div>
                             </div>
-                            <span class="imp-val-muted"><span class="icon"><svg><use href="#i-graduate"></use></svg></span>Scolastica</span>
+                            <span class="imp-val-muted">{{ user.email }}</span>
                         </div>
                     </div>
 
@@ -933,17 +918,18 @@
                     <!-- Generato da JS -->
                 </div>
             </div>
-        </div>
 
-        <!-- Footer -->
-        <div class="profilo-modal-footer">
-            <div class="pro-api-status" id="proApiStatus"></div>
-            <button class="logout-btn-cancel">Annulla</button>
-            <button class="logout-btn-confirm" id="btnSalvaProfilo">Salva modifiche</button>
+            <!-- Footer -->
+            <div class="profilo-modal-footer">
+                <div class="pro-api-status" id="proApiStatus"></div>
+                <div class="profilo-modal-actions">
+                    <button class="logout-btn-cancel">Annulla</button>
+                    <button class="logout-btn-confirm" id="btnSalvaProfilo">Salva modifiche</button>
+                </div>
+            </div>
         </div>
     </div>
     </div>
-
 
     <div class="logout-overlay" id="logoutOverlay">
         <div class="logout-modal">
@@ -965,8 +951,19 @@
         </div>
     </div>
 
+    <div class="logout-overlay" id="companyDetailsOverlay">
+        <div class="logout-modal company-details-modal">
+            <div class="company-details-header">
+                <div>
+                    <div class="logout-modal-title">Dettagli azienda</div>
+                    <div class="logout-modal-desc company-details-subtitle">Informazioni e contatti del match selezionato.</div>
+                </div>
+                <button class="profilo-modal-close" id="companyDetailsClose" type="button">✕</button>
+            </div>
+            <div id="companyDetailsContent"></div>
+        </div>
+    </div>
 
     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
-
 </html>

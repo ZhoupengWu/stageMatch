@@ -55,11 +55,11 @@ def _completeLogin(user_data: dict):
 
 @app.route('/')
 def mainPage():
-    return "default..."
+    return render_template("html/landing.html")
 
 @app.route('/login')
 def login():
-    return redirect("/auth/login")
+    return render_template("/html/login.html")
 
 @app.route("/auth/login")
 def authLogin():
