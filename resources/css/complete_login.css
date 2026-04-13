@@ -24,7 +24,8 @@
     --field-disabled-color: rgba(180, 200, 255, 0.35);
     --label-color: rgba(160, 185, 255, 0.7);
     --error-color: rgba(255, 110, 110, 0.9);
-    --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue'
+    --hint-color: rgba(140, 210, 160, 0.85);
+    --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
 }
 
 /* ─── Body ─── */
@@ -253,11 +254,29 @@ body {
     grid-column: 1 / -1;
 }
 
+/* 2/3 width on left, 1/3 on next sibling */
+.col-2-1 {
+    grid-column: 1 / 2;
+}
+
 .divider {
     grid-column: 1 / -1;
     height: 1px;
     background: rgba(255, 255, 255, 0.06);
     margin: 0.2rem 0;
+}
+
+/* Section sub-heading */
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(130, 160, 255, 0.55);
+    margin-bottom: -0.2rem;
 }
 
 /* ─── Field ─── */
@@ -285,7 +304,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Badge "Auto" per campi JWT */
 .field-badge {
     margin-left: auto;
     font-size: 0.58rem;
@@ -299,7 +317,7 @@ body {
     text-transform: uppercase;
 }
 
-/* Input & Select */
+/* ─── Shared input/select base ─── */
 .field input,
 .field select {
     width: 100%;
@@ -334,30 +352,74 @@ body {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
 }
 
-/* Stato invalido (dopo tentativo submit) */
 .field input.invalid,
 .field select.invalid {
     border-color: rgba(255, 90, 90, 0.55) !important;
     box-shadow: 0 0 0 3px rgba(255, 90, 90, 0.1) !important;
 }
 
-/* Campi disabilitati (JWT) */
 .field input:disabled {
     background: var(--field-disabled-bg);
     color: var(--field-disabled-color);
     border-color: rgba(255, 255, 255, 0.05);
     cursor: not-allowed;
     opacity: 1;
-    /* sovrascrive il default del browser */
 }
 
-/* CF uppercase */
 #codice_fiscale {
     text-transform: uppercase;
     letter-spacing: 0.06em;
 }
 
-/* Select custom arrow */
+/* ─── Input + inline button ─── */
+.input-with-btn {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.input-with-btn input {
+    flex: 1;
+    min-width: 0;
+}
+
+.btn-inline {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0 1rem;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(102, 126, 234, 0.35);
+    background: rgba(102, 126, 234, 0.1);
+    color: rgba(160, 185, 255, 0.9);
+    font-family: var(--font-family);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.25s var(--ease);
+    white-space: nowrap;
+}
+
+.btn-inline:hover {
+    background: rgba(102, 126, 234, 0.22);
+    border-color: rgba(102, 126, 234, 0.6);
+    color: var(--white-cold);
+    box-shadow: 0 0 16px rgba(102, 126, 234, 0.2);
+}
+
+.btn-inline:active {
+    transform: scale(0.97);
+}
+
+.btn-inline:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ─── Select ─── */
 .select-wrap {
     position: relative;
 }
@@ -386,7 +448,71 @@ body {
     color: #e0e8ff;
 }
 
-/* Error text */
+/* ─── Autocomplete ─── */
+.autocomplete-wrap {
+    position: relative;
+}
+
+.autocomplete-list {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: #1a1535;
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 12px;
+    max-height: 200px;
+    overflow-y: auto;
+    list-style: none;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    animation: fadeUp 0.18s var(--ease);
+}
+
+.autocomplete-list.open {
+    display: block;
+}
+
+.autocomplete-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.autocomplete-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.autocomplete-list::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 4px;
+}
+
+.autocomplete-list li {
+    padding: 0.7rem 1rem;
+    font-size: 0.88rem;
+    color: rgba(200, 215, 255, 0.8);
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.15s, color 0.15s;
+}
+
+.autocomplete-list li:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-list li:hover,
+.autocomplete-list li.active {
+    background: rgba(102, 126, 234, 0.18);
+    color: var(--white-cold);
+}
+
+.autocomplete-list li em {
+    font-style: normal;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* ─── Error / Hint text ─── */
 .field-error {
     font-size: 0.7rem;
     font-weight: 400;
@@ -397,6 +523,20 @@ body {
 }
 
 .field-error:empty {
+    opacity: 0;
+}
+
+.field-hint {
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--hint-color);
+    min-height: 1em;
+    padding-left: 2px;
+    padding-bottom: 0.5rem;
+    transition: opacity 0.2s;
+}
+
+.field-hint:empty {
     opacity: 0;
 }
 
@@ -502,7 +642,6 @@ body {
     line-height: 1.65;
 }
 
-/* Progress bar redirect */
 .progress-bar {
     width: 220px;
     height: 3px;
@@ -524,7 +663,7 @@ body {
 @keyframes fadeUp {
     from {
         opacity: 0;
-        transform: translateY(16px);
+        transform: translateY(10px);
     }
 
     to {
@@ -539,7 +678,8 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .col-full {
+    .col-full,
+    .col-2-1 {
         grid-column: auto;
     }
 

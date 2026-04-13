@@ -4,10 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>StageMatch — Completa il profilo</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap"
-        rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/complete_login.css') }}" />
 </head>
 <body>
@@ -22,7 +18,6 @@
         <button class="btn-open" id="openModal">Termina la registrazione</button>
     </div>
 
-    <!-- Modal -->
     <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal">
 
@@ -39,12 +34,11 @@
                 </button>
             </div>
 
-            <div class="modal-body" id="modalBody">
+            <div class="modal-body">
                 <form id="studentForm" action="/logged/complete" method="POST" novalidate>
-
                     <div class="form-grid">
 
-                        <!-- ── Auto-compilati da JWT (disabilitati) ── -->
+                        <!-- ── Dati da JWT (disabilitati) ── -->
                         <div class="field">
                             <label for="nome">
                                 <svg viewBox="0 0 16 16" fill="currentColor">
@@ -53,7 +47,8 @@
                                 Nome
                                 <span class="field-badge">Auto</span>
                             </label>
-                            <input type="text" id="nome" name="nome" value="{{ user.name }}" disabled autocomplete="given-name" />
+                            <input type="text" id="nome" name="nome" value="{{ user.name }}" disabled
+                                autocomplete="given-name" />
                         </div>
 
                         <div class="field">
@@ -64,7 +59,8 @@
                                 Cognome
                                 <span class="field-badge">Auto</span>
                             </label>
-                            <input type="text" id="cognome" name="cognome" value="{{ user.surname }}" disabled autocomplete="family-name" />
+                            <input type="text" id="cognome" name="cognome" value="{{ user.surname }}" disabled
+                                autocomplete="family-name" />
                         </div>
 
                         <div class="field col-full">
@@ -76,12 +72,13 @@
                                 Email
                                 <span class="field-badge">Auto</span>
                             </label>
-                            <input type="email" id="email" name="email" value="{{ user.email }}" disabled autocomplete="email" />
+                            <input type="email" id="email" name="email" value="{{ user.email }}" disabled
+                                autocomplete="email" />
                         </div>
 
                         <div class="divider"></div>
 
-                        <!-- ── Campi da compilare manualmente ── -->
+                        <!-- ── Dati anagrafici ── -->
                         <div class="field">
                             <label for="data_nascita">
                                 <svg viewBox="0 0 16 16" fill="currentColor">
@@ -94,19 +91,26 @@
                             <span class="field-error" id="err-data_nascita"></span>
                         </div>
 
+                        <!-- Comune di nascita — autocomplete -->
                         <div class="field">
-                            <label for="comune">
+                            <label for="comune_nascita">
                                 <svg viewBox="0 0 16 16" fill="currentColor">
                                     <path
                                         d="M8 1a5 5 0 00-5 5c0 3.5 5 9 5 9s5-5.5 5-9a5 5 0 00-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z" />
                                 </svg>
-                                Comune
+                                Comune di nascita
                             </label>
-                            <input type="text" id="comune" name="comune" placeholder="Milano" required
-                                autocomplete="address-level2" />
-                            <span class="field-error" id="err-comune"></span>
+                            <div class="autocomplete-wrap">
+                                <input type="text" id="comune_nascita" name="comune_nascita" placeholder="Es. Milano"
+                                    required autocomplete="off" />
+                                <!-- Codice belfiore nascosto — usato per calcolo CF -->
+                                <input type="hidden" id="comune_nascita_code" name="comune_nascita_code" />
+                                <ul class="autocomplete-list" id="comune_nascita_list" role="listbox"></ul>
+                            </div>
+                            <span class="field-error" id="err-comune_nascita"></span>
                         </div>
 
+                        <!-- Codice Fiscale con bottone calcola -->
                         <div class="field col-full">
                             <label for="codice_fiscale">
                                 <svg viewBox="0 0 16 16" fill="currentColor">
@@ -115,9 +119,21 @@
                                 </svg>
                                 Codice fiscale
                             </label>
-                            <input type="text" id="codice_fiscale" name="codice_fiscale" placeholder="RSSMRA00A01F205X"
-                                maxlength="16" required autocomplete="off" spellcheck="false" />
+                            <div class="input-with-btn">
+                                <input type="text" id="codice_fiscale" name="codice_fiscale"
+                                    placeholder="RSSMRA00A01F205X" maxlength="16" required autocomplete="off"
+                                    spellcheck="false" />
+                                <button type="button" id="cfCalcBtn" class="btn-inline"
+                                    title="Calcola dal nome, cognome, data e comune di nascita">
+                                    <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                                        <path
+                                            d="M12 1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V2a1 1 0 00-1-1zM5 3h6v2H5V3zm0 4h2v2H5V7zm3 0h2v2H8V7zm-3 3h2v2H5v-2zm3 0h2v2H8v-2z" />
+                                    </svg>
+                                    Calcola
+                                </button>
+                            </div>
                             <span class="field-error" id="err-codice_fiscale"></span>
+                            <span class="field-hint" id="hint-codice_fiscale"></span>
                         </div>
 
                         <div class="field">
@@ -134,7 +150,7 @@
                         </div>
 
                         <div class="field">
-                            <label for="indirizzo">
+                            <label for="indirizzo_studio">
                                 <svg viewBox="0 0 16 16" fill="currentColor">
                                     <path
                                         d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3A1.5 1.5 0 0115 10.5v3A1.5 1.5 0 0113.5 15h-3A1.5 1.5 0 019 13.5v-3z" />
@@ -142,7 +158,7 @@
                                 Indirizzo di studio
                             </label>
                             <div class="select-wrap">
-                                <select id="indirizzo" name="indirizzo" required>
+                                <select id="indirizzo_studio" name="indirizzo_studio" required>
                                     <option value="" disabled selected>Seleziona…</option>
                                     <option value="informatica">Informatica e Telecomunicazioni</option>
                                     <option value="meccanica">Meccanica, Meccatronica ed Energia</option>
@@ -150,13 +166,62 @@
                                     <option value="moda">Sistema Moda Tessile</option>
                                 </select>
                             </div>
-                            <span class="field-error" id="err-indirizzo"></span>
+                            <span class="field-error" id="err-indirizzo_studio"></span>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <!-- ── Residenza ── -->
+                        <div class="section-label col-full">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                                <path
+                                    d="M8.354 1.146a.5.5 0 00-.708 0l-6 6A.5.5 0 002 8h1v5a1 1 0 001 1h3v-3h2v3h3a1 1 0 001-1V8h1a.5.5 0 00.354-.854l-6-6z" />
+                            </svg>
+                            Indirizzo di residenza
+                        </div>
+
+                        <div class="field col-2-1">
+                            <label for="via">Via / Piazza</label>
+                            <input type="text" id="via" name="via" placeholder="Via Roma" required
+                                autocomplete="street-address" />
+                            <span class="field-error" id="err-via"></span>
+                        </div>
+
+                        <div class="field">
+                            <label for="civico">Civico</label>
+                            <input type="text" id="civico" name="civico" placeholder="12/A" required
+                                autocomplete="off" />
+                            <span class="field-error" id="err-civico"></span>
+                        </div>
+
+                        <div class="field">
+                            <label for="cap">CAP</label>
+                            <input type="text" id="cap" name="cap" placeholder="20100" maxlength="5" required
+                                inputmode="numeric" autocomplete="postal-code" />
+                            <span class="field-error" id="err-cap"></span>
+                        </div>
+
+                        <!-- Città residenza — autocomplete -->
+                        <div class="field col-full">
+                            <label for="citta_residenza">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path
+                                        d="M8 1a5 5 0 00-5 5c0 3.5 5 9 5 9s5-5.5 5-9a5 5 0 00-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z" />
+                                </svg>
+                                Città di residenza
+                            </label>
+                            <div class="autocomplete-wrap">
+                                <input type="text" id="citta_residenza" name="citta_residenza" placeholder="Es. Brescia"
+                                    required autocomplete="off" />
+                                <ul class="autocomplete-list" id="citta_residenza_list" role="listbox"></ul>
+                            </div>
+                            <span class="field-error" id="err-citta_residenza"></span>
                         </div>
 
                     </div><!-- /form-grid -->
                 </form>
 
-                <!-- Messaggio di successo -->
+                <!-- Successo -->
                 <div class="success-msg" id="successMsg">
                     <div class="success-icon">
                         <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
@@ -170,7 +235,6 @@
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
                 </div>
-
             </div><!-- /modal-body -->
 
             <div class="modal-footer" id="modalFooter">

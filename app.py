@@ -1,3 +1,4 @@
+import json
 import os
 import secrets
 from flask import Flask, render_template, redirect, request, session, url_for
@@ -106,8 +107,15 @@ def authLogout():
 
     return redirect(au.sso_middleware.portal_url)
 
-@app.route("/logged/complete")
+@app.route("/logged/complete", methods=["GET", "POST"])
 def completeLogin():
+    if request.method == "POST":
+        data = json.dumps(dict(request.form))
+
+        print(data)
+
+        return redirect(url_for("homepage"))
+
     user = session["user"]
     user_data = {
         "name": au.getName(user["email"]),
