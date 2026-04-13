@@ -59,20 +59,36 @@ async function loadComuni() {
 }
 
 function searchComuni(query, limit = 8) {
-    if (!query || query.length < 2) return [];
-    const q = query
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+    if (!query) return [];
+
+    const q = normalizeComuneName(query);
+
     return comuniDB
         .filter((c) => {
-            const n = c.nome
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "");
+            const n = normalizeComuneName(c.nome);
             return n.startsWith(q);
         })
         .slice(0, limit);
+}
+
+function normalizeComuneName(value) {
+    return (value || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function findComuneByName(name) {
+    const normalizedName = normalizeComuneName(name);
+
+    if (!normalizedName) return null;
+
+    return (
+        comuniDB.find((comune) => normalizeComuneName(comune.nome) === normalizedName) ||
+        null
+    );
 }
 
 /* ── Autocomplete widget ── */
@@ -390,6 +406,17 @@ Object.keys(validators).forEach((id) => {
     });
 });
 
+fields.comune_nascita?.addEventListener("blur", () => {
+    if (fields.comune_nascita_code.value.trim()) return;
+
+    const match = findComuneByName(fields.comune_nascita.value);
+    if (!match) return;
+
+    fields.comune_nascita.value = match.nome;
+    fields.comune_nascita_code.value = match.codiceBelfiore;
+    clearError("comune_nascita");
+});
+
 /* ── CF uppercase live ── */
 fields.codice_fiscale.addEventListener("input", () => {
     const pos = fields.codice_fiscale.selectionStart;
@@ -425,18 +452,17 @@ document.getElementById("cfCalcBtn").addEventListener("click", () => {
     }
 
     if (!codice) {
-        // Comune digitato ma non selezionato dall'autocomplete → prova a cercarlo
-        const match = comuniDB.find(
-            (c) => c.nome.toLowerCase() === comune.toLowerCase(),
-        );
+        // Comune digitato manualmente: se corrisponde a un comune noto, usa il codice Belfiore.
+        const match = findComuneByName(comune);
         if (!match) {
             setHint("codice_fiscale", "");
             showError(
                 "codice_fiscale",
-                "Seleziona il comune dalla lista per calcolare il codice fiscale.",
+                "Inserisci un comune di nascita valido per calcolare il codice fiscale.",
             );
             return;
         }
+        fields.comune_nascita.value = match.nome;
         fields.comune_nascita_code.value = match.codiceBelfiore;
     }
 
@@ -497,7 +523,7 @@ form.addEventListener("submit", async (e) => {
         });
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        
+
         showSuccess(res);
     } catch (err) {
         console.error("[StageMatch]", err);
