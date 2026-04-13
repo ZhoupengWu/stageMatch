@@ -217,7 +217,7 @@
             <div class="sidebar-user">
                 <div class="user-avatar">MR</div>
                 <div class="user-info">
-                    <div class="user-name">Marco Rossi</div>
+                    <div class="user-name">{{user.name}} {{user.surname}}</div>
                     <div class="user-role">Studente · 5ª IT</div>
                 </div>
             </div>
@@ -455,8 +455,8 @@
                 <div class="profilo-hero animate-in">
                     <div class="profilo-avatar">MR</div>
                     <div class="profilo-hero-info">
-                        <div class="profilo-hero-name">Marco Rossi</div>
-                        <div class="profilo-hero-sub">Studente · 5ª Informatica · ITIS Paleocapa, Bergamo</div>
+                        <div class="profilo-hero-name">{{user.name}} {{user.surname}}</div>
+                        <div class="profilo-hero-sub">Studente · 5ª {{user.indirizzo_studio}} · ITIS Paleocapa, Bergamo</div>
                         <div class="profilo-hero-tags">
                             <span class="pro-tag"><span class="icon"><svg><use href="#i-graduate"></use></svg></span>Diploma 2025</span>
                             <span class="pro-tag"><span class="icon"><svg><use href="#i-pin"></use></svg></span>Bergamo</span>
@@ -471,20 +471,16 @@
                     <div class="pro-card">
                         <div class="pro-card-head"><span class="icon"><svg><use href="#i-user"></use></svg></span>Dati anagrafici</div>
                         <div class="pro-rows" id="proAnagrafica">
-                            <div class="pro-row"><span class="pro-lbl">Nome</span><span class="pro-val">Marco</span>
+                            <div class="pro-row"><span class="pro-lbl">Nome</span><span class="pro-val">{{user.name}}</span>
                             </div>
-                            <div class="pro-row"><span class="pro-lbl">Cognome</span><span class="pro-val">Rossi</span>
+                            <div class="pro-row"><span class="pro-lbl">Cognome</span><span class="pro-val">{{user.surname}}</span>
                             </div>
-                            <div class="pro-row"><span class="pro-lbl">Data di nascita</span><span class="pro-val">14
-                                    marzo 2007</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Data di nascita</span><span class="pro-val">{{user.data_nascita}}</span></div>
                             <div class="pro-row"><span class="pro-lbl">Codice fiscale</span><span
-                                    class="pro-val pro-mono">RSSMRC07C14A794Z</span></div>
-                            <div class="pro-row"><span class="pro-lbl">Comune</span><span class="pro-val">Bergamo
-                                    (BG)</span></div>
-                            <div class="pro-row"><span class="pro-lbl">Telefono</span><span class="pro-val">+39 333 456
-                                    7890</span></div>
-                            <div class="pro-row"><span class="pro-lbl">Email</span><span class="pro-val">{{ user.email
-                                    }}</span></div>
+                                    class="pro-val pro-mono">{{user.codice_fiscale}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Comune</span><span class="pro-val">{{user.citta_residenza}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Telefono</span><span class="pro-val">{{user.telefono}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Email</span><span class="pro-val">{{ user.email}}</span></div>
                         </div>
                     </div>
 
@@ -494,8 +490,7 @@
                         <div class="pro-rows" id="proScuola">
                             <div class="pro-row"><span class="pro-lbl">Istituto</span><span class="pro-val">ITIS
                                     Paleocapa</span></div>
-                            <div class="pro-row"><span class="pro-lbl">Indirizzo</span><span class="pro-val">Informatica
-                                    e Telecomunicazioni</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Indirizzo</span><span class="pro-val">{{user.indirizzo_studio}}</span></div>
                             <div class="pro-row"><span class="pro-lbl">Classe</span><span class="pro-val">5ª IT</span>
                             </div>
                             <div class="pro-row"><span class="pro-lbl">Anno diploma</span><span
