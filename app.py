@@ -8,7 +8,7 @@ from datetime import timedelta
 import auth.auth as au
 
 load_dotenv()
-test = {}
+
 app = Flask(
     __name__,
     static_folder="./resources",
@@ -108,13 +108,10 @@ def authLogout():
     return redirect(au.sso_middleware.portal_url)
 
 @app.route("/logged/complete", methods=["GET", "POST"])
+@au.sso_middleware.sso_login_required
 def completeLogin():
     if request.method == "POST":
-        data = dict(request.form) #json.dumps(dict(request.form))
-
-        print(data)
-        test = data
-        print(test)
+        session["other"] = request.form.to_dict()
 
         return redirect(url_for("homepage"))
 
@@ -131,16 +128,23 @@ def completeLogin():
 @au.sso_middleware.sso_login_required
 def homepage():
     user = session["user"]
+    other_data = session.get("other", {})
+
+    if isinstance(other_data, str):
+        try:
+            other_data = json.loads(other_data)
+        except json.JSONDecodeError:
+            other_data = {}
+
     user_data = {
         "name": au.getName(user["email"]),
         "surname": au.getSurname(user["email"]),
         "email": user["email"],
+        "other": other_data,
+        **other_data,
     }
 
-    data = user_data | test
-    print(data)
-
-    return render_template("/html/home.html", user=data)
+    return render_template("/html/home.html", user=user_data)
 
 @app.route('/logged/map')
 @au.sso_middleware.sso_login_required
