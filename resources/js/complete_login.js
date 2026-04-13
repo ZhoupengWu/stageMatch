@@ -314,7 +314,7 @@ const validators = {
     data_nascita(v) {
         if (!v) return "La data di nascita è obbligatoria.";
         const age = (Date.now() - new Date(v)) / (365.25 * 24 * 3600 * 1000);
-        if (age < 10 || age > 100) return "Data di nascita non valida.";
+        if (age < 13 || age > 31) return "Data di nascita non valida.";
         return null;
     },
     comune_nascita(v) {
@@ -396,6 +396,57 @@ function validateAll() {
     );
 }
 
+function buildSubmissionData() {
+    const formData = new FormData(form);
+    const trimmedFields = [
+        "nome",
+        "cognome",
+        "email",
+        "comune_nascita",
+        "telefono",
+        "via",
+        "civico",
+        "cap",
+        "citta_residenza",
+    ];
+
+    trimmedFields.forEach((fieldName) => {
+        const value = formData.get(fieldName);
+        if (typeof value === "string") {
+            formData.set(fieldName, value.trim());
+        }
+    });
+
+    const codiceFiscale = formData.get("codice_fiscale");
+    if (typeof codiceFiscale === "string") {
+        formData.set("codice_fiscale", codiceFiscale.trim().toUpperCase());
+    }
+
+    const indirizzoStudioField = fields.indirizzo_studio;
+    const selectedOption =
+        indirizzoStudioField?.selectedOptions?.[0]?.textContent?.trim() || "";
+    if (selectedOption) {
+        formData.set("indirizzo_studio", selectedOption);
+    }
+
+    const comuneNascitaMatch = findComuneByName(
+        String(formData.get("comune_nascita") || ""),
+    );
+    if (comuneNascitaMatch) {
+        formData.set("comune_nascita", comuneNascitaMatch.nome);
+        formData.set("comune_nascita_code", comuneNascitaMatch.codiceBelfiore);
+    }
+
+    const cittaResidenzaMatch = findComuneByName(
+        String(formData.get("citta_residenza") || ""),
+    );
+    if (cittaResidenzaMatch) {
+        formData.set("citta_residenza", cittaResidenzaMatch.nome);
+    }
+
+    return formData;
+}
+
 /* ── Live validation on blur ── */
 Object.keys(validators).forEach((id) => {
     const el = fields[id];
@@ -452,7 +503,6 @@ document.getElementById("cfCalcBtn").addEventListener("click", () => {
     }
 
     if (!codice) {
-        // Comune digitato manualmente: se corrisponde a un comune noto, usa il codice Belfiore.
         const match = findComuneByName(comune);
         if (!match) {
             setHint("codice_fiscale", "");
@@ -519,10 +569,10 @@ form.addEventListener("submit", async (e) => {
     try {
         const res = await fetch("/logged/complete", {
             method: "POST",
-            body: new FormData(form),
+            body: buildSubmissionData(),
         });
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) throw new Error(`[ERROR] code ${res.status}`);
 
         showSuccess(res);
     } catch (err) {
