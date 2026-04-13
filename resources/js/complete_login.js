@@ -21,6 +21,7 @@ const fields = {
     cognome: document.getElementById("cognome"),
     email: document.getElementById("email"),
     data_nascita: document.getElementById("data_nascita"),
+    sesso: document.getElementById("sesso"),
     comune_nascita: document.getElementById("comune_nascita"),
     comune_nascita_code: document.getElementById("comune_nascita_code"),
     codice_fiscale: document.getElementById("codice_fiscale"),
@@ -317,6 +318,11 @@ const validators = {
         if (age < 13 || age > 31) return "Data di nascita non valida.";
         return null;
     },
+    sesso(v) {
+        if (!v) return "Seleziona il sesso.";
+        if (!["M", "F"].includes(v)) return "Valore non valido.";
+        return null;
+    },
     comune_nascita(v) {
         if (!v.trim()) return "Il comune di nascita è obbligatorio.";
         if (!COMUNE_REGEX.test(v.trim())) return "Comune non valido.";
@@ -487,6 +493,7 @@ document.getElementById("cfCalcBtn").addEventListener("click", () => {
     const nome = fields.nome.value.trim();
     const cognome = fields.cognome.value.trim();
     const data = fields.data_nascita.value;
+    const sesso = fields.sesso.value;
     const comune = fields.comune_nascita.value.trim();
     const codice = fields.comune_nascita_code.value.trim();
 
@@ -494,6 +501,7 @@ document.getElementById("cfCalcBtn").addEventListener("click", () => {
     if (!nome) missing.push("nome");
     if (!cognome) missing.push("cognome");
     if (!data) missing.push("data di nascita");
+    if (!sesso) missing.push("sesso");
     if (!comune) missing.push("comune di nascita");
 
     if (missing.length) {
@@ -517,7 +525,7 @@ document.getElementById("cfCalcBtn").addEventListener("click", () => {
     }
 
     const belfiore = fields.comune_nascita_code.value;
-    const cf = calculateCF(nome, cognome, data, belfiore);
+    const cf = calculateCF(nome, cognome, data, belfiore, sesso);
     fields.codice_fiscale.value = cf;
     fields.codice_fiscale.classList.remove("invalid");
     showError("codice_fiscale", null);

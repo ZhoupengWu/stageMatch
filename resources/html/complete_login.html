@@ -91,6 +91,24 @@
                             <span class="field-error" id="err-data_nascita"></span>
                         </div>
 
+                        <div class="field">
+                            <label for="sesso">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path
+                                        d="M11 1h4v4h-1.5V3.56L11.53 5.53A4.5 4.5 0 119.5 4.47L11.44 2.5H10V1h1zm-6.5 5a3 3 0 103 3 3 3 0 00-3-3z" />
+                                </svg>
+                                Sesso
+                            </label>
+                            <div class="select-wrap">
+                                <select id="sesso" name="sesso" required>
+                                    <option value="" disabled selected>Seleziona...</option>
+                                    <option value="M">Maschio</option>
+                                    <option value="F">Femmina</option>
+                                </select>
+                            </div>
+                            <span class="field-error" id="err-sesso"></span>
+                        </div>
+
                         <!-- Comune di nascita — autocomplete -->
                         <div class="field">
                             <label for="comune_nascita">
@@ -159,7 +177,7 @@
                             </label>
                             <div class="select-wrap">
                                 <select id="indirizzo_studio" name="indirizzo_studio" required>
-                                    <option value="" disabled selected>Seleziona…</option>
+                                    <option value="" disabled selected>Seleziona...</option>
                                     <option value="Informatica e Telecomunicazioni">Informatica e Telecomunicazioni</option>
                                     <option value="Meccanica, Meccatronica ed Energia">Meccanica, Meccatronica ed Energia</option>
                                     <option value="Elettronica, Elettrotecnica ed Automazione">Elettronica, Elettrotecnica ed Automazione</option>
@@ -230,7 +248,7 @@
                         </svg>
                     </div>
                     <h3>Profilo completato!</h3>
-                    <p>I tuoi dati sono stati salvati. Stai per essere reindirizzato alla homepage…</p>
+                    <p>I tuoi dati sono stati salvati. Stai per essere reindirizzato...</p>
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
