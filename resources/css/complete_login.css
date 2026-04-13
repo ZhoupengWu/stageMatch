@@ -304,19 +304,6 @@ body {
     flex-shrink: 0;
 }
 
-.field-badge {
-    margin-left: auto;
-    font-size: 0.58rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    padding: 0.15rem 0.45rem;
-    border-radius: 4px;
-    background: rgba(102, 126, 234, 0.18);
-    color: rgba(140, 170, 255, 0.85);
-    border: 1px solid rgba(102, 126, 234, 0.25);
-    text-transform: uppercase;
-}
-
 /* ─── Shared input/select base ─── */
 .field input,
 .field select {
