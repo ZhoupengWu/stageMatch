@@ -6,7 +6,6 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import timedelta
 import auth.auth as au
 from database import database_helper
-import server
 
 load_dotenv()
 
@@ -28,6 +27,7 @@ if au.SSO_MODE == "production":
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax"
     )
+
 try:
     database_helper.init_db(os.getenv("DB_CONNECTION_STRING", "database.db"))
 except Exception as e:
@@ -35,7 +35,7 @@ except Exception as e:
     raise e
 
 def _completeLogin(user_data: dict):
-    global user
+    global user # Da rivedere
 
     email = user_data.get("email", "")
 
@@ -55,14 +55,14 @@ def _completeLogin(user_data: dict):
             "Too many active sessions",
             "⏱️"
         )
-    
+
     app.logger.info(f"[INFO] User {email} logged in with session ID: {session_id}")
 
     user = database_helper.get_user_by_id(user_data["googleId"])
 
     if not user:
         try:
-            database_helper.add_user(user_data) 
+            database_helper.add_user(user_data)
             user = database_helper.get_user_by_id(user_data["googleId"])
         except Exception:
             app.logger.error(f"[ERROR] Failed adding user {user_data}")
@@ -73,7 +73,7 @@ def _completeLogin(user_data: dict):
     app.logger.info(f"[INFO] User info from database: {dict_user['email']}, {dict_user['nome']}")
 
     au.sso_middleware.create_session(dict_user, session, session_id)
-    
+
     return redirect(url_for("homepage"))
 
 @app.route('/')
@@ -152,6 +152,7 @@ def devLogin():
 def update_user():
     try:
         data = request.get_json()
+        
         if not data:
             return jsonify({"error": "Invalid JSON"}), 400
 
@@ -159,8 +160,8 @@ def update_user():
         data["googleId"] = session_user["googleId"]
 
         # print(data)
-        
-        user_dict = database_helper.update_user(data) 
+
+        user_dict = database_helper.update_user(data)
         message = "User updated"
 
         return jsonify({"message": message, "user": user_dict}), 200
@@ -171,22 +172,6 @@ def update_user():
     except Exception as e:
         app.logger.exception("[ERROR] user endpoint failed")
         return jsonify({"error": "Internal server error"}), 500
-
-@app.route('/routejson')
-def routejson():
-    startaddress = request.args.get("startaddress")
-    endaddress = request.args.get("endaddress")
-    routemode = request.args.get("routemode")
-    try:
-        database_helper.add_user_route(session["user"]["googleId"], {
-        "start_address": startaddress,
-        "end_address": endaddress,
-        "mode": routemode
-    })
-    except Exception as e:
-        print("Failed to save route:", e)
-    json = server.getroutejson(startaddress, endaddress, routemode)
-    return json
 
 @app.errorhandler(404)
 def notFound(e):
