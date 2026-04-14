@@ -20,18 +20,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 <body>
-    <!-- Header con titolo -->
-    <div class="header-title">
-        <h1>
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            stageMatch
-        </h1>
-        <p>Trova il percorso migliore verso la tua destinazione</p>
-    </div>
-
     <!-- Pannello di controllo laterale -->
     <div id="controlPanel" class="control-panel">
 
@@ -55,9 +43,23 @@
                     </svg>
                     Partenza
                 </label>
-                <div class="input-wrapper">
-                    <input type="text" id="address_start" class="form-control" placeholder="Inserisci indirizzo di partenza">
-                    <div id="suggestions_start" class="suggestions-dropdown not-visible"></div>
+
+                <!-- Partenza -->
+                <div class="input-outer-wrapper">
+                    <div class="input-wrapper">
+                        <div class="input-field-wrapper">
+                            <input type="text" id="address_start" class="form-control" placeholder="Inserisci indirizzo di partenza">
+                            <div id="suggestions_start" class="suggestions-dropdown not-visible"></div>
+                        </div>
+                        <button class="btn-search" id="search_start" aria-label="Cerca indirizzo di partenza">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2.5"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -73,9 +75,23 @@
                     </svg>
                     Destinazione
                 </label>
-                <div class="input-wrapper">
-                    <input type="text" id="address_end" class="form-control" placeholder="Inserisci indirizzo di destinazione">
-                    <div id="suggestions_end" class="suggestions-dropdown not-visible"></div>
+
+                <!-- Destinazione -->
+                <div class="input-outer-wrapper">
+                    <div class="input-wrapper">
+                        <div class="input-field-wrapper">
+                            <input type="text" id="address_end" class="form-control" placeholder="Inserisci indirizzo di destinazione">
+                            <div id="suggestions_end" class="suggestions-dropdown not-visible"></div>
+                        </div>
+                        <button class="btn-search" id="search_end" aria-label="Cerca indirizzo di destinazione">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2.5"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 

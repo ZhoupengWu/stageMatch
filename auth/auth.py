@@ -1,4 +1,5 @@
 import os
+from turtle import st
 from dotenv import load_dotenv
 from auth.middleware.sso_middleware import SSOMiddleware, WhitelistManager, RateLimiter, render_sso_error
 
@@ -26,3 +27,9 @@ sso_middleware = SSOMiddleware(
 
 def getUsername(email: str) -> str:
     return email.split("@")[0]
+
+def getName(email: str) -> str:
+    return email.split(".")[0]
+
+def getSurname(email: str) -> str:
+    return email.split(".")[1]

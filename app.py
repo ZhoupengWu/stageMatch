@@ -1,5 +1,7 @@
+import json
 import os
 import secrets
+import requests
 from flask import Flask, render_template, redirect, request, session, url_for
 from dotenv import load_dotenv
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -51,16 +53,15 @@ def _completeLogin(user_data: dict):
 
     # Upload preferences to be reviewed
 
-    return redirect(url_for("homepage"))
-
+    return redirect(url_for("completeLogin"))
 
 @app.route('/')
 def mainPage():
-    return "default..."
+    return render_template("html/landing.html")
 
 @app.route('/login')
 def login():
-    return redirect("/auth/login")
+    return render_template("/html/login.html")
 
 @app.route("/auth/login")
 def authLogin():
@@ -107,10 +108,44 @@ def authLogout():
 
     return redirect(au.sso_middleware.portal_url)
 
+@app.route("/logged/complete", methods=["GET", "POST"])
+@au.sso_middleware.sso_login_required
+def completeLogin():
+    if request.method == "POST":
+        session["other"] = request.form.to_dict()
+
+        return redirect(url_for("homepage"))
+
+    user = session["user"]
+    user_data = {
+        "name": au.getName(user["email"]),
+        "surname": au.getSurname(user["email"]),
+        "email": user["email"]
+    }
+
+    return render_template("/html/complete_login.html", user=user_data)
+
 @app.route("/logged/homepage")
 @au.sso_middleware.sso_login_required
 def homepage():
-    return render_template("/html/home.html")
+    user = session["user"]
+    other_data = session.get("other", {})
+
+    if isinstance(other_data, str):
+        try:
+            other_data = json.loads(other_data)
+        except json.JSONDecodeError:
+            other_data = {}
+
+    user_data = {
+        "name": au.getName(user["email"]),
+        "surname": au.getSurname(user["email"]),
+        "email": user["email"],
+        "other": other_data,
+        **other_data,
+    }
+
+    return render_template("/html/home.html", user=user_data)
 
 @app.route('/logged/map')
 @au.sso_middleware.sso_login_required
@@ -123,6 +158,14 @@ def devLogin():
         return "Not availble in production", 403
 
     return redirect(url_for("authLogin"))
+
+@app.route("/photon")
+@au.sso_middleware.sso_login_required
+def photon():
+    params = request.args.to_dict()
+    response = requests.get("http://127.0.0.1:5001/photon", params=params, timeout=5)
+
+    return response.json(), response.status_code
 
 @app.errorhandler(404)
 def notFound(e):
