@@ -1,26 +1,16 @@
 import os
-from flask import Flask, request, jsonify
-from flask_cors import CORS
 import requests
 import aiohttp
 import urllib.parse
 import asyncio
+import json
 from dotenv import load_dotenv
 
 load_dotenv()
 
 ors_api_key = os.getenv("ORS_API_KEY")
 
-app = Flask(__name__)
-
-# Enable CORS for all routes
-CORS(app, origins=["http://127.0.0.1:5000"])
-
-@app.route('/routejson')
-def routejson():
-    startaddress = request.args.get("startaddress")
-    endaddress = request.args.get("endaddress")
-    routemode = request.args.get("routemode")
+def getroutejson(startaddress, endaddress, routemode):
 
     if (startaddress==None or endaddress==None):
         return {
@@ -35,7 +25,7 @@ def routejson():
     try:
         coords = asyncio.run(get_coordinates(startaddress, endaddress))
     except:
-        return jsonify({
+        return json.dumps({
             "error": "Non è stato possibile ricavare le coordinate geografiche dagli indirizzi forniti"
         })
 
@@ -57,13 +47,14 @@ def routejson():
 
     try:
         response = requests.post(openrouteservice_url, json=request_body, headers=headers)
-        response.raise_for_status()  # Raises exception for 4xx/5xx
+        response.raise_for_status()  
 
         data = response.json()
         return data
     except requests.exceptions.RequestException as error:
         print("Errore nella ricerca del percorso:", error)
-        return jsonify({
+        print(f"API KEY: {ors_api_key}")
+        return json.dumps({
             "error": f"Errore nella richiesta: {str(error)}",
         })
 
@@ -136,6 +127,3 @@ async def get_coordinates(address_start, address_end):
     }
 
     return coords
-
-if __name__ == '__main__':
-    app.run('127.0.0.1', 5001, debug=True)
