@@ -31,7 +31,7 @@ if au.SSO_MODE == "production":
     )
 
 try:
-    database_helper.init_db(os.getenv("DB_CONNECTION_STRING", "database.db"))
+    database_helper.initDB(os.getenv("DB_CONNECTION_STRING", "database.db"))
 except Exception as e:
     app.logger.error(f"[ERROR] database initialization failed: {e}")
     raise e
@@ -60,17 +60,17 @@ def _completeLogin(user_data: dict):
 
     app.logger.info(f"[INFO] User {email} logged in with session ID: {session_id}")
 
-    user = database_helper.get_user_by_id(user_data["googleId"])
+    user = database_helper.getUserById(user_data["googleId"])
 
     if not user:
         try:
-            database_helper.add_user(user_data)
-            user = database_helper.get_user_by_id(user_data["googleId"])
+            database_helper.addUser(user_data)
+            user = database_helper.getUserById(user_data["googleId"])
         except Exception:
             app.logger.error(f"[ERROR] Failed adding user {user_data}")
             return
 
-    dict_user = database_helper.model_to_dict(user)
+    dict_user = database_helper.modelToDict(user)
 
     app.logger.info(f"[INFO] User info from database: {dict_user['email']}, {dict_user['nome']}")
 
@@ -182,7 +182,7 @@ def devLogin():
 
 @app.route("/users/update", methods=["POST"])
 @au.sso_middleware.sso_login_required
-def update_user():
+def updateUser():
     try:
         data = request.get_json()
 
@@ -194,7 +194,7 @@ def update_user():
 
         # print(data)
 
-        user_dict = database_helper.update_user(data)
+        user_dict = database_helper.updateUser(data)
         message = "User updated"
 
         return jsonify({"message": message, "user": user_dict}), 200

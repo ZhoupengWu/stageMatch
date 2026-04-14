@@ -14,8 +14,7 @@ from .models.route import UserRoute
 # global
 Session = None
 
-
-def init_db(connstr: str):
+def initDB(connstr: str):
     """Initialize the database engine and session."""
     global Session
 
@@ -24,8 +23,7 @@ def init_db(connstr: str):
 
     Base.metadata.create_all(engine)
 
-
-def get_user_by_id(user_id: str):
+def getUserById(user_id: str):
     with Session() as session:
         return (
             session.query(User)
@@ -39,19 +37,20 @@ def get_user_by_id(user_id: str):
             .first()
         )
 
-
-def get_user_column(user_id: str, column: str):
+def getUserColumn(user_id: str, column: str):
     """Return a single column value of a user by id."""
     with Session() as session:
         user = session.query(User).filter_by(googleId=user_id).first()
+
         if not user:
             return None
+
         if not hasattr(user, column):
             raise ValueError(f"Column '{column}' does not exist in User model")
+
         return getattr(user, column)
 
-
-def add_user(user_data: dict):
+def addUser(user_data: dict):
     with Session() as session:
         existing = session.query(User).filter_by(googleId=user_data["googleId"]).options(
             selectinload(User.preferences)
@@ -67,10 +66,10 @@ def add_user(user_data: dict):
 
         session.add(user)
         session.commit()
+
         return user
 
-
-def update_user(user_data: dict):
+def updateUser(user_data: dict):
     with Session() as session:
         user = session.query(User).filter_by(googleId=user_data["googleId"]).options(
             selectinload(User.preferences),
@@ -105,11 +104,12 @@ def update_user(user_data: dict):
             for key, value in pref_data.items():
                 if hasattr(user.preferences, key):
                     setattr(user.preferences, key, value)
-        
+
         # Skills
         skills = user_data.get("skills")
         if skills:
             user.skills.clear()
+
             for skill_item in skills:
                 nuova_skill = Skill(
                     nome=skill_item["nome"],
@@ -118,10 +118,10 @@ def update_user(user_data: dict):
                 user.skills.append(nuova_skill)
 
         # SoftSkills
-
         sskills = user_data.get("soft_skills")
         if sskills:
             user.soft_skills.clear()
+
             for skill_item in sskills:
                 nuova_skill = SoftSkill(
                     label=skill_item["label"],
@@ -134,10 +134,9 @@ def update_user(user_data: dict):
         session.commit()
 
         # Convert to dict while session is open
-        return model_to_dict(user, include_relationships=True)
+        return modelToDict(user, include_relationships=True)
 
-
-def get_user_preferences(user_id: str):
+def getUserPreferences(user_id: str):
     with Session() as session:
         user = (
             session.query(User)
@@ -148,10 +147,10 @@ def get_user_preferences(user_id: str):
 
         if not user:
             return None
+
         return user.preferences
 
-
-def update_user_preferences(user_id: str, color_mode: str):
+def updateUserPreferences(user_id: str, color_mode: str):
     with Session() as session:
         user = session.query(User).filter_by(googleId=user_id).first()
 
@@ -164,9 +163,10 @@ def update_user_preferences(user_id: str, color_mode: str):
             user.preferences.color_mode = color_mode
 
         session.commit()
+
         return user.preferences
-    
-def add_user_route(user_id: str, route_data: dict):
+
+def addUserRoute(user_id: str, route_data: dict):
     with Session() as session:
         user = session.query(User).filter_by(googleId=user_id).first()
 
@@ -178,6 +178,7 @@ def add_user_route(user_id: str, route_data: dict):
             end_address=route_data["end_address"],
             mode=route_data["mode"]
         )
+
         if not any(
             r.start_address == route.start_address and
             r.end_address == route.end_address and
@@ -190,9 +191,10 @@ def add_user_route(user_id: str, route_data: dict):
             user.routes = user.routes[:25]
 
         session.commit()
+
         return route
 
-def model_to_dict(obj, include_relationships=True):
+def modelToDict(obj, include_relationships=True):
     result = {}
 
     mapper = inspect(obj)
@@ -209,12 +211,11 @@ def model_to_dict(obj, include_relationships=True):
             if value is None:
                 result[rel.key] = None
             elif rel.uselist:
-                result[rel.key] = [model_to_dict(item, False) for item in value]
+                result[rel.key] = [modelToDict(item, False) for item in value]
             else:
-                result[rel.key] = model_to_dict(value, False)
+                result[rel.key] = modelToDict(value, False)
 
     return result
-
 
 class UserAlreadyExistsError(Exception):
     """Raised when trying to add a user that already exists."""
