@@ -1,6 +1,7 @@
 import json
 import os
 import secrets
+import requests
 from flask import Flask, render_template, redirect, request, session, url_for
 from dotenv import load_dotenv
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -161,8 +162,6 @@ def devLogin():
 @app.route("/photon")
 @au.sso_middleware.sso_login_required
 def photon():
-    import requests
-
     params = request.args.to_dict()
     response = requests.get("http://127.0.0.1:5001/photon", params=params, timeout=5)
 
