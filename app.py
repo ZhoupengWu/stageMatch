@@ -6,6 +6,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import timedelta
 import auth.auth as au
 from database import database_helper
+import server
 
 load_dotenv()
 
@@ -146,7 +147,7 @@ def devLogin():
 
     return redirect(url_for("authLogin"))
 
-@app.route("/api/users", methods=["POST"])
+@app.route("/users/update", methods=["POST"])
 @au.sso_middleware.sso_login_required
 def update_user():
     try:
@@ -157,8 +158,8 @@ def update_user():
         session_user = session["user"]
         data["googleId"] = session_user["googleId"]
 
-        print(data)
-        # update
+        # print(data)
+        
         user_dict = database_helper.update_user(data) 
         message = "User updated"
 
@@ -170,6 +171,22 @@ def update_user():
     except Exception as e:
         app.logger.exception("[ERROR] user endpoint failed")
         return jsonify({"error": "Internal server error"}), 500
+
+@app.route('/routejson')
+def routejson():
+    startaddress = request.args.get("startaddress")
+    endaddress = request.args.get("endaddress")
+    routemode = request.args.get("routemode")
+    try:
+        database_helper.add_user_route(session["user"]["googleId"], {
+        "start_address": startaddress,
+        "end_address": endaddress,
+        "mode": routemode
+    })
+    except Exception as e:
+        print("Failed to save route:", e)
+    json = server.getroutejson(startaddress, endaddress, routemode)
+    return json
 
 @app.errorhandler(404)
 def notFound(e):
