@@ -37,6 +37,12 @@ class User(Base):
         back_populates="user", 
         cascade="all, delete-orphan"
     )
+    routes = relationship(
+        "UserRoute",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        order_by="desc(UserRoute.id)"
+)
     @validates("codice_fiscale")
     def validate_codice_fiscale(self, value):
         if value and not re.match(CF_REGEX, value):
