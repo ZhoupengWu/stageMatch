@@ -1,12 +1,15 @@
+from tracemalloc import start
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, selectinload
 from .models.base import Base
 from .models.user import User
 from .models.user_preferences import UserPreferences
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.inspection import inspect
 from datetime import datetime
 from .models.skill import Skill
+from .models.soft_skill import SoftSkill
+from .models.route import UserRoute
 
 # global
 Session = None
@@ -29,7 +32,8 @@ def get_user_by_id(user_id: str):
             .options(
                 selectinload(User.preferences),
                 selectinload(User.skills),
-                selectinload(User.soft_skills)
+                selectinload(User.soft_skills),
+                selectinload(User.routes)
             )
             .filter_by(googleId=user_id)
             .first()
@@ -119,7 +123,7 @@ def update_user(user_data: dict):
         if sskills:
             user.soft_skills.clear()
             for skill_item in sskills:
-                nuova_skill = Skill(
+                nuova_skill = SoftSkill(
                     label=skill_item["label"],
                     icon=skill_item["icon"]
                 )
@@ -161,7 +165,32 @@ def update_user_preferences(user_id: str, color_mode: str):
 
         session.commit()
         return user.preferences
+    
+def add_user_route(user_id: str, route_data: dict):
+    with Session() as session:
+        user = session.query(User).filter_by(googleId=user_id).first()
 
+        if not user:
+            return None
+
+        route = UserRoute(
+            start_address=route_data["start_address"],
+            end_address=route_data["end_address"],
+            mode=route_data["mode"]
+        )
+        if not any(
+            r.start_address == route.start_address and
+            r.end_address == route.end_address and
+            r.route_mode == route.route_mode
+            for r in user.routes
+        ):
+            user.routes.append(route)
+
+        if len(user.routes) > 25:
+            user.routes = user.routes[:25]
+
+        session.commit()
+        return route
 
 def model_to_dict(obj, include_relationships=True):
     result = {}
