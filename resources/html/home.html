@@ -1,278 +1,964 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>stageMatch — Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>stageMatch - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
 <body>
 
-  <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+        style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
+        <symbol id="i-home" viewBox="0 0 24 24">
+            <path d="M3 10.5 12 3l9 7.5" />
+            <path d="M5 9.5V21h14V9.5" />
+            <path d="M9.5 21v-6h5v6" />
+        </symbol>
+        <symbol id="i-map" viewBox="0 0 24 24">
+            <path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5V4.5L15 7 9 4Z" />
+            <path d="M9 4v13" />
+            <path d="M15 7v12.5" />
+        </symbol>
+        <symbol id="i-route" viewBox="0 0 24 24">
+            <circle cx="6" cy="18" r="2" />
+            <circle cx="18" cy="6" r="2" />
+            <path d="M8 18c4 0 4-4 8-4" />
+            <path d="M16 14v2h2" />
+        </symbol>
+        <symbol id="i-building" viewBox="0 0 24 24">
+            <path d="M4 21V7l8-3 8 3v14" />
+            <path d="M9 21v-4h6v4" />
+            <path d="M8 10h.01M12 10h.01M16 10h.01M8 13h.01M12 13h.01M16 13h.01" />
+        </symbol>
+        <symbol id="i-user" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="3.5" />
+            <path d="M5 20a7 7 0 0 1 14 0" />
+        </symbol>
+        <symbol id="i-settings" viewBox="0 0 24 24">
+            <path d="M12 8.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5Z" />
+            <path
+                d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V20a2 2 0 0 1-4 0v-.1a1 1 0 0 0-.6-.9 1 1 0 0 0-1.1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H4a2 2 0 0 1 0-4h.1a1 1 0 0 0 .9-.6 1 1 0 0 0-.2-1.1l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1 1 0 0 0 1.1.2 1 1 0 0 0 .6-.9V4a2 2 0 0 1 4 0v.1a1 1 0 0 0 .6.9 1 1 0 0 0 1.1-.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1 1 0 0 0-.2 1.1 1 1 0 0 0 .9.6H20a2 2 0 0 1 0 4h-.1a1 1 0 0 0-.9.6Z" />
+        </symbol>
+        <symbol id="i-logout" viewBox="0 0 24 24">
+            <path d="M10 17 15 12 10 7" />
+            <path d="M15 12H4" />
+            <path d="M12 4h5a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-5" />
+        </symbol>
+        <symbol id="i-bell" viewBox="0 0 24 24">
+            <path d="M15 18H5.5a1.5 1.5 0 0 1-1.2-2.4L6 13.5V10a6 6 0 1 1 12 0v3.5l1.7 2.1A1.5 1.5 0 0 1 18.5 18H15" />
+            <path d="M10 20a2 2 0 0 0 4 0" />
+        </symbol>
+        <symbol id="i-bell-off" viewBox="0 0 24 24">
+            <path d="M15 18H7a1.5 1.5 0 0 1-1.2-2.4L7.5 13.5V10a4.5 4.5 0 0 1 7.8-3.1" />
+            <path d="M16.5 13.5 18 15.3A1.5 1.5 0 0 1 16.8 18H15" />
+            <path d="M10 20a2 2 0 0 0 4 0" />
+            <path d="M4 4l16 16" />
+        </symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24">
+            <path d="M4 7h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" />
+            <path d="m4 8 8 6 8-6" />
+        </symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24">
+            <path d="M7 4h3l1 4-2 1.5a14 14 0 0 0 5.5 5.5L16 13l4 1v3a2 2 0 0 1-2.2 2A16 16 0 0 1 5 6.2 2 2 0 0 1 7 4Z" />
+        </symbol>
+        <symbol id="i-car" viewBox="0 0 24 24">
+            <path d="M5 16 6.7 9.8A2 2 0 0 1 8.6 8h6.8a2 2 0 0 1 1.9 1.8L19 16" />
+            <path d="M4 16h16v2a1 1 0 0 1-1 1h-1v-2H6v2H5a1 1 0 0 1-1-1v-2Z" />
+            <circle cx="7.5" cy="16.5" r="1.5" />
+            <circle cx="16.5" cy="16.5" r="1.5" />
+        </symbol>
+        <symbol id="i-walk" viewBox="0 0 24 24">
+            <circle cx="13" cy="5" r="2" />
+            <path d="m12 7-2 4 2 2-1 6" />
+            <path d="m10 11 4 2 2 5" />
+            <path d="m9 19 3-4" />
+        </symbol>
+        <symbol id="i-bike" viewBox="0 0 24 24">
+            <circle cx="6" cy="17" r="3" />
+            <circle cx="18" cy="17" r="3" />
+            <path d="M9 17 12 10h3" />
+            <path d="m10 8 2 2" />
+            <path d="M14 17 9.5 9H7" />
+        </symbol>
+        <symbol id="i-pencil" viewBox="0 0 24 24">
+            <path d="m4 20 4.5-1 9-9a2.1 2.1 0 0 0-3-3l-9 9L4 20Z" />
+            <path d="m13.5 6.5 4 4" />
+        </symbol>
+        <symbol id="i-graduate" viewBox="0 0 24 24">
+            <path d="m3 9 9-4 9 4-9 4-9-4Z" />
+            <path d="M7 11.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-3.5" />
+            <path d="M21 10v5" />
+        </symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24">
+            <path d="M12 21s6-4.5 6-10a6 6 0 1 0-12 0c0 5.5 6 10 6 10Z" />
+            <circle cx="12" cy="11" r="2" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+            <path d="m5 12 4 4 10-10" />
+        </symbol>
+        <symbol id="i-code" viewBox="0 0 24 24">
+            <path d="m8 8-4 4 4 4" />
+            <path d="m16 8 4 4-4 4" />
+            <path d="m14 5-4 14" />
+        </symbol>
+        <symbol id="i-brain" viewBox="0 0 24 24">
+            <path d="M9 4a3 3 0 0 0-3 3v1a2.5 2.5 0 0 0-1 4V13a3 3 0 0 0 3 3h1" />
+            <path d="M15 4a3 3 0 0 1 3 3v1a2.5 2.5 0 0 1 1 4V13a3 3 0 0 1-3 3h-1" />
+            <path d="M12 4v16" />
+            <path d="M9 10h3M12 14h3" />
+        </symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3 12h18" />
+            <path d="M12 3a14 14 0 0 1 0 18" />
+            <path d="M12 3a14 14 0 0 0 0 18" />
+        </symbol>
+        <symbol id="i-folder" viewBox="0 0 24 24">
+            <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H10l2 2h6.5A2.5 2.5 0 0 1 21 9.5v7A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5v-9Z" />
+        </symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24">
+            <rect x="5" y="11" width="14" height="10" rx="2" />
+            <path d="M8 11V8a4 4 0 1 1 8 0v3" />
+        </symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24">
+            <path d="M12 3 5 6v6c0 4.5 3 7.8 7 9 4-1.2 7-4.5 7-9V6l-7-3Z" />
+        </symbol>
+        <symbol id="i-palette" viewBox="0 0 24 24">
+            <path d="M12 4a8 8 0 1 0 0 16h1.2a2.3 2.3 0 0 0 0-4.6H12a2 2 0 0 1 0-4h4a4 4 0 0 0 0-8h-4Z" />
+            <path d="M7.5 10h.01M9.5 7.5h.01M14.5 7.5h.01" />
+        </symbol>
+        <symbol id="i-link" viewBox="0 0 24 24">
+            <path d="M10 14 8 16a3 3 0 1 1-4-4l3-3a3 3 0 0 1 4 0" />
+            <path d="M14 10 16 8a3 3 0 1 1 4 4l-3 3a3 3 0 0 1-4 0" />
+            <path d="M9 15 15 9" />
+        </symbol>
+        <symbol id="i-info" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 10v5" />
+            <path d="M12 7h.01" />
+        </symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24">
+            <path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a8 8 0 1 0 9.5 9.5Z" />
+        </symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2.5v2.2M12 19.3v2.2M21.5 12h-2.2M4.7 12H2.5M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6M18.7 18.7l-1.6-1.6M6.9 6.9 5.3 5.3" />
+        </symbol>
+        <symbol id="i-file" viewBox="0 0 24 24">
+            <path d="M8 3h6l5 5v13H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" />
+            <path d="M14 3v5h5" />
+            <path d="M10 13h4M10 17h4" />
+        </symbol>
+    </svg>
 
-  <div class="shell">
+    <div class="sidebar-overlay" id="overlay"></div>
 
-    <!-- ══════════════════════ SIDEBAR ══════════════════════ -->
-    <aside class="sidebar" id="sidebar">
+    <div class="shell">
 
-      <div class="sidebar-logo">
-        <div class="logo-mark">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-               fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-        </div>
-        <span class="logo-text">stageMatch</span>
-      </div>
+        <!-- ══════════════════════ SIDEBAR ══════════════════════ -->
+        <aside class="sidebar" id="sidebar">
 
-      <nav class="sidebar-nav">
-        <div class="nav-label-section">Menu</div>
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </svg>
+                </div>
+                <span class="logo-text">stageMatch</span>
+            </div>
 
-        <a href="#" class="nav-item active" id="navDashboard"
-           onclick="showSection('dashboard'); setActive(this); return false;">
-          <span class="nav-icon">🏠</span>
-          <span>Dashboard</span>
-        </a>
+            <nav class="sidebar-nav">
+                <div class="nav-label-section">Menu</div>
 
-        <a href="index.html" class="nav-item">
-          <span class="nav-icon">🗺️</span>
-          <span>Mappa</span>
-        </a>
+                <a href="#" class="nav-item active" id="navDashboard">
+                    <span class="nav-icon"><span class="icon"><svg><use href="#i-home"></use></svg></span></span>
+                    <span>Dashboard</span>
+                </a>
 
-        <a href="#" class="nav-item" id="navPercorsi"
-           onclick="showSection('percorsi'); setActive(this); return false;">
-          <span class="nav-icon">📍</span>
-          <span>I miei percorsi</span>
-          <span class="nav-badge" id="badgePercorsi">3</span>
-        </a>
+                <a href="/logged/map" class="nav-item">
+                    <span class="nav-icon"><span class="icon"><svg><use href="#i-map"></use></svg></span></span>
+                    <span>Mappa</span>
+                </a>
 
-        <div class="nav-divider"></div>
-        <div class="nav-label-section">Account</div>
+                <a href="#" class="nav-item" id="navPercorsi">
+                    <span class="nav-icon"><span class="icon"><svg><use href="#i-route"></use></svg></span></span>
+                    <span>I miei percorsi</span>
+                    <span class="nav-badge" id="badgePercorsi">3</span>
+                </a>
 
-        <a href="#" class="nav-item" id="navAziende"
-           onclick="showSection('aziende'); setActive(this); return false;">
-          <span class="nav-icon">🏢</span>
-          <span>Aziende Match</span>
-          <span class="nav-badge" id="badgeAziende">4</span>
-        </a>
+                <div class="nav-divider"></div>
+                <div class="nav-label-section">Account</div>
 
-        <a href="#" class="nav-item" onclick="setActive(this); return false;">
-          <span class="nav-icon">👤</span>
-          <span>Profilo</span>
-        </a>
+                <a href="#" class="nav-item" id="navAziende">
+                    <span class="nav-icon"><span class="icon"><svg><use href="#i-building"></use></svg></span></span>
+                    <span>Aziende Match</span>
+                    <span class="nav-badge" id="badgeAziende">4</span>
+                </a>
 
-        <a href="#" class="nav-item" onclick="setActive(this); return false;">
-          <span class="nav-icon">⚙️</span>
-          <span>Impostazioni</span>
-        </a>
+                <a href="#" class="nav-item" id="navProfilo">
+                    <span class="nav-icon"><span class="icon"><svg><use href="#i-user"></use></svg></span></span>
+                    <span>Profilo</span>
+                </a>
 
-        <a href="#" class="nav-item" onclick="setActive(this); return false;">
-          <span class="nav-icon">🔓</span>
-          <span>Logout</span>
-        </a>
-      </nav>
+                <a href="#" class="nav-item" id="navImpostazioni">
+                    <span class="nav-icon"><span class="icon"><svg><use href="#i-settings"></use></svg></span></span>
+                    <span>Impostazioni</span>
+                </a>
 
-      <div class="sidebar-user">
-        <div class="user-avatar">MR</div>
-        <div class="user-info">
-          <div class="user-name">Marco Rossi</div>
-          <div class="user-role">Studente · 5ª IT</div>
-        </div>
-        <span class="user-dots">⋯</span>
-      </div>
+                <a href="#" class="nav-item" id="navLogout">
+                    <span class="nav-icon"><span class="icon"><svg><use href="#i-logout"></use></svg></span></span>
+                    <span>Logout</span>
+                </a>
+            </nav>
 
-    </aside>
+            <div class="sidebar-user">
+                <div class="user-avatar">MR</div>
+                <div class="user-info">
+                    <div class="user-name">{{user.name}} {{user.surname}}</div>
+                    <div class="user-role">Studente · 5ª IT</div>
+                </div>
+            </div>
 
-    <!-- ══════════════════════ MAIN ══════════════════════════ -->
-    <div class="main">
+        </aside>
 
-      <header class="topbar">
-        <div class="topbar-left">
-          <button class="hamburger" onclick="toggleSidebar()">
-            <span></span><span></span><span></span>
-          </button>
-          <div class="topbar-greeting">Buonasera, <span>{{user.name}}</span> 👋</div>
-        </div>
-        <div class="topbar-right">
-          <div class="topbar-chip"><div class="chip-dot"></div>Online</div>
-          <div class="topbar-icon-btn" title="Notifiche">🔔</div>
-          <div class="topbar-icon-btn" title="Profilo">👤</div>
-        </div>
-      </header>
+        <!-- ══════════════════════ MAIN ══════════════════════════ -->
+        <div class="main">
 
-      <!-- ════════════════════════════════════════════════════
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="hamburger">
+                        <span></span><span></span><span></span>
+                    </button>
+                    <div class="topbar-greeting">Buonasera, <span>{{ user.name }}</span></div>
+                </div>
+                <div class="topbar-right">
+                    <button class="topbar-icon-btn" id="notificationsToggle" type="button" aria-pressed="false" title="Disattiva notifiche">
+                        <span class="icon icon-bell-on"><svg><use href="#i-bell"></use></svg></span>
+                        <span class="icon icon-bell-off"><svg><use href="#i-bell-off"></use></svg></span>
+                        <span class="mute-bar" aria-hidden="true"></span>
+                    </button>
+                    <div class="topbar-icon-btn" id="profiloButton" title="Profilo"><span class="icon"><svg><use href="#i-user"></use></svg></span></div>
+                </div>
+            </header>
+
+            <!-- ════════════════════════════════════════════════════
            SEZIONE: DASHBOARD  (visibile di default)
       ════════════════════════════════════════════════════ -->
-      <div class="content" id="sectionDashboard">
+            <div class="content" id="sectionDashboard">
 
-        <div class="page-header animate-in">
-          <div>
-            <div class="page-title">Dashboard</div>
-            <div class="page-subtitle">Bentornato nel tuo pannello personale</div>
-          </div>
-          <div class="header-actions">
-            <button class="btn-ghost"
-              onclick="showSection('aziende'); setActive(document.getElementById('navAziende'));">
-              🏢 Aziende Match
-            </button>
-            <a href="index.html" class="btn-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                   fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-              </svg>
-              Nuovo Percorso
-            </a>
-          </div>
-        </div>
-
-        <div class="stats-row">
-          <div class="stat-card animate-in">
-            <div class="stat-icon">🛣️</div>
-            <div><div class="stat-num">247</div><div class="stat-lbl">km percorsi</div></div>
-          </div>
-          <div class="stat-card animate-in">
-            <div class="stat-icon">🗺️</div>
-            <div><div class="stat-num">12</div><div class="stat-lbl">Percorsi totali</div></div>
-          </div>
-          <div class="stat-card animate-in">
-            <div class="stat-icon">🏢</div>
-            <div><div class="stat-num">4</div><div class="stat-lbl">Aziende match</div></div>
-          </div>
-          <div class="stat-card animate-in">
-            <div class="stat-icon">🚗</div>
-            <div><div class="stat-num">Auto</div><div class="stat-lbl">Mezzo preferito</div></div>
-          </div>
-        </div>
-
-        <div class="dash-grid">
-
-          <!-- Hero: calcola percorso -->
-          <div class="hero-card">
-            <div class="hero-header">
-              <div>
-                <div class="hero-title">Calcola il tuo percorso</div>
-                <div class="hero-desc">Trova il tragitto ottimale verso l'azienda di stage. Scegli il mezzo e visualizza la rotta interattiva.</div>
-              </div>
-              <div class="hero-icon">🗺️</div>
-            </div>
-            <div class="map-preview">
-              <div class="map-grid"></div>
-              <div class="map-route"></div>
-              <div class="map-pin s"></div>
-              <div class="map-pin e"></div>
-              <div class="map-overlay">
-                <div class="map-chip">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
-                       fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                    <circle cx="12" cy="10" r="3"/>
-                  </svg>
-                  Ultimo: Bergamo → Dalmine · 12 km
+                <div class="page-header animate-in">
+                    <div>
+                        <div class="page-title">Dashboard</div>
+                        <div class="page-subtitle">Bentornato nel tuo pannello personale</div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-ghost" id="btnDashAziende">
+                            <span class="icon"><svg><use href="#i-building"></use></svg></span>
+                            Aziende Match
+                        </button>
+                        <a href="/logged/map" class="btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13" />
+                                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                            </svg>
+                            Nuovo Percorso
+                        </a>
+                    </div>
                 </div>
-              </div>
-            </div>
-            <div class="transport-pills">
-              <div class="t-pill active">🚗 Auto</div>
-              <div class="t-pill">🚶 A piedi</div>
-              <div class="t-pill">🚴 Bicicletta</div>
-            </div>
-            <div style="margin-top:16px">
-              <a href="index.html" class="btn-primary" style="width:100%;justify-content:center;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                     fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-                Vai alla Mappa
-              </a>
-            </div>
-          </div>
 
-          <!-- Ultimi percorsi (anteprima) -->
-          <div class="card">
-            <div class="card-head">
-              <span>📍 Percorsi recenti</span>
-              <button class="card-link"
-                onclick="showSection('percorsi'); setActive(document.getElementById('navPercorsi'));">
-                Vedi tutti →
-              </button>
-            </div>
-            <div id="recentRoutesList"></div>
-          </div>
+                <div class="stats-row">
+                    <div class="stat-card animate-in">
+                        <div class="stat-icon"><span class="icon"><svg><use href="#i-route"></use></svg></span></div>
+                        <div>
+                            <div class="stat-num">247</div>
+                            <div class="stat-lbl">km percorsi</div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-in">
+                        <div class="stat-icon"><span class="icon"><svg><use href="#i-map"></use></svg></span></div>
+                        <div>
+                            <div class="stat-num">12</div>
+                            <div class="stat-lbl">Percorsi totali</div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-in">
+                        <div class="stat-icon"><span class="icon"><svg><use href="#i-building"></use></svg></span></div>
+                        <div>
+                            <div class="stat-num">4</div>
+                            <div class="stat-lbl">Aziende match</div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-in">
+                        <div class="stat-icon"><span class="icon"><svg><use href="#i-car"></use></svg></span></div>
+                        <div>
+                            <div class="stat-num">Auto</div>
+                            <div class="stat-lbl">Mezzo preferito</div>
+                        </div>
+                    </div>
+                </div>
 
-        </div>
-      </div><!-- /sectionDashboard -->
+                <div class="dash-grid">
 
-      <!-- ════════════════════════════════════════════════════
+                    <!-- Hero: calcola percorso -->
+                    <div class="hero-card">
+                        <div class="hero-header">
+                            <div>
+                                <div class="hero-title">Calcola il tuo percorso</div>
+                                <div class="hero-desc">Trova il tragitto ottimale verso l'azienda di stage. Scegli il
+                                    mezzo e visualizza la rotta interattiva.</div>
+                            </div>
+                            <div class="hero-icon"><span class="icon"><svg><use href="#i-map"></use></svg></span></div>
+                        </div>
+                        <div class="map-preview">
+                            <div class="map-grid"></div>
+                            <div class="map-route"></div>
+                            <div class="map-pin s"></div>
+                            <div class="map-pin e"></div>
+                            <div class="map-overlay">
+                                <div class="map-chip">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                        <circle cx="12" cy="10" r="3" />
+                                    </svg>
+                                    Ultimo: Bergamo → Dalmine · 12 km
+                                </div>
+                            </div>
+                        </div>
+                        <div class="transport-pills">
+                            <div class="t-pill active"><span class="icon"><svg><use href="#i-car"></use></svg></span>Auto</div>
+                            <div class="t-pill"><span class="icon"><svg><use href="#i-walk"></use></svg></span>A piedi</div>
+                            <div class="t-pill"><span class="icon"><svg><use href="#i-bike"></use></svg></span>Bicicletta</div>
+                        </div>
+                        <div style="margin-top:16px">
+                            <a href="/logged/map" class="btn-primary" style="width:100%;justify-content:center;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13" />
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                                </svg>
+                                Vai alla Mappa
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Ultimi percorsi (anteprima) -->
+                    <div class="card">
+                        <div class="card-head">
+                            <span class="card-title-inline"><span class="icon"><svg><use href="#i-route"></use></svg></span>Percorsi recenti</span>
+                            <button class="card-link" id="btnVediPercorsi">
+                                Vedi tutti →
+                            </button>
+                        </div>
+                        <div id="recentRoutesList"></div>
+                    </div>
+
+                </div>
+            </div><!-- /sectionDashboard -->
+
+            <!-- ════════════════════════════════════════════════════
            SEZIONE: AZIENDE MATCH  (attivata dalla sidebar)
       ════════════════════════════════════════════════════ -->
-      <div class="content hidden" id="sectionAziende">
+            <div class="content hidden" id="sectionAziende">
 
-        <div class="page-header animate-in">
-          <div>
-            <div class="page-title">Aziende Match</div>
-            <div class="page-subtitle" id="aziendeSubtitle">Caricamento…</div>
-          </div>
-          <div class="header-actions">
-            <a href="index.html" class="btn-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                   fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-              </svg>
-              Nuovo Percorso
-            </a>
-          </div>
-        </div>
+                <div class="page-header animate-in">
+                    <div>
+                        <div class="page-title">Aziende Match</div>
+                        <div class="page-subtitle" id="aziendeSubtitle">Caricamento…</div>
+                    </div>
+                    <div class="header-actions">
+                        <a href="/logged/map" class="btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13" />
+                                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                            </svg>
+                            Nuovo Percorso
+                        </a>
+                    </div>
+                </div>
 
-        <div id="aziendeLoading" class="section-state">
-          <div class="spinner"></div>
-          <span>Analisi compatibilità in corso…</span>
-        </div>
-        <div id="aziendeEmpty" class="section-state" style="display:none;">
-          <div style="font-size:44px;margin-bottom:12px;opacity:.4;">🔍</div>
-          <strong style="color:white;">Nessuna azienda trovata</strong>
-          <span>Completa il tuo profilo per ricevere i match.</span>
-        </div>
-        <div id="aziendeList" class="companies-grid" style="display:none;"></div>
+                <div id="aziendeLoading" class="section-state">
+                    <div class="spinner"></div>
+                    <span>Analisi compatibilità in corso…</span>
+                </div>
+                <div id="aziendeEmpty" class="section-state" style="display:none;">
+                    <div class="empty-state-icon"><span class="icon"><svg><use href="#i-route"></use></svg></span></div>
+                    <strong style="color:white;">Nessuna azienda trovata</strong>
+                    <span>Completa il tuo profilo per ricevere i match.</span>
+                </div>
+                <div id="aziendeList" class="companies-grid" style="display:none;"></div>
 
-      </div><!-- /sectionAziende -->
+            </div><!-- /sectionAziende -->
 
-      <!-- ════════════════════════════════════════════════════
+            <!-- ════════════════════════════════════════════════════
            SEZIONE: I MIEI PERCORSI  (attivata dalla sidebar)
       ════════════════════════════════════════════════════ -->
-      <div class="content hidden" id="sectionPercorsi">
+            <div class="content hidden" id="sectionPercorsi">
 
-        <div class="page-header animate-in">
-          <div>
-            <div class="page-title">I miei percorsi</div>
-            <div class="page-subtitle">Storico completo · <span id="percorsiCount">0</span> percorsi salvati</div>
-          </div>
-          <div class="header-actions">
-            <a href="index.html" class="btn-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                   fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-              </svg>
-              Nuovo Percorso
-            </a>
-          </div>
+                <div class="page-header animate-in">
+                    <div>
+                        <div class="page-title">I miei percorsi</div>
+                        <div class="page-subtitle">Storico completo · <span id="percorsiCount">0</span> percorsi salvati
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <a href="/logged/map" class="btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13" />
+                                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                            </svg>
+                            Nuovo Percorso
+                        </a>
+                    </div>
+                </div>
+
+                <div class="filter-row animate-in">
+                    <button class="filter-btn active" data-filter="all">Tutti</button>
+                    <button class="filter-btn" data-filter="driving-car">Auto</button>
+                    <button class="filter-btn" data-filter="foot-walking">A piedi</button>
+                    <button class="filter-btn" data-filter="cycling-regular">Bici</button>
+                </div>
+
+                <div id="percorsiList" class="routes-full-list animate-in"></div>
+
+            </div><!-- /sectionPercorsi -->
+
+            <!-- ════════════════════════════════════════════════════
+           SEZIONE: PROFILO
+      ════════════════════════════════════════════════════ -->
+            <div class="content hidden" id="sectionProfilo">
+
+                <div class="page-header animate-in">
+                    <div>
+                        <div class="page-title">Profilo</div>
+                        <div class="page-subtitle">Le tue informazioni personali e scolastiche</div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-ghost" id="btnEditProfilo">
+                            <span class="icon"><svg><use href="#i-pencil"></use></svg></span>
+                            Modifica profilo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Avatar + nome -->
+                <div class="profilo-hero animate-in">
+                    <div class="profilo-avatar">MR</div>
+                    <div class="profilo-hero-info">
+                        <div class="profilo-hero-name">{{user.name}} {{user.surname}}</div>
+                        <div class="profilo-hero-sub">Studente · 5ª {{user.other.indirizzo_studio}} · ITIS Paleocapa, Bergamo</div>
+                        <div class="profilo-hero-tags">
+                            <span class="pro-tag"><span class="icon"><svg><use href="#i-graduate"></use></svg></span>Diploma 2025</span>
+                            <span class="pro-tag"><span class="icon"><svg><use href="#i-pin"></use></svg></span>Bergamo</span>
+                            <span class="pro-tag green"><span class="icon"><svg><use href="#i-check"></use></svg></span>Disponibile per stage</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profilo-grid animate-in">
+
+                    <!-- Dati anagrafici -->
+                    <div class="pro-card">
+                        <div class="pro-card-head"><span class="icon"><svg><use href="#i-user"></use></svg></span>Dati anagrafici</div>
+                        <div class="pro-rows" id="proAnagrafica">
+                            <div class="pro-row"><span class="pro-lbl">Nome</span><span class="pro-val">{{user.name}}</span>
+                            </div>
+                            <div class="pro-row"><span class="pro-lbl">Cognome</span><span class="pro-val">{{user.surname}}</span>
+                            </div>
+                            <div class="pro-row"><span class="pro-lbl">Data di nascita</span><span class="pro-val">{{user.other.data_nascita}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Codice fiscale</span><span
+                                    class="pro-val pro-mono">{{user.other.codice_fiscale}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Comune</span><span class="pro-val">{{user.other.citta_residenza}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Telefono</span><span class="pro-val">{{user.other.telefono}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Email</span><span class="pro-val">{{ user.email}}</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Percorso scolastico -->
+                    <div class="pro-card">
+                        <div class="pro-card-head"><span class="icon"><svg><use href="#i-graduate"></use></svg></span>Percorso scolastico</div>
+                        <div class="pro-rows" id="proScuola">
+                            <div class="pro-row"><span class="pro-lbl">Istituto</span><span class="pro-val">ITIS
+                                    Paleocapa</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Indirizzo</span><span class="pro-val">{{user.other.indirizzo_studio}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Classe</span><span class="pro-val">5ª IT</span>
+                            </div>
+                            <div class="pro-row"><span class="pro-lbl">Anno diploma</span><span
+                                    class="pro-val">2025</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Competenze tecniche -->
+                    <div class="pro-card">
+                        <div class="pro-card-head"><span class="icon"><svg><use href="#i-code"></use></svg></span>Competenze tecniche</div>
+                        <div class="pro-skills-list" id="proSkills">
+                            <div class="pro-skill-row"><span class="pro-skill-name">Python</span>
+                                <div class="pro-skill-bar">
+                                    <div class="pro-skill-fill" style="width:85%"></div>
+                                </div><span class="pro-skill-lv">Avanzato</span>
+                            </div>
+                            <div class="pro-skill-row"><span class="pro-skill-name">JavaScript</span>
+                                <div class="pro-skill-bar">
+                                    <div class="pro-skill-fill" style="width:70%"></div>
+                                </div><span class="pro-skill-lv">Intermedio</span>
+                            </div>
+                            <div class="pro-skill-row"><span class="pro-skill-name">C / C++</span>
+                                <div class="pro-skill-bar">
+                                    <div class="pro-skill-fill" style="width:60%"></div>
+                                </div><span class="pro-skill-lv">Intermedio</span>
+                            </div>
+                            <div class="pro-skill-row"><span class="pro-skill-name">SQL</span>
+                                <div class="pro-skill-bar">
+                                    <div class="pro-skill-fill" style="width:55%"></div>
+                                </div><span class="pro-skill-lv">Base</span>
+                            </div>
+                            <div class="pro-skill-row"><span class="pro-skill-name">Flask</span>
+                                <div class="pro-skill-bar">
+                                    <div class="pro-skill-fill" style="width:65%"></div>
+                                </div><span class="pro-skill-lv">Intermedio</span>
+                            </div>
+                            <div class="pro-skill-row"><span class="pro-skill-name">Linux</span>
+                                <div class="pro-skill-bar">
+                                    <div class="pro-skill-fill" style="width:50%"></div>
+                                </div><span class="pro-skill-lv">Base</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Soft skills -->
+                    <div class="pro-card">
+                        <div class="pro-card-head"><span class="icon"><svg><use href="#i-brain"></use></svg></span>Soft skills</div>
+                        <div class="pro-soft-grid" id="proSoftSkills">
+                            <div class="pro-soft-item"><span class="pro-soft-icon"><span class="icon"><svg><use href="#i-brain"></use></svg></span></span><span>Problem solving</span>
+                            </div>
+                            <div class="pro-soft-item"><span class="pro-soft-icon"><span class="icon"><svg><use href="#i-user"></use></svg></span></span><span>Lavoro in team</span>
+                            </div>
+                            <div class="pro-soft-item"><span class="pro-soft-icon"><span class="icon"><svg><use href="#i-route"></use></svg></span></span><span>Gestione del
+                                    tempo</span></div>
+                            <div class="pro-soft-item"><span class="pro-soft-icon"><span class="icon"><svg><use href="#i-bell"></use></svg></span></span><span>Comunicazione</span>
+                            </div>
+                            <div class="pro-soft-item"><span class="pro-soft-icon"><span class="icon"><svg><use href="#i-pin"></use></svg></span></span><span>Attenzione ai
+                                    dettagli</span></div>
+                            <div class="pro-soft-item"><span class="pro-soft-icon"><span class="icon"><svg><use href="#i-palette"></use></svg></span></span><span>Creatività</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lingue -->
+                    <div class="pro-card">
+                        <div class="pro-card-head"><span class="icon"><svg><use href="#i-globe"></use></svg></span>Lingue straniere</div>
+                        <div class="pro-rows" id="proLingue">
+                            <div class="pro-row"><span class="pro-lbl">Inglese</span><span class="pro-val"><span
+                                        class="pro-badge blue">B2</span> Cambridge FCE</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Spagnolo</span><span class="pro-val"><span
+                                        class="pro-badge gray">A2</span> Scolastico</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Esperienze -->
+                    <div class="pro-card pro-card-wide">
+                        <div class="pro-card-head"><span class="icon"><svg><use href="#i-folder"></use></svg></span>Esperienze e progetti</div>
+                        <div class="pro-exp-list" id="proEsperienze">
+                            <div class="pro-exp-item">
+                                <div class="pro-exp-dot"></div>
+                                <div class="pro-exp-body">
+                                    <div class="pro-exp-title">Stage — TechLab Srl <span
+                                            class="pro-badge blue">2024</span></div>
+                                    <div class="pro-exp-desc">Sviluppo di un'applicazione web con Flask e PostgreSQL per
+                                        la gestione degli ordini interni. 4 settimane.</div>
+                                </div>
+                            </div>
+                            <div class="pro-exp-item">
+                                <div class="pro-exp-dot"></div>
+                                <div class="pro-exp-body">
+                                    <div class="pro-exp-title">Progetto scolastico — stageMatch <span
+                                            class="pro-badge purple">PCTO</span></div>
+                                    <div class="pro-exp-desc">Piattaforma per il matching studenti-aziende con mappa
+                                        interattiva, sviluppata come progetto di classe.</div>
+                                </div>
+                            </div>
+                            <div class="pro-exp-item">
+                                <div class="pro-exp-dot"></div>
+                                <div class="pro-exp-body">
+                                    <div class="pro-exp-title">Progetto personale — BudgetTracker <span
+                                            class="pro-badge gray">GitHub</span></div>
+                                    <div class="pro-exp-desc">App Python/Tkinter per il tracciamento delle spese
+                                        personali. Disponibile su GitHub.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div><!-- /sectionProfilo -->
+
+            <!-- ════════════════════════════════════════════════════
+           SEZIONE: IMPOSTAZIONI
+      ════════════════════════════════════════════════════ -->
+            <div class="content hidden" id="sectionImpostazioni">
+
+                <div class="page-header animate-in">
+                    <div>
+                        <div class="page-title">Impostazioni</div>
+                        <div class="page-subtitle">Gestisci account, notifiche e preferenze</div>
+                    </div>
+                </div>
+
+                <div class="imp-grid animate-in">
+
+                    <!-- ── Account e sicurezza ── -->
+                    <div class="imp-card">
+                        <div class="imp-card-head"><span class="icon"><svg><use href="#i-lock"></use></svg></span>Account e sicurezza</div>
+
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Email account</div>
+                                <div class="imp-row-sub">Gestita dall'istituto</div>
+                            </div>
+                            <span class="imp-val-muted">{{ user.email }}</span>
+                        </div>
+                    </div>
+
+                    <!-- ── Notifiche ── -->
+                    <div class="imp-card">
+                        <div class="imp-card-head"><span class="icon"><svg><use href="#i-bell"></use></svg></span>Notifiche</div>
+
+                        <div class="imp-toggle-row">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Nuovi match aziendali</div>
+                                <div class="imp-row-sub">Avviso quando un'azienda compatibile viene aggiunta</div>
+                            </div>
+                            <label class="imp-toggle">
+                                <input type="checkbox" id="notifMatch" checked />
+                                <span class="imp-toggle-track"></span>
+                            </label>
+                        </div>
+
+                        <div class="imp-toggle-row">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Aggiornamenti percorsi</div>
+                                <div class="imp-row-sub">Modifiche a percorsi salvati</div>
+                            </div>
+                            <label class="imp-toggle">
+                                <input type="checkbox" id="notifPercorsi" checked />
+                                <span class="imp-toggle-track"></span>
+                            </label>
+                        </div>
+
+                        <div class="imp-toggle-row">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Comunicazioni scuola</div>
+                                <div class="imp-row-sub">Messaggi dall'istituto e dai docenti referenti</div>
+                            </div>
+                            <label class="imp-toggle">
+                                <input type="checkbox" id="notifScuola" checked />
+                                <span class="imp-toggle-track"></span>
+                            </label>
+                        </div>
+
+                        <div class="imp-toggle-row">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Promemoria scadenze</div>
+                                <div class="imp-row-sub">Avvisi prima della scadenza dello stage</div>
+                            </div>
+                            <label class="imp-toggle">
+                                <input type="checkbox" id="notifScadenze" />
+                                <span class="imp-toggle-track"></span>
+                            </label>
+                        </div>
+
+                        <div class="imp-toggle-row">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Riepilogo settimanale via email</div>
+                                <div class="imp-row-sub">Digest ogni lunedì con match e aggiornamenti</div>
+                            </div>
+                            <label class="imp-toggle">
+                                <input type="checkbox" id="notifEmail" checked />
+                                <span class="imp-toggle-track"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- ── Privacy ── -->
+                    <div class="imp-card">
+                        <div class="imp-card-head"><span class="icon"><svg><use href="#i-shield"></use></svg></span>Privacy</div>
+
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Visibilità profilo</div>
+                                <div class="imp-row-sub">Chi può vedere il tuo profilo</div>
+                            </div>
+                            <select class="imp-select" id="privVisibilita">
+                                <option value="public">Tutti</option>
+                                <option value="school" selected>Solo scuola</option>
+                                <option value="private">Solo io</option>
+                            </select>
+                        </div>
+
+                        <div class="imp-toggle-row">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Condividi dati con aziende</div>
+                                <div class="imp-row-sub">Permetti alle aziende in match di vedere il tuo profilo</div>
+                            </div>
+                            <label class="imp-toggle">
+                                <input type="checkbox" id="privCondividi" checked />
+                                <span class="imp-toggle-track"></span>
+                            </label>
+                        </div>
+
+                        <div class="imp-toggle-row">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Mostra link profilo pubblico</div>
+                                <div class="imp-row-sub">Genera un link condivisibile al tuo profilo</div>
+                            </div>
+                            <label class="imp-toggle">
+                                <input type="checkbox" id="privLink" />
+                                <span class="imp-toggle-track"></span>
+                            </label>
+                        </div>
+
+                        <div class="imp-divider"></div>
+
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Scarica i tuoi dati</div>
+                                <div class="imp-row-sub">Esporta tutto in formato JSON (GDPR Art. 20)</div>
+                            </div>
+                            <button class="imp-btn-sm" data-action="esportaDati">Esporta</button>
+                        </div>
+                    </div>
+
+                    <!-- ── Preferenze app ── -->
+                    <div class="imp-card">
+                        <div class="imp-card-head"><span class="icon"><svg><use href="#i-palette"></use></svg></span>Preferenze app</div>
+
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Tema</div>
+                                <div class="imp-row-sub">Aspetto dell'interfaccia</div>
+                            </div>
+                            <div class="imp-segmented" id="temaSegmented">
+                                <button class="imp-seg active" data-val="dark"><span class="icon"><svg><use href="#i-moon"></use></svg></span>Scuro</button>
+                                <button class="imp-seg" data-val="light"><span class="icon"><svg><use href="#i-sun"></use></svg></span>Chiaro</button>
+                            </div>
+                        </div>
+
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Mezzo predefinito</div>
+                                <div class="imp-row-sub">Usato come default nel calcolo percorsi</div>
+                            </div>
+                            <select class="imp-select" id="mezzoDefault">
+                                <option value="driving-car" selected>Auto</option>
+                                <option value="foot-walking">A piedi</option>
+                                <option value="cycling-regular">Bicicletta</option>
+                            </select>
+                        </div>
+
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Lingua</div>
+                                <div class="imp-row-sub">Lingua dell'interfaccia</div>
+                            </div>
+                            <select class="imp-select" id="lingua">
+                                <option value="it" selected>Italiano</option>
+                                <option value="en">English</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- ── Integrazioni ── -->
+                    <div class="imp-card">
+                        <div class="imp-card-head"><span class="icon"><svg><use href="#i-link"></use></svg></span>Integrazioni e connessioni</div>
+
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Google</div>
+                                <div class="imp-row-sub">Accesso rapido e sincronizzazione calendario</div>
+                            </div>
+                            <button class="imp-btn-sm connected" id="btnGoogle"><span class="icon"><svg><use href="#i-check"></use></svg></span>Connesso</button>
+                        </div>
+
+                        <div class="imp-divider"></div>
+
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Esporta profilo come CV</div>
+                                <div class="imp-row-sub">Genera un PDF con le tue informazioni</div>
+                            </div>
+                            <button class="imp-btn-sm" data-action="esportaCV"><span class="icon"><svg><use href="#i-file"></use></svg></span>PDF</button>
+                        </div>
+                    </div>
+
+                    <!-- ── Info app ── -->
+                    <div class="imp-card">
+                        <div class="imp-card-head"><span class="icon"><svg><use href="#i-info"></use></svg></span>Informazioni</div>
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Versione</div>
+                            </div>
+                            <span class="imp-val-muted">stageMatch v1.0.0</span>
+                        </div>
+                        <div class="imp-divider"></div>
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Termini di servizio</div>
+                            </div>
+                            <button class="imp-btn-link">Leggi →</button>
+                        </div>
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Informativa privacy</div>
+                            </div>
+                            <button class="imp-btn-link">Leggi →</button>
+                        </div>
+                        <div class="imp-row-item">
+                            <div class="imp-row-info">
+                                <div class="imp-row-label">Contatta il supporto</div>
+                            </div>
+                            <button class="imp-btn-link">Scrivi →</button>
+                        </div>
+                    </div>
+
+                </div><!-- /imp-grid -->
+
+                <!-- Toast feedback -->
+                <div class="imp-toast" id="impToast"></div>
+
+            </div><!-- /sectionImpostazioni -->
+
+        </div><!-- /main -->
+    </div><!-- /shell -->
+
+    <!-- ══════════════════════ IMPOSTAZIONI MODAL ════════════════════ -->
+    <div class="logout-overlay" id="impOverlay">
+        <div class="profilo-modal" style="width:min(440px,96vw)">
+            <div class="profilo-modal-head">
+                <div class="profilo-modal-title" id="impModalTitle">Modifica</div>
+                <button class="profilo-modal-close">✕</button>
+            </div>
+            <div style="padding:18px 22px 0; flex:1; overflow-y:auto;" id="impModalBody"></div>
+            <div class="profilo-modal-footer">
+                <div class="pro-api-status" id="impApiStatus"></div>
+                <button class="logout-btn-cancel">Annulla</button>
+                <button class="logout-btn-confirm" id="btnSalvaImp">Salva</button>
+            </div>
         </div>
+    </div>
 
-        <div class="filter-row animate-in">
-          <button class="filter-btn active" data-filter="all">Tutti</button>
-          <button class="filter-btn" data-filter="driving-car">🚗 Auto</button>
-          <button class="filter-btn" data-filter="foot-walking">🚶 A piedi</button>
-          <button class="filter-btn" data-filter="cycling-regular">🚴 Bici</button>
+    <!-- ══════════════════════ PROFILO MODAL ══════════════════════ -->
+    <div class="logout-overlay" id="profiloOverlay">
+        <div class="profilo-modal">
+            <div class="profilo-modal-head">
+                <div class="profilo-modal-title"><span class="icon"><svg><use href="#i-pencil"></use></svg></span>Modifica profilo</div>
+                <button class="profilo-modal-close">✕</button>
+            </div>
+
+            <!-- Tab bar -->
+            <div class="pro-modal-tabs">
+                <button class="pro-tab active" data-tab="anagrafica">Anagrafica</button>
+                <button class="pro-tab" data-tab="skills">Hard skills</button>
+                <button class="pro-tab" data-tab="soft">Soft skills</button>
+            </div>
+
+            <!-- Tab: Anagrafica -->
+            <div class="pro-tab-panel active" id="tabAnagrafica">
+                <div class="pro-form-grid">
+                    <div class="pro-field">
+                        <label>Nome</label>
+                        <input type="text" id="fNome" value="Marco" placeholder="Nome" />
+                    </div>
+                    <div class="pro-field">
+                        <label>Cognome</label>
+                        <input type="text" id="fCognome" value="Rossi" placeholder="Cognome" />
+                    </div>
+                    <div class="pro-field">
+                        <label>Data di nascita</label>
+                        <input type="date" id="fNascita" value="2007-03-14" />
+                    </div>
+                    <div class="pro-field">
+                        <label>Codice fiscale</label>
+                        <input type="text" id="fCF" value="RSSMRC07C14A794Z" placeholder="Codice fiscale" />
+                    </div>
+                    <div class="pro-field">
+                        <label>Comune di residenza</label>
+                        <input type="text" id="fComune" value="Bergamo (BG)" placeholder="Comune" />
+                    </div>
+                    <div class="pro-field">
+                        <label>Telefono</label>
+                        <input type="tel" id="fTel" value="+39 333 456 7890" placeholder="+39 …" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Competenze tecniche -->
+            <div class="pro-tab-panel" id="tabSkills">
+                <div id="proSkillsEditor" class="pro-skills-editor"></div>
+                <button class="pro-add-btn">+ Aggiungi competenza</button>
+            </div>
+
+            <!-- Tab: Soft skills -->
+            <div class="pro-tab-panel" id="tabSoft">
+                <div class="pro-soft-check-grid" id="proSoftEditor">
+                    <!-- Generato da JS -->
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="profilo-modal-footer">
+                <div class="pro-api-status" id="proApiStatus"></div>
+                <div class="profilo-modal-actions">
+                    <button class="logout-btn-cancel">Annulla</button>
+                    <button class="logout-btn-confirm" id="btnSalvaProfilo">Salva modifiche</button>
+                </div>
+            </div>
         </div>
+    </div>
+    </div>
 
-        <div id="percorsiList" class="routes-full-list animate-in"></div>
+    <div class="logout-overlay" id="logoutOverlay">
+        <div class="logout-modal">
+            <div class="logout-modal-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+            </div>
+            <div class="logout-modal-title">Sei sicuro di voler uscire?</div>
+            <div class="logout-modal-desc">La tua sessione verrà terminata e dovrai effettuare nuovamente l'accesso.
+            </div>
+            <div class="logout-modal-actions">
+                <button class="logout-btn-cancel" id="logoutCancel">Annulla</button>
+                <button class="logout-btn-confirm" id="logoutConfirm">Conferma</button>
+            </div>
+        </div>
+    </div>
 
-      </div><!-- /sectionPercorsi -->
+    <div class="logout-overlay" id="companyDetailsOverlay">
+        <div class="logout-modal company-details-modal">
+            <div class="company-details-header">
+                <div>
+                    <div class="logout-modal-title">Dettagli azienda</div>
+                    <div class="logout-modal-desc company-details-subtitle">Informazioni e contatti del match selezionato.</div>
+                </div>
+                <button class="profilo-modal-close" id="companyDetailsClose" type="button">✕</button>
+            </div>
+            <div id="companyDetailsContent"></div>
+        </div>
+    </div>
 
-    </div><!-- /main -->
-  </div><!-- /shell -->
-
-  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
 </html>

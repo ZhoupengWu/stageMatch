@@ -67,6 +67,27 @@ def routejson():
             "error": f"Errore nella richiesta: {str(error)}",
         })
 
+@app.route("/photon")
+def photon():
+    q = request.args.get("q", "")
+    lat = request.args.get("lat", "")
+    lon = request.args.get("lon", "")
+    limit = request.args.get("limit", "5")
+    lang = request.args.get("lang", "en")
+
+    header = {
+        "User-Agent": "stageMatch/1.0"
+    }
+    url = f"https://photon.komoot.io/api/?q={urllib.parse.quote(q)}&lat={lat}&lon={lon}&limit={limit}&lang={lang}"
+
+    try:
+        response = requests.get(url, headers=header)
+        response.raise_for_status()
+
+        return jsonify(response.json())
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 502
+
 async def get_coordinates(address_start, address_end):
     if not address_start or not address_end:
         raise ValueError("Inserire gli indirizzi di partenza e arrivo")
