@@ -37,8 +37,6 @@ except Exception as e:
     raise e
 
 def _completeLogin(user_data: dict):
-    global user # Da rivedere
-
     email = user_data.get("email", "")
 
     # Check whitelist to be reviewed
@@ -62,7 +60,8 @@ def _completeLogin(user_data: dict):
 
     user = database_helper.getUserById(user_data["googleId"])
 
-    if not user:
+    # DA SISTEMARE
+    """ if not user:
         try:
             database_helper.addUser(user_data)
             user = database_helper.getUserById(user_data["googleId"])
@@ -73,8 +72,10 @@ def _completeLogin(user_data: dict):
     dict_user = database_helper.modelToDict(user)
 
     app.logger.info(f"[INFO] User info from database: {dict_user['email']}, {dict_user['nome']}")
+    print(dict_user)
+    print(session) """
 
-    au.sso_middleware.create_session(dict_user, session, session_id)
+    au.sso_middleware.create_session(user_data, session, session_id)
 
     return redirect(url_for("completeLogin"))
 
@@ -94,9 +95,12 @@ def authLogin():
         dev_email: str = request.args.get("email") or au.DEV_USER_EMAIL
         app.logger.info(f"[INFO] authorised access for {dev_email}")
         user_data: dict[str, str] = {
+            "email": dev_email,
+            "name": au.getName(dev_email),
             "googleId": "dev-user-id",
-            "immagine": None
+            "picture": "DEV"
         }
+        print(user_data)
 
         return _completeLogin(user_data)
 
@@ -171,7 +175,7 @@ def homepage():
 @app.route('/logged/map')
 @au.sso_middleware.sso_login_required
 def map():
-    return render_template("/html/index.html", user=user)
+    return render_template("/html/index.html")
 
 @app.route("/dev/login")
 def devLogin():
@@ -206,11 +210,19 @@ def updateUser():
         app.logger.exception("[ERROR] user endpoint failed")
         return jsonify({"error": "Internal server error"}), 500
 
-@app.route("/photon")
+@app.route("/photon", methods=["POST"])
 @au.sso_middleware.sso_login_required
 def photon():
-    params = request.args.to_dict()
+    params = request.get_json()
     response = requests.get("http://127.0.0.1:5001/photon", params=params, timeout=5)
+
+    return response.json(), response.status_code
+
+@app.route("/routejson", methods=["POST"])
+@au.sso_middleware.sso_login_required
+def routejson():
+    params = request.get_json()
+    response = requests.get("http://127.0.0.1:5001/routejson", params=params, timeout=5)
 
     return response.json(), response.status_code
 
