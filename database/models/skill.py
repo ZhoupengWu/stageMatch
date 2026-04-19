@@ -6,8 +6,8 @@ class Skill(Base):
     __tablename__ = 'user_skills'
 
     user_id = Column(String, ForeignKey('users.googleId'), primary_key=True)
-    nome = Column(String, primary_key=True)
-    livello = Column(SmallInteger, nullable=False) 
+    name = Column(String, primary_key=True)
+    livello = Column(SmallInteger, nullable=False)
 
     user = relationship("User", back_populates="skills")
 

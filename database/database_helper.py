@@ -83,7 +83,7 @@ def updateUser(user_data: dict):
             return None
 
         # Update simple fields
-        for field in ["nome", "cognome", "codice_fiscale", "indirizzo" "comune_nascita", "telefono", "email", "immagine"]:
+        for field in ["name", "surname", "email", "sesso", "comune_nascita", "codice_fiscale", "telefono", "indirizzo_studio", "indirizzo", "picture"]:
             if field in user_data:
                 setattr(user, field, user_data[field])
 
@@ -112,7 +112,7 @@ def updateUser(user_data: dict):
 
             for skill_item in skills:
                 nuova_skill = Skill(
-                    nome=skill_item["nome"],
+                    name=skill_item["name"],
                     livello=skill_item["livello"]
                 )
                 user.skills.append(nuova_skill)

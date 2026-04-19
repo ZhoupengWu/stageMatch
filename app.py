@@ -96,7 +96,7 @@ def authLogin():
         app.logger.info(f"[INFO] authorised access for {dev_email}")
         user_data: dict[str, str] = {
             "email": dev_email,
-            "name": au.getName(dev_email),
+            "name": au.getUsername(dev_email),
             "googleId": "dev-user-id",
             "picture": "DEV"
         }
@@ -137,7 +137,25 @@ def authLogout():
 @au.sso_middleware.sso_login_required
 def completeLogin():
     if request.method == "POST":
-        session["other"] = request.form.to_dict()
+        user = session["user"]
+        data = request.form.to_dict()
+
+        user_data = {
+            "googleId": user["googleId"],
+            "name": au.getName(user["email"]),
+            "surname": au.getSurname(user["email"]),
+            "email": user["email"],
+            "data_nascita": data["data_nascita"],
+            "sesso": data["sesso"],
+            "comune_nascita": data["comune_nascita"],
+            "codice_fiscale": data["codice_fiscale"],
+            "telefono": data["telefono"],
+            "indirizzo_studio": data["indirizzo_studio"],
+            "indirizzo": f"{data["via"]} {data["civico"]} {data["cap"]} {data["citta_residenza"]}",
+            "picture": user["picture"]
+        }
+
+        database_helper.addUser(user_data)
 
         return redirect(url_for("homepage"))
 
@@ -154,21 +172,9 @@ def completeLogin():
 @au.sso_middleware.sso_login_required
 def homepage():
     user = session["user"]
-    other_data = session.get("other", {})
-
-    if isinstance(other_data, str):
-        try:
-            other_data = json.loads(other_data)
-        except json.JSONDecodeError:
-            other_data = {}
-
-    user_data = {
-        "name": au.getName(user["email"]),
-        "surname": au.getSurname(user["email"]),
-        "email": user["email"],
-        "other": other_data,
-        **other_data,
-    }
+    data = database_helper.getUserById(user["googleId"])
+    user_data = database_helper.modelToDict(data)
+    print(user_data)
 
     return render_template("/html/home.html", user=user_data)
 
