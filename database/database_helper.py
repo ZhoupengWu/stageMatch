@@ -1,12 +1,13 @@
+from datetime import datetime
+
 from tracemalloc import start
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, selectinload
+from sqlalchemy.inspection import inspect
 from .models.base import Base
 from .models.user import User
 from .models.user_preferences import UserPreferences
-from sqlalchemy.inspection import inspect
-from datetime import datetime
 from .models.skill import Skill
 from .models.soft_skill import SoftSkill
 from .models.route import UserRoute
@@ -36,6 +37,13 @@ def getUserById(user_id: str):
             .filter_by(googleId=user_id)
             .first()
         )
+
+def existUser(google_id: str) -> bool:
+    """
+        Check if the user exists
+    """
+    with Session() as session:
+        return session.get(User, google_id) is not None
 
 def getUserColumn(user_id: str, column: str):
     """Return a single column value of a user by id."""

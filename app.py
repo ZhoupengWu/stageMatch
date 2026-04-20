@@ -58,23 +58,6 @@ def _completeLogin(user_data: dict):
 
     app.logger.info(f"[INFO] User {email} logged in with session ID: {session_id}")
 
-    user = database_helper.getUserById(user_data["googleId"])
-
-    # DA SISTEMARE
-    """ if not user:
-        try:
-            database_helper.addUser(user_data)
-            user = database_helper.getUserById(user_data["googleId"])
-        except Exception:
-            app.logger.error(f"[ERROR] Failed adding user {user_data}")
-            return
-
-    dict_user = database_helper.modelToDict(user)
-
-    app.logger.info(f"[INFO] User info from database: {dict_user['email']}, {dict_user['nome']}")
-    print(dict_user)
-    print(session) """
-
     au.sso_middleware.create_session(user_data, session, session_id)
 
     return redirect(url_for("completeLogin"))
@@ -136,8 +119,12 @@ def authLogout():
 @app.route("/logged/complete", methods=["GET", "POST"])
 @au.sso_middleware.sso_login_required
 def completeLogin():
+    user = session["user"]
+
+    if database_helper.existUser(user["googleId"]):
+        return redirect(url_for("homepage"))
+
     if request.method == "POST":
-        user = session["user"]
         data = request.form.to_dict()
 
         user_data = {
@@ -151,7 +138,7 @@ def completeLogin():
             "codice_fiscale": data["codice_fiscale"],
             "telefono": data["telefono"],
             "indirizzo_studio": data["indirizzo_studio"],
-            "indirizzo": f"{data["via"]} {data["civico"]} {data["cap"]} {data["citta_residenza"]}",
+            "indirizzo": f"{data['via']} ££ {data['civico']} ££ {data['cap']} ££ {data['citta_residenza']}",
             "picture": user["picture"]
         }
 
@@ -159,7 +146,6 @@ def completeLogin():
 
         return redirect(url_for("homepage"))
 
-    user = session["user"]
     user_data = {
         "name": au.getName(user["email"]),
         "surname": au.getSurname(user["email"]),
@@ -174,7 +160,7 @@ def homepage():
     user = session["user"]
     data = database_helper.getUserById(user["googleId"])
     user_data = database_helper.modelToDict(data)
-    print(user_data)
+    user_data["indirizzo"] = [dato.strip() for dato in user_data["indirizzo"].split("££")]
 
     return render_template("/html/home.html", user=user_data)
 
