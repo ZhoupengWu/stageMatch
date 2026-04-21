@@ -83,8 +83,6 @@ def updateUser(user_data: dict):
             selectinload(User.soft_skills)
         ).first()
 
-        print(f"\n\n{user}\n\n")
-
         if not user:
             return None
 
@@ -113,7 +111,7 @@ def updateUser(user_data: dict):
 
         # Skills
         skills = user_data.get("skills")
-        if skills:
+        if skills is not None:
             user.skills.clear()
 
             for skill_item in skills:
@@ -125,7 +123,7 @@ def updateUser(user_data: dict):
 
         # SoftSkills
         sskills = user_data.get("soft_skills")
-        if sskills:
+        if sskills is not None:
             user.soft_skills.clear()
 
             for skill_item in sskills:

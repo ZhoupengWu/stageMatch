@@ -175,9 +175,17 @@ def devLogin():
 
     return redirect(url_for("authLogin"))
 
-@app.route("/users/update", methods=["POST"])
+@app.route("/api/users/profile")
 @au.sso_middleware.sso_login_required
-def updateUser():
+def getUserProfile():
+    id = session["user"]["googleId"]
+    data = database_helper.getUserById(id)
+
+    return database_helper.modelToDict(data)
+
+@app.route("/api/users/profile/save", methods=["POST"])
+@au.sso_middleware.sso_login_required
+def saveProfile():
     try:
         data = request.get_json()
 
@@ -187,40 +195,24 @@ def updateUser():
         session_user = session["user"]
         data["googleId"] = session_user["googleId"]
 
-        # print(data)
+        database_helper.updateUser(data)
+        updated_user = database_helper.getUserById(session_user["googleId"])
 
-        user_dict = database_helper.updateUser(data)
-        message = "User updated"
+        if not updated_user:
+            return jsonify({"error": "User not found"}), 404
 
-        return jsonify({"message": message, "user": user_dict}), 200
+        return jsonify({
+            "message": "Profile updated",
+            "user": database_helper.modelToDict(updated_user)
+        }), 200
 
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
 
     except Exception as e:
-        app.logger.exception("[ERROR] user endpoint failed")
+        app.logger.exception("[ERROR] profile save endpoint failed")
+
         return jsonify({"error": "Internal server error"}), 500
-
-@app.route("/api/users/profile/save", methods=["POST"])
-@au.sso_middleware.sso_login_required
-def saveProfile():
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"message": "Not valid data"}), 422
-
-    print(data)
-
-    return "", 204
-
-
-@app.route("/api/users/profile")
-@au.sso_middleware.sso_login_required
-def getUserProfile():
-    id = session["user"]["googleId"]
-    data = database_helper.getUserById(id)
-    
-    return database_helper.modelToDict(data)
 
 @app.route("/photon", methods=["POST"])
 @au.sso_middleware.sso_login_required

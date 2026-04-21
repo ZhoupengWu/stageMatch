@@ -477,38 +477,25 @@ function renderRecentRoutes() {
 }
 
 /* ════════════════════════════════════════════════════════
-   PROFILO — dati in memoria (in produzione: fetch /api/profile)
+   PROFILO — dati caricati da /api/users/profile
    ════════════════════════════════════════════════════════ */
-let profiloData = {
-    name: "Marco",
-    surname: "Rossi",
-    email:"marcorossi.studente@itispaleocapa.it",
-    data_nascita: "2007-03-14",
-    sesso: "M",
-    comune_nascita: "Bergamo (BG)",
-    codice_fiscale: "RSSMRC07C14A794Z",
-    telefono: "+39 333 456 7890",
+const EMPTY_PROFILO_DATA = {
+    name: "",
+    surname: "",
+    email: "",
+    data_nascita: "",
+    sesso: "",
+    comune_nascita: "",
+    codice_fiscale: "",
+    telefono: "",
     indirizzo_studio: "",
     indirizzo: "",
     picture: "",
-    skills: [
-        { name: "Python", livello: "Avanzato" },
-        { name: "JavaScript", livello: "Intermedio" },
-        { name: "C / C++", livello: "Intermedio" },
-        { name: "SQL", livello: "Base" },
-        { name: "Flask", livello: "Intermedio" },
-        { name: "Linux", livello: "Base" },
-    ],
-    soft_skills: [
-        { label: "Problem solving", icon: "i-brain" },
-        { label: "Lavoro in team", icon: "i-user" },
-        { label: "Gestione del tempo", icon: "i-route" },
-        { label: "Comunicazione", icon: "i-bell" },
-        { label: "Attenzione ai dettagli", icon: "i-pin" },
-        { label: "Creatività", icon: "i-palette" },
-    ],
+    skills: [],
+    soft_skills: [],
 };
-// fetch("/api/users/profile")
+let profiloData = { ...EMPTY_PROFILO_DATA };
+let profiloLoaded = false;
 
 const ALL_SOFT_SKILLS = [
     { icon: "i-brain", label: "Problem solving" },
@@ -525,9 +512,143 @@ const ALL_SOFT_SKILLS = [
 
 const SKILL_LV_MAP = { Base: 33, Intermedio: 65, Avanzato: 90 };
 const SKILL_LV_DB_MAP = { Base: 1, Intermedio: 2, Avanzato: 3 };
+const SKILL_LV_LABEL_MAP = { 1: "Base", 2: "Intermedio", 3: "Avanzato" };
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+    })[char]);
+}
+
+function normalizeDateInput(value) {
+    if (!value) return "";
+
+    if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}/.test(value)) {
+        return value.slice(0, 10);
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return "";
+
+    return date.toISOString().slice(0, 10);
+}
+
+function normalizeSkillLevel(value) {
+    return SKILL_LV_LABEL_MAP[value] || value || "Base";
+}
+
+function normalizeProfiloData(data) {
+    return {
+        ...EMPTY_PROFILO_DATA,
+        ...data,
+        data_nascita:
+            data.data_nascita === undefined
+                ? EMPTY_PROFILO_DATA.data_nascita
+                : normalizeDateInput(data.data_nascita),
+        skills: Array.isArray(data.skills)
+            ? data.skills.map((skill) => ({
+                name: skill.name || "",
+                livello: normalizeSkillLevel(skill.livello),
+            }))
+            : [],
+        soft_skills: Array.isArray(data.soft_skills)
+            ? data.soft_skills.map((soft) => ({
+                label: soft.label || "",
+                icon: soft.icon || "i-brain",
+            }))
+            : [],
+    };
+}
+
+function setProfiloEditEnabled(enabled) {
+    const btn = document.getElementById("btnEditProfilo");
+
+    if (!btn) return;
+
+    btn.disabled = !enabled;
+    btn.setAttribute("aria-busy", String(!enabled));
+}
+
+function renderProfiloLoading() {
+    setProfiloEditEnabled(false);
+
+    document.querySelector(".profilo-hero-name").textContent = "Caricamento profilo";
+    document.querySelector(".profilo-hero-sub").textContent = "Recupero dati in corso...";
+
+    const loadingState = `
+        <div class="section-state profile-state">
+            <div class="spinner"></div>
+            <span>Caricamento dati profilo...</span>
+        </div>
+    `;
+
+    const anagraficaEl = document.getElementById("proAnagrafica");
+    const scuolaEl = document.getElementById("proScuola");
+    const skillsEl = document.getElementById("proSkills");
+    const softEl = document.getElementById("proSoftSkills");
+
+    if (anagraficaEl) anagraficaEl.innerHTML = loadingState;
+    if (scuolaEl) scuolaEl.innerHTML = loadingState;
+    if (skillsEl) skillsEl.innerHTML = loadingState;
+    if (softEl) softEl.innerHTML = loadingState;
+}
+
+function renderProfiloError() {
+    setProfiloEditEnabled(false);
+
+    document.querySelector(".profilo-hero-name").textContent = "Profilo non disponibile";
+    document.querySelector(".profilo-hero-sub").textContent = "Impossibile recuperare i dati profilo.";
+
+    const errorState = `
+        <div class="section-state profile-state">
+            <span>Errore nel caricamento del profilo. Ricarica la pagina.</span>
+        </div>
+    `;
+
+    const anagraficaEl = document.getElementById("proAnagrafica");
+    const scuolaEl = document.getElementById("proScuola");
+    const skillsEl = document.getElementById("proSkills");
+    const softEl = document.getElementById("proSoftSkills");
+
+    if (anagraficaEl) anagraficaEl.innerHTML = errorState;
+    if (scuolaEl) scuolaEl.innerHTML = errorState;
+    if (skillsEl) skillsEl.innerHTML = errorState;
+    if (softEl) softEl.innerHTML = errorState;
+}
+
+async function loadProfiloData() {
+    renderProfiloLoading();
+
+    try {
+        const response = await fetch("/api/users/profile");
+
+        if (!response.ok) throw new Error(`[ERROR] http code ${response.status}`);
+
+        const data = await response.json();
+        profiloData = normalizeProfiloData(data || {});
+        profiloLoaded = true;
+        updateProfiloUI(null);
+        setProfiloEditEnabled(true);
+    } catch (err) {
+        console.error("Errore caricamento profilo:", err);
+        profiloLoaded = false;
+        renderProfiloError();
+    }
+}
 
 /* ─── Apre il modal e popola i form ──────────────────── */
 function openProfiloModal() {
+    if (!profiloLoaded) {
+        showToast("Attendi il caricamento del profilo");
+
+        return;
+    }
+
     // Anagrafica
     document.getElementById("fNome").value = profiloData.name;
     document.getElementById("fCognome").value = profiloData.surname;
@@ -571,23 +692,18 @@ function switchTab(name) {
 function renderSkillsEditor() {
     const el = document.getElementById("proSkillsEditor");
     el.innerHTML = profiloData.skills
-        .map(
-            (s, i) => `
-      <div class="pro-skill-edit-row">
-        <input type="text" value="${s.name}" placeholder="Es. Python"
-               data-skill-index="${i}" data-skill-field="name"/>
-        <select data-skill-index="${i}" data-skill-field="livello">
-          ${["Base", "Intermedio", "Avanzato"]
-              .map(
-                  (lv) =>
-                      `<option value="${lv}"${s.livello === lv ? " selected" : ""}>${lv}</option>`,
-              )
-              .join("")}
-        </select>
-        <button class="pro-del-btn" data-skill-remove="${i}">✕</button>
-      </div>`,
-        )
-        .join("");
+        .map((s, i) => `
+            <div class="pro-skill-edit-row">
+                <input type="text" value="${escapeHtml(s.name)}" placeholder="Es. Python" data-skill-index="${i}" data-skill-field="name"/>
+                <select data-skill-index="${i}" data-skill-field="livello">
+                    ${["Base", "Intermedio", "Avanzato"]
+                    .map((lv) =>
+                        `<option value="${lv}"${s.livello === lv ? " selected" : ""}>${lv}</option>`,
+                    ).join("")}
+                </select>
+                <button class="pro-del-btn" data-skill-remove="${i}">✕</button>
+            </div>
+        `).join("");
 }
 
 function addSkillRow() {
@@ -652,9 +768,9 @@ function buildProfiloPayload() {
         indirizzo: profiloData.indirizzo,
         picture: profiloData.picture,
         skills: profiloData.skills
-            .filter((skill) => skill.name.trim())
+            .filter((skill) => String(skill.name || "").trim())
             .map((skill) => ({
-                name: skill.name.trim(),
+                name: String(skill.name || "").trim(),
                 livello: SKILL_LV_DB_MAP[skill.livello] || skill.livello,
             })),
         soft_skills: profiloData.soft_skills.map((soft) => ({
@@ -693,16 +809,11 @@ async function salvaProfilo() {
 
         if (!response.ok) throw new Error(`[ERROR] http code ${response.status}`);
 
-        console.log(response)
+        const result = await response.json();
 
-        /* ── Sostituire con chiamata reale al backend: ────────────
-           await fetch('/api/profile', {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify(profiloData)
-           });
-           ──────────────────────────────────────────────────────── */
-        await new Promise((r) => setTimeout(r, 600)); // simula latenza rete
+        if (result.user) {
+            profiloData = normalizeProfiloData(result.user);
+        }
 
         updateProfiloUI(null);
         setApiStatus("Profilo aggiornato", "ok");
@@ -720,6 +831,28 @@ async function salvaProfilo() {
 function updateProfiloUI(apiResult) {
     // Nome hero
     document.querySelector(".profilo-hero-name").textContent = profiloData.name + " " + profiloData.surname;
+    document.querySelector(".profilo-hero-sub").textContent = `Studente · 5ª ${profiloData.indirizzo_studio || ""} · ITIS Paleocapa, Bergamo`;
+
+    const anagraficaEl = document.getElementById("proAnagrafica");
+    if (anagraficaEl) {
+        anagraficaEl.innerHTML = `
+            <div class="pro-row"><span class="pro-lbl">Nome</span><span class="pro-val">${escapeHtml(profiloData.name)}</span></div>
+            <div class="pro-row"><span class="pro-lbl">Cognome</span><span class="pro-val">${escapeHtml(profiloData.surname)}</span></div>
+            <div class="pro-row"><span class="pro-lbl">Data di nascita</span><span class="pro-val">${escapeHtml(profiloData.data_nascita)}</span></div>
+            <div class="pro-row"><span class="pro-lbl">Codice fiscale</span><span class="pro-val pro-mono">${escapeHtml(profiloData.codice_fiscale)}</span></div>
+            <div class="pro-row"><span class="pro-lbl">Comune</span><span class="pro-val">${escapeHtml(profiloData.comune_nascita)}</span></div>
+            <div class="pro-row"><span class="pro-lbl">Telefono</span><span class="pro-val">${escapeHtml(profiloData.telefono)}</span></div>
+            <div class="pro-row"><span class="pro-lbl">Email</span><span class="pro-val">${escapeHtml(profiloData.email)}</span></div>`;
+    }
+
+    const scuolaEl = document.getElementById("proScuola");
+    if (scuolaEl) {
+        scuolaEl.innerHTML = `
+            <div class="pro-row"><span class="pro-lbl">Istituto</span><span class="pro-val">ITIS Paleocapa</span></div>
+            <div class="pro-row"><span class="pro-lbl">Indirizzo</span><span class="pro-val">${escapeHtml(profiloData.indirizzo_studio)}</span></div>
+            <div class="pro-row"><span class="pro-lbl">Classe</span><span class="pro-val">5ª IT</span></div>
+            <div class="pro-row"><span class="pro-lbl">Anno diploma</span><span class="pro-val">2025</span></div>`;
+    }
 
     // Aggiorna suggerimento come tag (se presente)
     if (apiResult && apiResult.suggerimento) {
@@ -740,11 +873,12 @@ function updateProfiloUI(apiResult) {
             .map((s) => {
                 const pct = SKILL_LV_MAP[s.livello] || 50;
                 return `
-                <div class="pro-skill-row">
-                  <span class="pro-skill-name">${s.name}</span>
-                  <div class="pro-skill-bar"><div class="pro-skill-fill" style="width:${pct}%"></div></div>
-                  <span class="pro-skill-lv">${s.livello}</span>
-                </div>`;
+                    <div class="pro-skill-row">
+                        <span class="pro-skill-name">${escapeHtml(s.name)}</span>
+                        <div class="pro-skill-bar"><div class="pro-skill-fill" style="width:${pct}%"></div></div>
+                        <span class="pro-skill-lv">${escapeHtml(s.livello)}</span>
+                    </div>
+                `;
             })
             .join("");
     }
@@ -755,10 +889,11 @@ function updateProfiloUI(apiResult) {
         softEl.innerHTML = profiloData.soft_skills
             .map((soft) => {
                 return `
-            <div class="pro-soft-item">
-              <span class="pro-soft-icon">${svgIcon(soft.icon || "i-brain")}</span>
-              <span>${soft.label}</span>
-            </div>`;
+                    <div class="pro-soft-item">
+                      <span class="pro-soft-icon">${svgIcon(soft.icon || "i-brain")}</span>
+                      <span>${escapeHtml(soft.label)}</span>
+                    </div>
+                `;
             })
             .join("");
     }
@@ -903,6 +1038,7 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ── Render iniziale ─────────────────────────────────── */
     renderRecentRoutes();
     updateNotificationsToggle();
+    loadProfiloData();
 
     /* ── Sidebar overlay (chiudi cliccando fuori) ────────── */
     document.getElementById("overlay").addEventListener("click", closeSidebar);
