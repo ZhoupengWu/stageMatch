@@ -13,40 +13,35 @@ ors_api_key = os.getenv("ORS_API_KEY")
 
 app = Flask(__name__)
 
-# Enable CORS for all routes
 CORS(app, origins=["http://127.0.0.1:5000"])
 
 @app.route('/routejson')
 def routejson():
-    startaddress = request.args.get("startaddress")
-    endaddress = request.args.get("endaddress")
-    routemode = request.args.get("routemode")
+    start_address = request.args.get("startaddress")
+    end_address = request.args.get("endaddress")
+    route_mode = request.args.get("routemode")
 
-    if (startaddress==None or endaddress==None):
-        return {
+    if (start_address == None or end_address == None):
+        return jsonify({
             "error": "Mancano gli indirizzi di partenza o di arrivo."
-        }
+        })
 
-    if routemode==None:
-        routemode="driving-car"  # Default mode
+    if route_mode == None:
+        route_mode = "driving-car"
 
-    # pos to coords
-    coords = None
     try:
-        coords = asyncio.run(get_coordinates(startaddress, endaddress))
+        coords = asyncio.run(getCoordinates(start_address, end_address))
     except:
         return jsonify({
             "error": "Non è stato possibile ricavare le coordinate geografiche dagli indirizzi forniti"
         })
 
-    print(f"lat:{coords["Start"]["Lat"]}")
-
-    openrouteservice_url = f"https://api.openrouteservice.org/v2/directions/{routemode}/geojson"
+    openrouteservice_url = f"https://api.openrouteservice.org/v2/directions/{route_mode}/geojson"
 
     request_body = {
         "coordinates": [
-            [coords["Start"]["Lon"], coords["Start"]["Lat"]],  # Point A
-            [coords["End"]["Lon"], coords["End"]["Lat"]]       # Point B
+            [coords["Start"]["Lon"], coords["Start"]["Lat"]],
+            [coords["End"]["Lon"], coords["End"]["Lat"]]
         ]
     }
 
@@ -57,12 +52,11 @@ def routejson():
 
     try:
         response = requests.post(openrouteservice_url, json=request_body, headers=headers)
-        response.raise_for_status()  # Raises exception for 4xx/5xx
+        response.raise_for_status()
 
         data = response.json()
         return data
     except requests.exceptions.RequestException as error:
-        print("Errore nella ricerca del percorso:", error)
         return jsonify({
             "error": f"Errore nella richiesta: {str(error)}",
         })
@@ -88,16 +82,12 @@ def photon():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 502
 
-async def get_coordinates(address_start, address_end):
+async def getCoordinates(address_start, address_end):
     if not address_start or not address_end:
         raise ValueError("Inserire gli indirizzi di partenza e arrivo")
 
     url_start = f"https://nominatim.openstreetmap.org/search?q={urllib.parse.quote(address_start)}&format=json&limit=1"
-
     url_end = f"https://nominatim.openstreetmap.org/search?q={urllib.parse.quote(address_end)}&format=json&limit=1"
-
-    print(f"INDIRIZZO PARTENZA: {url_start}")
-    print(f"INDIRIZZO DESTINAZIONE: {url_end}")
 
     coords_start = []
     coords_end = []
@@ -106,12 +96,10 @@ async def get_coordinates(address_start, address_end):
         # --- Richiesta indirizzo di partenza ---
         try:
             async with session.get(url_start) as response:
-                if (response.status != 200):
+                if not response.ok:
                     raise Exception(f"HTTP Error: {response.status}")
 
                 data = await response.json()
-
-                print(f"partenza: {data}")
 
                 if len(data) > 0:
                     coords_start.append(data[0]["lat"])
@@ -128,12 +116,10 @@ async def get_coordinates(address_start, address_end):
         # --- Richiesta indirizzo di arrivo ---
         try:
             async with session.get(url_end) as response:
-                if (response.status != 200):
+                if not response.ok:
                     raise Exception(f"HTTP Error: {response.status}")
 
                 data = await response.json()
-
-                print(f"arrivo: {data}")
 
                 if len(data) > 0:
                     coords_end.append(data[0]["lat"])

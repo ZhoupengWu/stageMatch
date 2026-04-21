@@ -500,6 +500,12 @@ body {
     background: var(--surface-hov);
 }
 
+.btn-ghost:disabled {
+    cursor: wait;
+    opacity: 0.58;
+    transform: none;
+}
+
 /* ─── STATS ───────────────────────────────────────────── */
 .stats-row {
     display: grid;
@@ -1036,6 +1042,16 @@ body {
     color: var(--muted);
     font-size: 13px;
     padding: 80px 20px;
+}
+
+.profile-state {
+    padding: 28px 16px;
+    min-height: 96px;
+    width: 100%;
+}
+
+.pro-soft-grid .profile-state {
+    grid-column: 1 / -1;
 }
 
 .spinner {

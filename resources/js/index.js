@@ -110,7 +110,17 @@ async function calcolaPercorso() {
         return;
     }
 
-    const response = await fetch(`http://127.0.0.1:5001/routejson?startaddress=${encodeURIComponent(address_start)}&endaddress=${encodeURIComponent(address_end)}&routemode=${encodeURIComponent(mode)}`);
+    const response = await fetch("/routejson", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "startaddress": address_start,
+            "endaddress": address_end,
+            "routemode": mode
+        })
+    });
 
     if (!response.ok) {
         throw new Error(`Code error: ${response.status} --- ${response}`);
@@ -220,7 +230,19 @@ async function suggestion() {
     }, 100);
 
     try {
-        const response = await fetch(`/photon?q=${encodeURIComponent(address)}&lat=${initial_coordinates[0]}&lon=${initial_coordinates[1]}&limit=5&lang=en`);
+        const response = await fetch("/photon", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "q": address,
+                "lat": initial_coordinates[0],
+                "lon": initial_coordinates[1],
+                "limit": 5,
+                "lang": "en"
+            })
+        });
 
         if (!response.ok) {
             throw new Error(`Code error: ${response.status} --- ${response}`);

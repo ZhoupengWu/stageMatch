@@ -218,7 +218,7 @@
                 <div class="user-avatar">MR</div>
                 <div class="user-info">
                     <div class="user-name">{{user.name}} {{user.surname}}</div>
-                    <div class="user-role">Studente · 5ª IT</div>
+                    <div class="user-role">Studente · {{user.classe}}</div>
                 </div>
             </div>
 
@@ -456,7 +456,7 @@
                     <div class="profilo-avatar">MR</div>
                     <div class="profilo-hero-info">
                         <div class="profilo-hero-name">{{user.name}} {{user.surname}}</div>
-                        <div class="profilo-hero-sub">Studente · 5ª {{user.other.indirizzo_studio}} · ITIS Paleocapa, Bergamo</div>
+                        <div class="profilo-hero-sub">Studente · {{user.classe}} · ITIS Paleocapa, Bergamo</div>
                         <div class="profilo-hero-tags">
                             <span class="pro-tag"><span class="icon"><svg><use href="#i-graduate"></use></svg></span>Diploma 2025</span>
                             <span class="pro-tag"><span class="icon"><svg><use href="#i-pin"></use></svg></span>Bergamo</span>
@@ -475,11 +475,11 @@
                             </div>
                             <div class="pro-row"><span class="pro-lbl">Cognome</span><span class="pro-val">{{user.surname}}</span>
                             </div>
-                            <div class="pro-row"><span class="pro-lbl">Data di nascita</span><span class="pro-val">{{user.other.data_nascita}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Data di nascita</span><span class="pro-val">{{user.data_nascita}}</span></div>
                             <div class="pro-row"><span class="pro-lbl">Codice fiscale</span><span
-                                    class="pro-val pro-mono">{{user.other.codice_fiscale}}</span></div>
-                            <div class="pro-row"><span class="pro-lbl">Comune</span><span class="pro-val">{{user.other.citta_residenza}}</span></div>
-                            <div class="pro-row"><span class="pro-lbl">Telefono</span><span class="pro-val">{{user.other.telefono}}</span></div>
+                                    class="pro-val pro-mono">{{user.codice_fiscale}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Comune di residenza</span><span class="pro-val">{{user.indirizzo[3]}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Telefono</span><span class="pro-val">{{user.telefono}}</span></div>
                             <div class="pro-row"><span class="pro-lbl">Email</span><span class="pro-val">{{ user.email}}</span></div>
                         </div>
                     </div>
@@ -490,8 +490,8 @@
                         <div class="pro-rows" id="proScuola">
                             <div class="pro-row"><span class="pro-lbl">Istituto</span><span class="pro-val">ITIS
                                     Paleocapa</span></div>
-                            <div class="pro-row"><span class="pro-lbl">Indirizzo</span><span class="pro-val">{{user.other.indirizzo_studio}}</span></div>
-                            <div class="pro-row"><span class="pro-lbl">Classe</span><span class="pro-val">5ª IT</span>
+                            <div class="pro-row"><span class="pro-lbl">Indirizzo</span><span class="pro-val">{{user.indirizzo_studio}}</span></div>
+                            <div class="pro-row"><span class="pro-lbl">Classe</span><span class="pro-val">{{user.classe}}</span>
                             </div>
                             <div class="pro-row"><span class="pro-lbl">Anno diploma</span><span
                                     class="pro-val">2025</span></div>
@@ -820,7 +820,7 @@
                             <div class="imp-row-info">
                                 <div class="imp-row-label">Informativa privacy</div>
                             </div>
-                            <button class="imp-btn-link">Leggi →</button>
+                            <button class="imp-btn-link" data-action="openPrivacy">Leggi →</button>
                         </div>
                         <div class="imp-row-item">
                             <div class="imp-row-info">
@@ -892,7 +892,7 @@
                     </div>
                     <div class="pro-field">
                         <label>Comune di residenza</label>
-                        <input type="text" id="fComune" value="Bergamo (BG)" placeholder="Comune" />
+                        <input type="text" id="fComune" value="{{ user.indirizzo[3] }}" placeholder="Comune di residenza" />
                     </div>
                     <div class="pro-field">
                         <label>Telefono</label>

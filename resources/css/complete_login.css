@@ -527,6 +527,63 @@ body {
     opacity: 0;
 }
 
+/* ─── Privacy acknowledgement ─── */
+.privacy-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid rgba(102, 126, 234, 0.22);
+    border-radius: 14px;
+    background: rgba(102, 126, 234, 0.07);
+}
+
+.privacy-panel-head {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(180, 200, 255, 0.82);
+}
+
+.privacy-copy {
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: rgba(200, 215, 255, 0.56);
+}
+
+.privacy-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: rgba(220, 230, 255, 0.78);
+    cursor: pointer;
+}
+
+.privacy-check input {
+    width: 18px;
+    height: 18px;
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+    accent-color: #667eea;
+}
+
+.privacy-check input.invalid {
+    outline: 2px solid rgba(255, 90, 90, 0.55);
+    outline-offset: 2px;
+}
+
+.privacy-check a {
+    color: rgba(170, 190, 255, 0.96);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
 /* ─── Modal footer ─── */
 .modal-footer {
     padding: 1.25rem 2rem 1.75rem;

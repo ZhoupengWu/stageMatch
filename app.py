@@ -1,14 +1,16 @@
-import json
 import os
 import secrets
 import requests
-from flask import Flask, render_template, redirect, request, session, url_for
+from flask import Flask, render_template, redirect, request, session, url_for, jsonify
 from dotenv import load_dotenv
 from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import timedelta
 import auth.auth as au
+from database import database_helper
 
 load_dotenv()
+
+PRIVACY_POLICY_VERSION = os.getenv("PRIVACY_POLICY_VERSION")
 
 app = Flask(
     __name__,
@@ -28,6 +30,12 @@ if au.SSO_MODE == "production":
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax"
     )
+
+try:
+    database_helper.initDB(os.getenv("DB_CONNECTION_STRING", "database.db"))
+except Exception as e:
+    app.logger.error(f"[ERROR] database initialization failed: {e}")
+    raise e
 
 def _completeLogin(user_data: dict):
     email = user_data.get("email", "")
@@ -49,9 +57,9 @@ def _completeLogin(user_data: dict):
             "⏱️"
         )
 
-    au.sso_middleware.create_session(user_data, session, session_id)
+    app.logger.info(f"[INFO] User {email} logged in with session ID: {session_id}")
 
-    # Upload preferences to be reviewed
+    au.sso_middleware.create_session(user_data, session, session_id)
 
     return redirect(url_for("completeLogin"))
 
@@ -63,6 +71,10 @@ def mainPage():
 def login():
     return render_template("/html/login.html")
 
+@app.route("/privacy")
+def privacy():
+    return render_template("/html/privacy.html", privacy_version=PRIVACY_POLICY_VERSION)
+
 @app.route("/auth/login")
 def authLogin():
     token: str | None = request.args.get("token")
@@ -72,10 +84,11 @@ def authLogin():
         app.logger.info(f"[INFO] authorised access for {dev_email}")
         user_data: dict[str, str] = {
             "email": dev_email,
-            "name": au.getUsername(dev_email).replace(".", " ").title(),
+            "name": au.getUsername(dev_email),
             "googleId": "dev-user-id",
-            "picture": ""
+            "picture": "DEV"
         }
+        print(user_data)
 
         return _completeLogin(user_data)
 
@@ -111,39 +124,64 @@ def authLogout():
 @app.route("/logged/complete", methods=["GET", "POST"])
 @au.sso_middleware.sso_login_required
 def completeLogin():
+    user = session["user"]
+
+    if database_helper.existUser(user["googleId"]):
+        return redirect(url_for("homepage"))
+
     if request.method == "POST":
-        session["other"] = request.form.to_dict()
+        data = request.form.to_dict()
+
+        if data.get("privacy_ack") != "on":
+            return jsonify({
+                "error": "Devi prendere visione dell'informativa privacy prima di continuare."
+            }), 400
+
+        if data.get("privacy_version") != PRIVACY_POLICY_VERSION:
+            return jsonify({
+                "error": "Informativa privacy non aggiornata. Ricarica la pagina e riprova."
+            }), 400
+
+        user_data = {
+            "googleId": user["googleId"],
+            "name": au.getName(user["email"]),
+            "surname": au.getSurname(user["email"]),
+            "email": user["email"],
+            "data_nascita": data["data_nascita"],
+            "sesso": data["sesso"],
+            "comune_nascita": data["comune_nascita"],
+            "codice_fiscale": data["codice_fiscale"],
+            "telefono": data["telefono"],
+            "indirizzo_studio": data["indirizzo_studio"],
+            "classe": data["classe"],
+            "indirizzo": f"{data['via']} ££ {data['civico']} ££ {data['cap']} ££ {data['citta_residenza']}",
+            "picture": user["picture"]
+        }
+
+        database_helper.addUser(
+            user_data,
+            privacy_consent={
+                "privacy_version": PRIVACY_POLICY_VERSION
+            }
+        )
 
         return redirect(url_for("homepage"))
 
-    user = session["user"]
     user_data = {
         "name": au.getName(user["email"]),
         "surname": au.getSurname(user["email"]),
         "email": user["email"]
     }
 
-    return render_template("/html/complete_login.html", user=user_data)
+    return render_template("/html/complete_login.html", user=user_data, privacy_version=PRIVACY_POLICY_VERSION)
 
 @app.route("/logged/homepage")
 @au.sso_middleware.sso_login_required
 def homepage():
     user = session["user"]
-    other_data = session.get("other", {})
-
-    if isinstance(other_data, str):
-        try:
-            other_data = json.loads(other_data)
-        except json.JSONDecodeError:
-            other_data = {}
-
-    user_data = {
-        "name": au.getName(user["email"]),
-        "surname": au.getSurname(user["email"]),
-        "email": user["email"],
-        "other": other_data,
-        **other_data,
-    }
+    data = database_helper.getUserById(user["googleId"])
+    user_data = database_helper.modelToDict(data)
+    user_data["indirizzo"] = [dato.strip() for dato in user_data["indirizzo"].split("££")]
 
     return render_template("/html/home.html", user=user_data)
 
@@ -159,11 +197,58 @@ def devLogin():
 
     return redirect(url_for("authLogin"))
 
-@app.route("/photon")
+@app.route("/api/users/profile")
+@au.sso_middleware.sso_login_required
+def getUserProfile():
+    id = session["user"]["googleId"]
+    data = database_helper.getUserById(id)
+
+    return database_helper.modelToDict(data)
+
+@app.route("/api/users/profile/save", methods=["POST"])
+@au.sso_middleware.sso_login_required
+def saveProfile():
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "Invalid JSON"}), 400
+
+        session_user = session["user"]
+        data["googleId"] = session_user["googleId"]
+
+        database_helper.updateUser(data)
+        updated_user = database_helper.getUserById(session_user["googleId"])
+
+        if not updated_user:
+            return jsonify({"error": "User not found"}), 404
+
+        return jsonify({
+            "message": "Profile updated",
+            "user": database_helper.modelToDict(updated_user)
+        }), 200
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+    except Exception as e:
+        app.logger.exception("[ERROR] profile save endpoint failed")
+
+        return jsonify({"error": "Internal server error"}), 500
+
+@app.route("/photon", methods=["POST"])
 @au.sso_middleware.sso_login_required
 def photon():
-    params = request.args.to_dict()
+    params = request.get_json()
     response = requests.get("http://127.0.0.1:5001/photon", params=params, timeout=5)
+
+    return response.json(), response.status_code
+
+@app.route("/routejson", methods=["POST"])
+@au.sso_middleware.sso_login_required
+def routejson():
+    params = request.get_json()
+    response = requests.get("http://127.0.0.1:5001/routejson", params=params, timeout=5)
 
     return response.json(), response.status_code
 

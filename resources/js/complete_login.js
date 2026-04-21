@@ -27,11 +27,24 @@ const fields = {
     codice_fiscale: document.getElementById("codice_fiscale"),
     telefono: document.getElementById("telefono"),
     indirizzo_studio: document.getElementById("indirizzo_studio"),
+    classe: document.getElementById("classe"),
+    classe_custom: document.getElementById("classe_custom"),
     via: document.getElementById("via"),
     civico: document.getElementById("civico"),
     cap: document.getElementById("cap"),
     citta_residenza: document.getElementById("citta_residenza"),
+    privacy_ack: document.getElementById("privacy_ack"),
 };
+
+const STUDY_CLASS_CODES = {
+    "Informatica e Telecomunicazioni": "I",
+    "Meccanica, Meccatronica ed Energia": "M",
+    "Elettronica, Elettrotecnica ed Automazione": "E",
+    "Sistema Moda Tessile": "T",
+};
+const CLASS_YEARS = ["1", "2", "3", "4", "5"];
+const CLASS_SECTIONS = ["A", "B", "C", "D", "E", "F", "G"];
+const CUSTOM_CLASS_VALUE = "__custom__";
 
 /* ════════════════════════════════════
    COMUNI — dataset caricato una volta
@@ -90,6 +103,96 @@ function findComuneByName(name) {
         comuniDB.find((comune) => normalizeComuneName(comune.nome) === normalizedName) ||
         null
     );
+}
+
+function buildClassCode(year, studyCode, section) {
+    return `${year}${studyCode}${section}`;
+}
+
+function getClassOptions(indirizzoStudio) {
+    const studyCode = STUDY_CLASS_CODES[indirizzoStudio];
+
+    if (!studyCode) return [];
+
+    return CLASS_YEARS.flatMap((year) =>
+        CLASS_SECTIONS.map((section) => buildClassCode(year, studyCode, section)),
+    );
+}
+
+function normalizeClassValue(value) {
+    return String(value || "")
+        .trim()
+        .toUpperCase()
+        .replace(/\s+/g, "");
+}
+
+function populateClassSelect(indirizzoStudio) {
+    const select = fields.classe;
+    const customInput = fields.classe_custom;
+
+    if (!select) return;
+
+    const options = getClassOptions(indirizzoStudio);
+    select.innerHTML = "";
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    placeholder.textContent = options.length
+        ? "Seleziona..."
+        : "Seleziona prima l'indirizzo di studio...";
+    select.appendChild(placeholder);
+
+    options.forEach((classCode) => {
+        const option = document.createElement("option");
+        option.value = classCode;
+        option.textContent = classCode;
+        select.appendChild(option);
+    });
+
+    if (options.length) {
+        const customOption = document.createElement("option");
+        customOption.value = CUSTOM_CLASS_VALUE;
+        customOption.textContent = "Classe non in lista...";
+        select.appendChild(customOption);
+    }
+
+    select.disabled = !options.length;
+    select.value = "";
+
+    if (customInput) {
+        customInput.hidden = true;
+        customInput.value = "";
+    }
+
+    clearError("classe");
+}
+
+function getSelectedClassValue() {
+    if (fields.classe?.value === CUSTOM_CLASS_VALUE) {
+        return normalizeClassValue(fields.classe_custom?.value);
+    }
+
+    return normalizeClassValue(fields.classe?.value);
+}
+
+function toggleCustomClassInput() {
+    const customInput = fields.classe_custom;
+
+    if (!customInput || !fields.classe) return;
+
+    const isCustom = fields.classe.value === CUSTOM_CLASS_VALUE;
+    customInput.hidden = !isCustom;
+    customInput.required = isCustom;
+
+    if (isCustom) {
+        customInput.focus();
+    } else {
+        customInput.value = "";
+    }
+
+    clearError("classe");
 }
 
 /* ── Autocomplete widget ── */
@@ -348,6 +451,21 @@ const validators = {
         if (!v) return "Seleziona un indirizzo di studio.";
         return null;
     },
+    classe() {
+        const selected = fields.classe?.value || "";
+        const classValue = getSelectedClassValue();
+
+        if (!selected) return "Seleziona una classe.";
+
+        if (selected === CUSTOM_CLASS_VALUE) {
+            if (!classValue) return "Inserisci la classe.";
+            if (!/^[1-5][A-Z0-9\/-]{2,14}$/.test(classValue)) {
+                return "Usa un formato valido, ad esempio 4IC o 4EBn.";
+            }
+        }
+
+        return null;
+    },
     via(v) {
         if (!v.trim()) return "La via è obbligatoria.";
         if (v.trim().length < 3) return "Inserisci un indirizzo valido.";
@@ -365,6 +483,12 @@ const validators = {
     citta_residenza(v) {
         if (!v.trim()) return "La città di residenza è obbligatoria.";
         if (!COMUNE_REGEX.test(v.trim())) return "Città non valida.";
+        return null;
+    },
+    privacy_ack() {
+        if (!fields.privacy_ack?.checked) {
+            return "Devi leggere e confermare l'informativa privacy.";
+        }
         return null;
     },
 };
@@ -435,6 +559,8 @@ function buildSubmissionData() {
         formData.set("indirizzo_studio", selectedOption);
     }
 
+    formData.set("classe", getSelectedClassValue());
+
     const comuneNascitaMatch = findComuneByName(
         String(formData.get("comune_nascita") || ""),
     );
@@ -461,6 +587,9 @@ Object.keys(validators).forEach((id) => {
     el.addEventListener("input", () => {
         if (el.classList.contains("invalid")) validateField(id);
     });
+    el.addEventListener("change", () => {
+        if (el.classList.contains("invalid")) validateField(id);
+    });
 });
 
 fields.comune_nascita?.addEventListener("blur", () => {
@@ -484,6 +613,21 @@ fields.codice_fiscale.addEventListener("input", () => {
 /* ── CAP: solo numeri ── */
 fields.cap.addEventListener("input", () => {
     fields.cap.value = fields.cap.value.replace(/\D/g, "").slice(0, 5);
+});
+
+fields.indirizzo_studio?.addEventListener("change", () => {
+    populateClassSelect(fields.indirizzo_studio.value);
+});
+
+fields.classe?.addEventListener("change", toggleCustomClassInput);
+
+fields.classe_custom?.addEventListener("input", () => {
+    const normalized = normalizeClassValue(fields.classe_custom.value);
+    fields.classe_custom.value = normalized;
+
+    if (fields.classe.classList.contains("invalid")) {
+        validateField("classe");
+    }
 });
 
 /* ════════════════════════════════════
@@ -580,7 +724,19 @@ form.addEventListener("submit", async (e) => {
             body: buildSubmissionData(),
         });
 
-        if (!res.ok) throw new Error(`[ERROR] code ${res.status}`);
+        if (!res.ok) {
+            let message = "Si è verificato un errore. Riprova o contatta il supporto.";
+
+            try {
+                const payload = await res.json()
+
+                if (payload?.error) message = payload.error;
+            } catch {
+                message = `[ERROR] code ${res.status}`;
+            }
+
+            throw new Error(message);
+        }
 
         showSuccess(res);
     } catch (err) {
@@ -589,15 +745,15 @@ form.addEventListener("submit", async (e) => {
         submitLabel.textContent = "Salva e continua";
 
         let globalErr = document.getElementById("global-error");
+
         if (!globalErr) {
             globalErr = document.createElement("p");
             globalErr.id = "global-error";
-            globalErr.style.cssText =
-                "color:rgba(255,110,110,.9);font-size:.78rem;text-align:center;margin-top:.75rem;";
+            globalErr.style.cssText = "color:rgba(255,110,110,.9);font-size:.78rem;text-align:center;margin-top:.75rem;";
             form.appendChild(globalErr);
         }
-        globalErr.textContent =
-            "Si è verificato un errore. Riprova o contatta il supporto.";
+
+        globalErr.textContent = err?.message || "Si è verificato un errore. Riprova o contatta il supporto.";
     }
 });
 
