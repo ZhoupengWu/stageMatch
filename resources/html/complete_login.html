@@ -184,6 +184,23 @@
                             <span class="field-error" id="err-indirizzo_studio"></span>
                         </div>
 
+                        <div class="field">
+                            <label for="classe">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path
+                                        d="M2 3.5A1.5 1.5 0 013.5 2h9A1.5 1.5 0 0114 3.5v9a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 12.5v-9zm2 1V6h8V4.5H4zm0 3V9h8V7.5H4zm0 3V12h8v-1.5H4z" />
+                                </svg>
+                                Classe
+                            </label>
+                            <div class="select-wrap">
+                                <select id="classe" name="classe" required disabled>
+                                    <option value="" disabled selected>Seleziona prima l'indirizzo di studio...</option>
+                                </select>
+                            </div>
+                            <input type="text" id="classe_custom" placeholder="Es. 4EBn" autocomplete="off" hidden />
+                            <span class="field-error" id="err-classe"></span>
+                        </div>
+
                         <div class="divider"></div>
 
                         <!-- ── Residenza ── -->

@@ -137,6 +137,7 @@ def completeLogin():
             "codice_fiscale": data["codice_fiscale"],
             "telefono": data["telefono"],
             "indirizzo_studio": data["indirizzo_studio"],
+            "classe": data["classe"],
             "indirizzo": f"{data['via']} ££ {data['civico']} ££ {data['cap']} ££ {data['citta_residenza']}",
             "picture": user["picture"]
         }

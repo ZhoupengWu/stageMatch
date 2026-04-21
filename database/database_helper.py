@@ -87,7 +87,7 @@ def updateUser(user_data: dict):
             return None
 
         # Update simple fields
-        for field in ["name", "surname", "email", "sesso", "comune_nascita", "codice_fiscale", "telefono", "indirizzo_studio", "indirizzo", "picture"]:
+        for field in ["name", "surname", "email", "sesso", "comune_nascita", "codice_fiscale", "telefono", "indirizzo_studio", "classe", "indirizzo", "picture"]:
             if field in user_data:
                 setattr(user, field, user_data[field])
 

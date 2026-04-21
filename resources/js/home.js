@@ -489,6 +489,7 @@ const EMPTY_PROFILO_DATA = {
     codice_fiscale: "",
     telefono: "",
     indirizzo_studio: "",
+    classe: "",
     indirizzo: "",
     picture: "",
     skills: [],
@@ -765,6 +766,7 @@ function buildProfiloPayload() {
         codice_fiscale: profiloData.codice_fiscale,
         telefono: profiloData.telefono,
         indirizzo_studio: profiloData.indirizzo_studio,
+        classe: profiloData.classe,
         indirizzo: profiloData.indirizzo,
         picture: profiloData.picture,
         skills: profiloData.skills
@@ -831,7 +833,12 @@ async function salvaProfilo() {
 function updateProfiloUI(apiResult) {
     // Nome hero
     document.querySelector(".profilo-hero-name").textContent = profiloData.name + " " + profiloData.surname;
-    document.querySelector(".profilo-hero-sub").textContent = `Studente · 5ª ${profiloData.indirizzo_studio || ""} · ITIS Paleocapa, Bergamo`;
+    document.querySelector(".profilo-hero-sub").textContent = `Studente · ${profiloData.classe || ""} · ITIS Paleocapa, Bergamo`;
+    const sidebarRole = document.querySelector(".user-role");
+
+    if (sidebarRole) {
+        sidebarRole.textContent = `Studente · ${profiloData.classe || ""}`;
+    }
 
     const anagraficaEl = document.getElementById("proAnagrafica");
     if (anagraficaEl) {
@@ -850,7 +857,7 @@ function updateProfiloUI(apiResult) {
         scuolaEl.innerHTML = `
             <div class="pro-row"><span class="pro-lbl">Istituto</span><span class="pro-val">ITIS Paleocapa</span></div>
             <div class="pro-row"><span class="pro-lbl">Indirizzo</span><span class="pro-val">${escapeHtml(profiloData.indirizzo_studio)}</span></div>
-            <div class="pro-row"><span class="pro-lbl">Classe</span><span class="pro-val">5ª IT</span></div>
+            <div class="pro-row"><span class="pro-lbl">Classe</span><span class="pro-val">${escapeHtml(profiloData.classe)}</span></div>
             <div class="pro-row"><span class="pro-lbl">Anno diploma</span><span class="pro-val">2025</span></div>`;
     }
 

@@ -19,6 +19,7 @@ class User(Base):
     codice_fiscale = Column(String, unique=True)
     telefono = Column(String)
     indirizzo_studio = Column(String)
+    classe = Column(String)
     indirizzo = Column(String)
     picture = Column(String)
 
