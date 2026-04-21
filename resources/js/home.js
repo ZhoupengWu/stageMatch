@@ -487,23 +487,25 @@ let profiloData = {
     sesso: "M",
     comune_nascita: "Bergamo (BG)",
     codice_fiscale: "RSSMRC07C14A794Z",
-    comune: "Bergamo (BG)",
     telefono: "+39 333 456 7890",
+    indirizzo_studio: "",
+    indirizzo: "",
+    picture: "",
     skills: [
-        { nome: "Python", livello: "Avanzato" },
-        { nome: "JavaScript", livello: "Intermedio" },
-        { nome: "C / C++", livello: "Intermedio" },
-        { nome: "SQL", livello: "Base" },
-        { nome: "Flask", livello: "Intermedio" },
-        { nome: "Linux", livello: "Base" },
+        { name: "Python", livello: "Avanzato" },
+        { name: "JavaScript", livello: "Intermedio" },
+        { name: "C / C++", livello: "Intermedio" },
+        { name: "SQL", livello: "Base" },
+        { name: "Flask", livello: "Intermedio" },
+        { name: "Linux", livello: "Base" },
     ],
-    softSkills: [
-        "Problem solving",
-        "Lavoro in team",
-        "Gestione del tempo",
-        "Comunicazione",
-        "Attenzione ai dettagli",
-        "Creatività",
+    soft_skills: [
+        { label: "Problem solving", icon: "i-brain" },
+        { label: "Lavoro in team", icon: "i-user" },
+        { label: "Gestione del tempo", icon: "i-route" },
+        { label: "Comunicazione", icon: "i-bell" },
+        { label: "Attenzione ai dettagli", icon: "i-pin" },
+        { label: "Creatività", icon: "i-palette" },
     ],
 };
 // fetch("/api/users/profile")
@@ -522,6 +524,7 @@ const ALL_SOFT_SKILLS = [
 ];
 
 const SKILL_LV_MAP = { Base: 33, Intermedio: 65, Avanzato: 90 };
+const SKILL_LV_DB_MAP = { Base: 1, Intermedio: 2, Avanzato: 3 };
 
 /* ─── Apre il modal e popola i form ──────────────────── */
 function openProfiloModal() {
@@ -530,7 +533,7 @@ function openProfiloModal() {
     document.getElementById("fCognome").value = profiloData.surname;
     document.getElementById("fNascita").value = profiloData.data_nascita;
     document.getElementById("fCF").value = profiloData.codice_fiscale;
-    document.getElementById("fComune").value = profiloData.comune;
+    document.getElementById("fComune").value = profiloData.comune_nascita;
     document.getElementById("fTel").value = profiloData.telefono;
 
     // Skills editor
@@ -571,8 +574,8 @@ function renderSkillsEditor() {
         .map(
             (s, i) => `
       <div class="pro-skill-edit-row">
-        <input type="text" value="${s.nome}" placeholder="Es. Python"
-               data-skill-index="${i}" data-skill-field="nome"/>
+        <input type="text" value="${s.name}" placeholder="Es. Python"
+               data-skill-index="${i}" data-skill-field="name"/>
         <select data-skill-index="${i}" data-skill-field="livello">
           ${["Base", "Intermedio", "Avanzato"]
               .map(
@@ -588,7 +591,7 @@ function renderSkillsEditor() {
 }
 
 function addSkillRow() {
-    profiloData.skills.push({ nome: "", livello: "Base" });
+    profiloData.skills.push({ name: "", livello: "Base" });
     renderSkillsEditor();
 }
 
@@ -601,7 +604,7 @@ function removeSkill(i) {
 function renderSoftEditor() {
     const el = document.getElementById("proSoftEditor");
     el.innerHTML = ALL_SOFT_SKILLS.map((s) => {
-        const sel = profiloData.softSkills.includes(s.label);
+        const sel = profiloData.soft_skills.some((soft) => soft.label === s.label);
         return `
         <div class="pro-soft-check${sel ? " selected" : ""}" onclick="toggleSoft(this, '${s.label}')">
           <input type="checkbox"${sel ? " checked" : ""}/>
@@ -613,9 +616,16 @@ function renderSoftEditor() {
 
 function toggleSoft(el, label) {
     el.classList.toggle("selected");
-    const idx = profiloData.softSkills.indexOf(label);
-    if (idx === -1) profiloData.softSkills.push(label);
-    else profiloData.softSkills.splice(idx, 1);
+    const idx = profiloData.soft_skills.findIndex((soft) => soft.label === label);
+    if (idx === -1) {
+        const found = ALL_SOFT_SKILLS.find((soft) => soft.label === label);
+        profiloData.soft_skills.push({
+            label,
+            icon: found ? found.icon : "i-brain",
+        });
+    } else {
+        profiloData.soft_skills.splice(idx, 1);
+    }
 }
 
 /* ─── Status helper ──────────────────────────────────── */
@@ -628,6 +638,32 @@ function setApiStatus(msg, cls) {
         (cls ? " " + cls : "");
 }
 
+function buildProfiloPayload() {
+    return {
+        name: profiloData.name,
+        surname: profiloData.surname,
+        email: profiloData.email,
+        data_nascita: profiloData.data_nascita,
+        sesso: profiloData.sesso,
+        comune_nascita: profiloData.comune_nascita,
+        codice_fiscale: profiloData.codice_fiscale,
+        telefono: profiloData.telefono,
+        indirizzo_studio: profiloData.indirizzo_studio,
+        indirizzo: profiloData.indirizzo,
+        picture: profiloData.picture,
+        skills: profiloData.skills
+            .filter((skill) => skill.name.trim())
+            .map((skill) => ({
+                name: skill.name.trim(),
+                livello: SKILL_LV_DB_MAP[skill.livello] || skill.livello,
+            })),
+        soft_skills: profiloData.soft_skills.map((soft) => ({
+            label: soft.label,
+            icon: soft.icon || "i-brain",
+        })),
+    };
+}
+
 /* ════════════════════════════════════════════════════════
    SALVA PROFILO — salvataggio locale
    In produzione sostituire con: fetch('/api/profile', { method: 'POST', body: JSON.stringify(profiloData) })
@@ -638,8 +674,9 @@ async function salvaProfilo() {
     profiloData.surname = document.getElementById("fCognome").value.trim();
     profiloData.data_nascita = document.getElementById("fNascita").value;
     profiloData.codice_fiscale = document.getElementById("fCF").value.trim().toUpperCase();
-    profiloData.comune = document.getElementById("fComune").value.trim();
+    profiloData.comune_nascita = document.getElementById("fComune").value.trim();
     profiloData.telefono = document.getElementById("fTel").value.trim();
+    const payload = buildProfiloPayload();
     const btn = document.getElementById("btnSalvaProfilo");
     btn.textContent = "Salvataggio...";
     btn.disabled = true;
@@ -651,7 +688,7 @@ async function salvaProfilo() {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(profiloData)
+            body: JSON.stringify(payload)
         });
 
         if (!response.ok) throw new Error(`[ERROR] http code ${response.status}`);
@@ -682,7 +719,7 @@ async function salvaProfilo() {
 /* ─── Aggiorna la sezione profilo con i nuovi dati ───── */
 function updateProfiloUI(apiResult) {
     // Nome hero
-    document.querySelector(".profilo-hero-name").textContent = profiloData.nome + " " + profiloData.cognome;
+    document.querySelector(".profilo-hero-name").textContent = profiloData.name + " " + profiloData.surname;
 
     // Aggiorna suggerimento come tag (se presente)
     if (apiResult && apiResult.suggerimento) {
@@ -699,12 +736,12 @@ function updateProfiloUI(apiResult) {
     const skillsEl = document.getElementById("proSkills");
     if (skillsEl) {
         skillsEl.innerHTML = profiloData.skills
-            .filter((s) => s.nome)
+            .filter((s) => s.name)
             .map((s) => {
                 const pct = SKILL_LV_MAP[s.livello] || 50;
                 return `
                 <div class="pro-skill-row">
-                  <span class="pro-skill-name">${s.nome}</span>
+                  <span class="pro-skill-name">${s.name}</span>
                   <div class="pro-skill-bar"><div class="pro-skill-fill" style="width:${pct}%"></div></div>
                   <span class="pro-skill-lv">${s.livello}</span>
                 </div>`;
@@ -715,14 +752,12 @@ function updateProfiloUI(apiResult) {
     // Ri-renderizza soft skills
     const softEl = document.getElementById("proSoftSkills");
     if (softEl) {
-        softEl.innerHTML = profiloData.softSkills
-            .map((label) => {
-                const found = ALL_SOFT_SKILLS.find((s) => s.label === label);
-                const icon = found ? found.icon : "i-brain";
+        softEl.innerHTML = profiloData.soft_skills
+            .map((soft) => {
                 return `
             <div class="pro-soft-item">
-              <span class="pro-soft-icon">${svgIcon(icon)}</span>
-              <span>${label}</span>
+              <span class="pro-soft-icon">${svgIcon(soft.icon || "i-brain")}</span>
+              <span>${soft.label}</span>
             </div>`;
             })
             .join("");

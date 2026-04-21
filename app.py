@@ -214,12 +214,13 @@ def saveProfile():
     return "", 204
 
 
-@app.route("/api/users/profile", methods=["GET"])
+@app.route("/api/users/profile")
 @au.sso_middleware.sso_login_required
-def fetchProfile():
-    id = session["googleId"];
-    profile = database_helper.getUserById(id)
-    return database_helper.modelToDict(profile)
+def getUserProfile():
+    id = session["user"]["googleId"]
+    data = database_helper.getUserById(id)
+    
+    return database_helper.modelToDict(data)
 
 @app.route("/photon", methods=["POST"])
 @au.sso_middleware.sso_login_required
