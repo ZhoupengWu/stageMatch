@@ -820,7 +820,7 @@
                             <div class="imp-row-info">
                                 <div class="imp-row-label">Informativa privacy</div>
                             </div>
-                            <button class="imp-btn-link">Leggi →</button>
+                            <button class="imp-btn-link" data-action="openPrivacy">Leggi →</button>
                         </div>
                         <div class="imp-row-item">
                             <div class="imp-row-info">
@@ -892,7 +892,7 @@
                     </div>
                     <div class="pro-field">
                         <label>Comune di residenza</label>
-                        <input type="text" id="fComune" value="{{ user.comune_nascita }}" placeholder="Comune" />
+                        <input type="text" id="fComune" value="{{ user.indirizzo[3] }}" placeholder="Comune di residenza" />
                     </div>
                     <div class="pro-field">
                         <label>Telefono</label>

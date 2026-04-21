@@ -33,6 +33,7 @@ const fields = {
     civico: document.getElementById("civico"),
     cap: document.getElementById("cap"),
     citta_residenza: document.getElementById("citta_residenza"),
+    privacy_ack: document.getElementById("privacy_ack"),
 };
 
 const STUDY_CLASS_CODES = {
@@ -484,6 +485,12 @@ const validators = {
         if (!COMUNE_REGEX.test(v.trim())) return "Città non valida.";
         return null;
     },
+    privacy_ack() {
+        if (!fields.privacy_ack?.checked) {
+            return "Devi leggere e confermare l'informativa privacy.";
+        }
+        return null;
+    },
 };
 
 function showError(fieldId, message) {
@@ -578,6 +585,9 @@ Object.keys(validators).forEach((id) => {
     if (!el) return;
     el.addEventListener("blur", () => validateField(id));
     el.addEventListener("input", () => {
+        if (el.classList.contains("invalid")) validateField(id);
+    });
+    el.addEventListener("change", () => {
         if (el.classList.contains("invalid")) validateField(id);
     });
 });
@@ -714,7 +724,19 @@ form.addEventListener("submit", async (e) => {
             body: buildSubmissionData(),
         });
 
-        if (!res.ok) throw new Error(`[ERROR] code ${res.status}`);
+        if (!res.ok) {
+            let message = "Si è verificato un errore. Riprova o contatta il supporto.";
+
+            try {
+                const payload = await res.json()
+
+                if (payload?.error) message = payload.error;
+            } catch {
+                message = `[ERROR] code ${res.status}`;
+            }
+
+            throw new Error(message);
+        }
 
         showSuccess(res);
     } catch (err) {
@@ -723,15 +745,15 @@ form.addEventListener("submit", async (e) => {
         submitLabel.textContent = "Salva e continua";
 
         let globalErr = document.getElementById("global-error");
+
         if (!globalErr) {
             globalErr = document.createElement("p");
             globalErr.id = "global-error";
-            globalErr.style.cssText =
-                "color:rgba(255,110,110,.9);font-size:.78rem;text-align:center;margin-top:.75rem;";
+            globalErr.style.cssText = "color:rgba(255,110,110,.9);font-size:.78rem;text-align:center;margin-top:.75rem;";
             form.appendChild(globalErr);
         }
-        globalErr.textContent =
-            "Si è verificato un errore. Riprova o contatta il supporto.";
+
+        globalErr.textContent = err?.message || "Si è verificato un errore. Riprova o contatta il supporto.";
     }
 });
 

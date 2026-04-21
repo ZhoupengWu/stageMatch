@@ -10,6 +10,8 @@ from database import database_helper
 
 load_dotenv()
 
+PRIVACY_POLICY_VERSION = os.getenv("PRIVACY_POLICY_VERSION")
+
 app = Flask(
     __name__,
     static_folder="./resources",
@@ -69,6 +71,10 @@ def mainPage():
 def login():
     return render_template("/html/login.html")
 
+@app.route("/privacy")
+def privacy():
+    return render_template("/html/privacy.html", privacy_version=PRIVACY_POLICY_VERSION)
+
 @app.route("/auth/login")
 def authLogin():
     token: str | None = request.args.get("token")
@@ -126,6 +132,16 @@ def completeLogin():
     if request.method == "POST":
         data = request.form.to_dict()
 
+        if data.get("privacy_ack") != "on":
+            return jsonify({
+                "error": "Devi prendere visione dell'informativa privacy prima di continuare."
+            }), 400
+
+        if data.get("privacy_version") != PRIVACY_POLICY_VERSION:
+            return jsonify({
+                "error": "Informativa privacy non aggiornata. Ricarica la pagina e riprova."
+            }), 400
+
         user_data = {
             "googleId": user["googleId"],
             "name": au.getName(user["email"]),
@@ -142,7 +158,12 @@ def completeLogin():
             "picture": user["picture"]
         }
 
-        database_helper.addUser(user_data)
+        database_helper.addUser(
+            user_data,
+            privacy_consent={
+                "privacy_version": PRIVACY_POLICY_VERSION
+            }
+        )
 
         return redirect(url_for("homepage"))
 
@@ -152,7 +173,7 @@ def completeLogin():
         "email": user["email"]
     }
 
-    return render_template("/html/complete_login.html", user=user_data)
+    return render_template("/html/complete_login.html", user=user_data, privacy_version=PRIVACY_POLICY_VERSION)
 
 @app.route("/logged/homepage")
 @au.sso_middleware.sso_login_required

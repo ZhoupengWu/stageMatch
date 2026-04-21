@@ -11,6 +11,7 @@ from .models.user_preferences import UserPreferences
 from .models.skill import Skill
 from .models.soft_skill import SoftSkill
 from .models.route import UserRoute
+from .models.privacy_consent import PrivacyConsent
 
 # global
 Session = None
@@ -58,7 +59,7 @@ def getUserColumn(user_id: str, column: str):
 
         return getattr(user, column)
 
-def addUser(user_data: dict):
+def addUser(user_data: dict, privacy_consent: dict | None = None):
     with Session() as session:
         existing = session.query(User).filter_by(googleId=user_data["googleId"]).options(
             selectinload(User.preferences)
@@ -73,6 +74,14 @@ def addUser(user_data: dict):
         user.preferences = UserPreferences(color_mode="light")
 
         session.add(user)
+        session.flush()
+
+        if privacy_consent:
+            session.add(PrivacyConsent(
+                user_id=user.googleId,
+                privacy_version=privacy_consent["privacy_version"]
+            ))
+
         session.commit()
 
 def updateUser(user_data: dict):

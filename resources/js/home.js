@@ -543,6 +543,32 @@ function normalizeSkillLevel(value) {
     return SKILL_LV_LABEL_MAP[value] || value || "Base";
 }
 
+function splitIndirizzo(value) {
+    if (Array.isArray(value)) {
+        return value.map((part) => String(part || "").trim());
+    }
+
+    return String(value || "")
+        .split("££")
+        .map((part) => part.trim());
+}
+
+function getComuneResidenza(indirizzo) {
+    return splitIndirizzo(indirizzo)[3] || "";
+}
+
+function setComuneResidenza(indirizzo, comune) {
+    const parts = splitIndirizzo(indirizzo);
+
+    while (parts.length < 4) {
+        parts.push("");
+    }
+
+    parts[3] = comune;
+
+    return parts.join(" ££ ");
+}
+
 function normalizeProfiloData(data) {
     return {
         ...EMPTY_PROFILO_DATA,
@@ -655,7 +681,7 @@ function openProfiloModal() {
     document.getElementById("fCognome").value = profiloData.surname;
     document.getElementById("fNascita").value = profiloData.data_nascita;
     document.getElementById("fCF").value = profiloData.codice_fiscale;
-    document.getElementById("fComune").value = profiloData.comune_nascita;
+    document.getElementById("fComune").value = getComuneResidenza(profiloData.indirizzo);
     document.getElementById("fTel").value = profiloData.telefono;
 
     // Skills editor
@@ -792,7 +818,10 @@ async function salvaProfilo() {
     profiloData.surname = document.getElementById("fCognome").value.trim();
     profiloData.data_nascita = document.getElementById("fNascita").value;
     profiloData.codice_fiscale = document.getElementById("fCF").value.trim().toUpperCase();
-    profiloData.comune_nascita = document.getElementById("fComune").value.trim();
+    profiloData.indirizzo = setComuneResidenza(
+        profiloData.indirizzo,
+        document.getElementById("fComune").value.trim(),
+    );
     profiloData.telefono = document.getElementById("fTel").value.trim();
     const payload = buildProfiloPayload();
     const btn = document.getElementById("btnSalvaProfilo");
@@ -847,7 +876,7 @@ function updateProfiloUI(apiResult) {
             <div class="pro-row"><span class="pro-lbl">Cognome</span><span class="pro-val">${escapeHtml(profiloData.surname)}</span></div>
             <div class="pro-row"><span class="pro-lbl">Data di nascita</span><span class="pro-val">${escapeHtml(profiloData.data_nascita)}</span></div>
             <div class="pro-row"><span class="pro-lbl">Codice fiscale</span><span class="pro-val pro-mono">${escapeHtml(profiloData.codice_fiscale)}</span></div>
-            <div class="pro-row"><span class="pro-lbl">Comune</span><span class="pro-val">${escapeHtml(profiloData.comune_nascita)}</span></div>
+            <div class="pro-row"><span class="pro-lbl">Comune di residenza</span><span class="pro-val">${escapeHtml(getComuneResidenza(profiloData.indirizzo))}</span></div>
             <div class="pro-row"><span class="pro-lbl">Telefono</span><span class="pro-val">${escapeHtml(profiloData.telefono)}</span></div>
             <div class="pro-row"><span class="pro-lbl">Email</span><span class="pro-val">${escapeHtml(profiloData.email)}</span></div>`;
     }
@@ -1256,6 +1285,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document
         .querySelector('[data-action="esportaCV"]')
         .addEventListener("click", esportaCV);
+    document
+        .querySelector('[data-action="openPrivacy"]')
+        .addEventListener("click", () => {
+            window.open("/privacy", "_blank", "noopener");
+        });
 
     /* ── Logout modal ────────────────────────────────────── */
     document
