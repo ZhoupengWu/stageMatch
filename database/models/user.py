@@ -1,6 +1,6 @@
 import re
 from sqlalchemy.orm import relationship, validates
-from sqlalchemy import Column, String, LargeBinary, Date
+from sqlalchemy import Column, String, Date
 from .base import Base
 from datetime import date
 

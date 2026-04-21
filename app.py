@@ -1,4 +1,3 @@
-import json
 import os
 import secrets
 import requests
@@ -201,6 +200,26 @@ def updateUser():
     except Exception as e:
         app.logger.exception("[ERROR] user endpoint failed")
         return jsonify({"error": "Internal server error"}), 500
+
+@app.route("/api/users/profile/save", methods=["POST"])
+@au.sso_middleware.sso_login_required
+def saveProfile():
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"message": "Not valid data"}), 422
+
+    print(data)
+
+    return "", 204
+
+
+@app.route("/api/users/profile", methods=["GET"])
+@au.sso_middleware.sso_login_required
+def fetchProfile():
+    id = session["googleId"];
+    profile = database_helper.getUserById(id)
+    return database_helper.modelToDict(profile)
 
 @app.route("/photon", methods=["POST"])
 @au.sso_middleware.sso_login_required

@@ -480,12 +480,15 @@ function renderRecentRoutes() {
    PROFILO — dati in memoria (in produzione: fetch /api/profile)
    ════════════════════════════════════════════════════════ */
 let profiloData = {
-    nome: "Marco",
-    cognome: "Rossi",
-    nascita: "2007-03-14",
-    cf: "RSSMRC07C14A794Z",
+    name: "Marco",
+    surname: "Rossi",
+    email:"marcorossi.studente@itispaleocapa.it",
+    data_nascita: "2007-03-14",
+    sesso: "M",
+    comune_nascita: "Bergamo (BG)",
+    codice_fiscale: "RSSMRC07C14A794Z",
     comune: "Bergamo (BG)",
-    tel: "+39 333 456 7890",
+    telefono: "+39 333 456 7890",
     skills: [
         { nome: "Python", livello: "Avanzato" },
         { nome: "JavaScript", livello: "Intermedio" },
@@ -503,6 +506,7 @@ let profiloData = {
         "Creatività",
     ],
 };
+// fetch("/api/users/profile")
 
 const ALL_SOFT_SKILLS = [
     { icon: "i-brain", label: "Problem solving" },
@@ -522,12 +526,12 @@ const SKILL_LV_MAP = { Base: 33, Intermedio: 65, Avanzato: 90 };
 /* ─── Apre il modal e popola i form ──────────────────── */
 function openProfiloModal() {
     // Anagrafica
-    document.getElementById("fNome").value = profiloData.nome;
-    document.getElementById("fCognome").value = profiloData.cognome;
-    document.getElementById("fNascita").value = profiloData.nascita;
-    document.getElementById("fCF").value = profiloData.cf;
+    document.getElementById("fNome").value = profiloData.name;
+    document.getElementById("fCognome").value = profiloData.surname;
+    document.getElementById("fNascita").value = profiloData.data_nascita;
+    document.getElementById("fCF").value = profiloData.codice_fiscale;
     document.getElementById("fComune").value = profiloData.comune;
-    document.getElementById("fTel").value = profiloData.tel;
+    document.getElementById("fTel").value = profiloData.telefono;
 
     // Skills editor
     renderSkillsEditor();
@@ -630,18 +634,30 @@ function setApiStatus(msg, cls) {
    ════════════════════════════════════════════════════════ */
 async function salvaProfilo() {
     // Leggi valori dal form anagrafica
-    profiloData.nome = document.getElementById("fNome").value.trim();
-    profiloData.cognome = document.getElementById("fCognome").value.trim();
-    profiloData.nascita = document.getElementById("fNascita").value;
-    profiloData.cf = document.getElementById("fCF").value.trim().toUpperCase();
+    profiloData.name = document.getElementById("fNome").value.trim();
+    profiloData.surname = document.getElementById("fCognome").value.trim();
+    profiloData.data_nascita = document.getElementById("fNascita").value;
+    profiloData.codice_fiscale = document.getElementById("fCF").value.trim().toUpperCase();
     profiloData.comune = document.getElementById("fComune").value.trim();
-    profiloData.tel = document.getElementById("fTel").value.trim();
+    profiloData.telefono = document.getElementById("fTel").value.trim();
     const btn = document.getElementById("btnSalvaProfilo");
     btn.textContent = "Salvataggio...";
     btn.disabled = true;
     setApiStatus("Salvataggio in corso…", "");
 
     try {
+        const response = await fetch("/api/users/profile/save", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(profiloData)
+        });
+
+        if (!response.ok) throw new Error(`[ERROR] http code ${response.status}`);
+
+        console.log(response)
+
         /* ── Sostituire con chiamata reale al backend: ────────────
            await fetch('/api/profile', {
                method: 'POST',

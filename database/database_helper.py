@@ -75,8 +75,6 @@ def addUser(user_data: dict):
         session.add(user)
         session.commit()
 
-        return user
-
 def updateUser(user_data: dict):
     with Session() as session:
         user = session.query(User).filter_by(googleId=user_data["googleId"]).options(
@@ -140,9 +138,6 @@ def updateUser(user_data: dict):
         # Commit changes
         session.add(user)
         session.commit()
-
-        # Convert to dict while session is open
-        return modelToDict(user, include_relationships=True)
 
 def getUserPreferences(user_id: str):
     with Session() as session:
