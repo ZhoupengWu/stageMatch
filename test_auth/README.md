@@ -1,10 +1,13 @@
-# SSO Blueprint — Template di integrazione SSO
+# SSO Blueprint - Template di integrazione SSO
+
+Questo README riguarda solo l'applicazione di esempio in `test_auth/`.
+Per l'app principale consulta il README nella root del repository.
 
 Applicazione Flask **minimale e documentata** da usare come punto di partenza
 per qualsiasi team che deve integrare il portale SSO centralizzato nella propria applicazione.
 
-Il blueprint non fa nulla di utile di per sé: contiene solo l'ossatura — autenticazione,
-struttura delle route, template, file statici — che ogni team dovrà riempire con
+Il blueprint non fa nulla di utile di per sé: contiene solo l'ossatura - autenticazione,
+struttura delle route, template, file statici - che ogni team dovrà riempire con
 la propria logica di business.
 
 ---
@@ -16,22 +19,22 @@ sso-blueprint/
 │
 ├── app.py                        # Applicazione Flask principale
 ├── requirements.txt
-├── .env.example                  # Template variabili d'ambiente — copiare in .env
+├── .env.example                  # Template variabili d'ambiente - copiare in .env
 ├── ecosystem.config.js           # Configurazione PM2 per production
 ├── start.sh                      # Script di avvio Linux
 │
 ├── shared_modules/
 │   ├── __init__.py
-│   └── sso_middleware.py         # ⭐ Middleware SSO — copiare nella propria app
+│   └── sso_middleware.py         # Middleware SSO - copiare nella propria app
 │                                 #    Contiene: SSOMiddleware, WhitelistManager, RateLimiter
 │
 ├── templates/
 │   ├── base.html                 # Layout comune autenticato (header, nav, footer)
 │   │                             # Carica static/css/main.css e static/js/main.js
-│   ├── index.html                # Landing page PUBBLICA — standalone, non estende base.html
-│   ├── dashboard.html            # ✅ Pagina riservata — Dashboard
-│   ├── reports.html              # ✅ Pagina riservata — Reports (esempio seconda area)
-│   └── settings.html            # ✅ Pagina riservata — Impostazioni utente
+│   ├── index.html                # Landing page pubblica, non estende base.html
+│   ├── dashboard.html            # Pagina riservata - Dashboard
+│   ├── reports.html              # Pagina riservata - Reports
+│   └── settings.html             # Pagina riservata - Impostazioni utente
 │
 ├── static/
 │   ├── css/
@@ -51,8 +54,8 @@ sso-blueprint/
 
 | URL | Accesso | Descrizione |
 |---|---|---|
-| `/` | **Pubblico** | Landing page — presenta l'app, link al login SSO |
-| `/sso/login` | Pubblico | Callback SSO — riceve il JWT dal portale (o simula il login in dev) |
+| `/` | **Pubblico** | Landing page con link al login SSO |
+| `/sso/login` | Pubblico | Callback SSO: riceve il JWT dal portale o simula il login in dev |
 | `/logout` | Autenticato | Logout + redirect al portale SSO |
 | `/dashboard` | 🔒 Riservato | Area principale per l'utente autenticato |
 | `/reports` | 🔒 Riservato | Esempio di seconda pagina riservata |
@@ -62,7 +65,7 @@ sso-blueprint/
 
 ---
 
-## Flusso SSO — production
+## Flusso SSO - production
 
 ```
 Utente → Portale SSO checkin
@@ -83,7 +86,7 @@ Logout → /logout
 
 ---
 
-## Configurazione — .env
+## Configurazione - .env
 
 Copia `.env.example` in `.env` e compila i valori:
 
@@ -94,15 +97,15 @@ cp .env.example .env
 | Variabile | Obbligatoria | Descrizione |
 |---|---|---|
 | `SSO_MODE` | ✅ | `production` oppure `dev` |
-| `JWT_SECRET` | ✅ in production | Secret condiviso col portale SSO — **deve essere identico** |
-| `APP_AUDIENCE` | ✅ in production | Identificativo univoco dell'app nel JWT (es. `mia-app`) |
-| `PORTAL_URL` | ✅ | URL del portale SSO — usato per redirect login e logout |
-| `SERVER_SECRET_KEY` | ✅ | Secret Flask per firmare i cookie di sessione |
+| `JWT_SECRET` | Sì, in production | Secret condiviso col portale SSO; deve essere identico |
+| `APP_AUDIENCE` | Sì, in production | Identificativo univoco dell'app nel JWT, per esempio `mia-app` |
+| `PORTAL_URL` | Sì | URL del portale SSO, usato per redirect login e logout |
+| `SERVER_SECRET_KEY` | Sì | Secret Flask per firmare i cookie di sessione |
 | `DEV_USER_EMAIL` | Solo dev | Email predefinita in modalità dev (default: `demo@example.com`) |
 | `MAX_SESSIONS_PER_USER` | No | Max sessioni simultanee per utente (default: `3`) |
 | `MAX_SESSIONS_GLOBAL` | No | Max sessioni attive totali nell'app (default: `100`) |
 | `PORT` | No | Porta dell'applicazione (default: `3020`) |
-| `DEBUG` | No | `True` o `False` — mai `True` in production |
+| `DEBUG` | No | `True` o `False`; mai `True` in production |
 
 ---
 
@@ -140,7 +143,7 @@ reindirizza automaticamente a `/dashboard`.
 
 ---
 
-**Metodo 1 — shortcut `/dev/auto-login`**
+**Metodo 1 - shortcut `/dev/auto-login`**
 
 ```
 http://localhost:3020/dev/auto-login
@@ -153,7 +156,7 @@ Il modo più rapido per avviare una sessione durante lo sviluppo.
 
 ---
 
-**Metodo 2 — `/sso/login` senza parametri**
+**Metodo 2 - `/sso/login` senza parametri**
 
 ```
 http://localhost:3020/sso/login
@@ -163,7 +166,7 @@ Identico al metodo 1: usa `DEV_USER_EMAIL` dal `.env`.
 
 ---
 
-**Metodo 3 — `/sso/login?email=...` con email personalizzata**
+**Metodo 3 - `/sso/login?email=...` con email personalizzata**
 
 ```
 http://localhost:3020/sso/login?email=mario.rossi@azienda.com
@@ -187,13 +190,13 @@ http://localhost:3020/sso/login?email=nonautorizzato@altro.com
 
 ### Logout in dev
 
-Il logout funziona identicamente alla modalità production:
+Il logout funziona come in modalità production:
 `/logout` pulisce la sessione Flask, rimuove la sessione dal RateLimiter
 e reindirizza a `PORTAL_URL`.
 
 In dev `PORTAL_URL` punta tipicamente al portale in locale (`http://localhost:5000`).
-Se il portale non è attivo, il browser mostrerà semplicemente un errore di connessione —
-è normale, la sessione è già stata pulita correttamente.
+Se il portale non è attivo, il browser mostrerà un errore di connessione:
+la sessione è già stata pulita correttamente.
 
 ---
 
@@ -210,13 +213,13 @@ Se il portale non è attivo, il browser mostrerà semplicemente un errore di con
 }
 ```
 
-2. Login con utente autorizzato → accede normalmente alla dashboard:
+2. Login con utente autorizzato: accede normalmente alla dashboard.
 
 ```
 http://localhost:3020/sso/login?email=autorizzato@example.com
 ```
 
-3. Login con utente non in lista → pagina di errore 403:
+3. Login con utente non in lista: pagina di errore 403.
 
 ```
 http://localhost:3020/sso/login?email=nonautorizzato@example.com
@@ -362,7 +365,7 @@ whitelist_manager.add_email("utente@azienda.com")
 whitelist_manager.remove_email("ex-utente@azienda.com")
 ```
 
-Un account non in whitelist che prova ad accedere riceve una risposta **403 — Account Non Autorizzato**
+Un account non in whitelist che prova ad accedere riceve una risposta **403 - Account Non Autorizzato**
 prima ancora che venga creata una sessione.
 
 ---
@@ -381,7 +384,7 @@ Comportamento:
 - ogni request su route protette aggiorna il timestamp `last_seen`
 - sessioni inattive da più di 8 ore vengono rimosse automaticamente
 - il logout esplicito rimuove subito la sessione dal contatore
-- se un limite è superato, l'utente vede **429 — Troppe Sessioni Attive**
+- se un limite è superato, l'utente vede **429 - Troppe Sessioni Attive**
 
 > ⚠️ **Nota multi-processo:** il `RateLimiter` usa memoria condivisa tra thread dello
 > stesso processo. Con gunicorn e più worker ogni processo ha il proprio contatore separato.

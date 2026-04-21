@@ -1,174 +1,235 @@
-# 🗺️ stageMatch
+# stageMatch
 
-Trova il percorso migliore verso la tua destinazione con un'interfaccia moderna e intuitiva.
+Applicazione Flask per gestire l'accesso degli utenti, raccogliere i dati di profilo e visualizzare percorsi su mappa tra due indirizzi.
 
-## 📋 Descrizione
+## Descrizione
 
-**stageMatch** è un'applicazione web full-stack che consente agli utenti di calcolare e visualizzare percorsi tra due indirizzi su una mappa interattiva. L'applicazione supporta molteplici mezzi di trasporto (auto, bicicletta, a piedi) e fornisce suggerimenti di indirizzi in tempo reale.
+**stageMatch** integra un front-end Flask con autenticazione SSO, completamento del primo accesso, informativa privacy, profilo utente e una mappa interattiva. La parte geografica usa OpenStreetMap, Photon/Nominatim per la ricerca degli indirizzi e OpenRouteService per il calcolo del percorso.
 
-## ✨ Funzionalità
+Il progetto contiene due servizi Flask:
 
-- 🛣️ **Calcolo percorsi avanzato** - Calcola rotte ottimizzate tramite OpenRouteService API
-- 🗺️ **Mappa interattiva** - Visualizzazione con Leaflet.js basata su OpenStreetMap
-- 🔍 **Suggerimenti indirizzi in tempo reale** - Autocomplete tramite API Photon Komoot
-- 🚗 **Selezione mezzo di trasporto** - Supporto per auto, bicicletta e percorsi a piedi
-- 🎨 **Interfaccia moderna** - Design responsivo con pannello di controllo collapsibile
-- ⌨️ **Accessibilità** - Supporto per tastiera (ESC per chiudere il pannello) e riduzione movimento
+- `app.py`: applicazione principale, pagine HTML, autenticazione, profilo utente e proxy verso le API geografiche.
+- `server.py`: API locale di supporto per geocoding e routing, in ascolto su `127.0.0.1:5001`.
 
-## 🛠️ Tecnologie utilizzate
+La directory `test_auth/` contiene un esempio separato di blueprint SSO riutilizzabile.
+
+## Funzionalità
+
+- Autenticazione SSO con modalità `production` e modalità `dev` per lo sviluppo locale.
+- Completamento del profilo al primo accesso con consenso privacy versionato.
+- Area utente autenticata con homepage, profilo e mappa.
+- Ricerca indirizzi con suggerimenti tramite Photon.
+- Calcolo percorsi tramite OpenRouteService, con supporto per auto, bici e tragitti a piedi.
+- Mappa interattiva basata su Leaflet e dati OpenStreetMap.
+- Database locale gestito con SQLAlchemy.
+
+## Tecnologie
 
 | Categoria | Tecnologie |
-|-----------|-----------|
-| **Frontend** | HTML5, CSS3, JavaScript (Vanilla) |
-| **Librerie JS** | Leaflet.js 1.9.4 (mappe), Bootstrap 4.3.1 |
-| **API esterne** | Photon Komoot (geocoding), OpenRouteService (routing), Nominatim (geocoding) |
-| **Backend** | Python Flask 3.1.2, Flask-CORS |
-| **Dati geografici** | OpenStreetMap |
-| **HTTP Async** | aiohttp, asyncio |
+|---|---|
+| Backend | Python, Flask, Flask-CORS, Werkzeug |
+| Autenticazione | PyJWT, middleware SSO in `auth/` |
+| Database | SQLAlchemy |
+| Frontend | HTML, CSS, JavaScript |
+| Mappe | Leaflet, OpenStreetMap |
+| API geografiche | OpenRouteService, Photon, Nominatim |
+| HTTP | requests, aiohttp |
 
-## 📦 Requisiti
+## Requisiti
 
 - Python 3.10+
-- Browser moderno con supporto ES6+
-- Chiave API OpenRouteService (ORS_API_KEY)
+- Browser moderno
+- Connessione internet per mappe e servizi geografici
+- Chiave OpenRouteService (`ORS_API_KEY`) per il calcolo dei percorsi
 
-## 🚀 Installazione
+## Installazione
 
-### 1. Clona il repository
+Clona il repository e prepara l'ambiente:
+
 ```bash
 git clone https://github.com/ZhoupengWu/stageMatch.git
 cd stageMatch
-```
-
-### 2. Configura l'ambiente Python
-```bash
-# Crea un ambiente virtuale
 python -m venv .venv
-
-# Attiva l'ambiente
-
-# Su Windows:
-.venv\Scripts\activate
-
-# Su macOS/Linux:
 source .venv/bin/activate
-```
-
-### 3. Installa le dipendenze
-```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configura le variabili d'ambiente
-Crea un file `.env` nella root del progetto:
-```env
-ORS_API_KEY=your_openrouteservice_api_key_here
-```
+Su Windows l'attivazione dell'ambiente virtuale è:
 
-Ottieni una chiave API gratuita su [OpenRouteService](https://openrouteservice.org/dev/#/signup)
-
-### 5. Avvia i server
-
-**Front-end:**
 ```bash
-python app.py
-# Applicazione disponibile su http://127.0.0.1:5000
+.venv\Scripts\activate
 ```
 
-**Back-end (API):**
+## Configurazione
+
+Copia il template delle variabili d'ambiente:
+
+```bash
+cp .env.example .env
+```
+
+Imposta almeno questi valori per lo sviluppo locale:
+
+```env
+ORS_API_KEY=la-tua-chiave-openrouteservice
+SSO_MODE=dev
+DEV_USER_EMAIL=demo@example.com
+SERVER_SECRET_KEY=una-stringa-lunga-e-casuale
+PORTAL_URL=http://127.0.0.1:5000
+DB_CONNECTION_STRING=users.db
+PORT=5000
+DEBUG=True
+PRIVACY_POLICY_VERSION=2026-04-21
+```
+
+In produzione imposta anche:
+
+```env
+SSO_MODE=production
+JWT_SECRET=segreto-condiviso-con-il-portale-sso
+APP_AUDIENCE=identificativo-app
+DEBUG=False
+```
+
+Ottieni una chiave OpenRouteService da <https://openrouteservice.org/dev/#/signup>.
+
+## Avvio
+
+Avvia il backend geografico:
+
 ```bash
 python server.py
-# Server in ascolto su http://127.0.0.1:5001
 ```
 
-### 6. Apri l'applicazione
-Visita `http://127.0.0.1:5000` nel tuo browser
+Il servizio ascolta su `http://127.0.0.1:5001`.
 
-## 📖 Utilizzo
+In un secondo terminale, con lo stesso virtualenv attivo, avvia l'app principale:
 
-1. **Inserisci partenza** - Digita l'indirizzo di partenza nel primo campo
-2. **Suggerimenti** - Vedrai suggerimenti automatici mentre digiti
-3. **Seleziona destinazione** - Ripeti per l'indirizzo di arrivo
-4. **Scegli mezzo** - Clicca su 🚗 (auto), 🚶 (a piedi) o 🚴 (bicicletta)
-5. **Calcola** - Clicca "Mostra Percorso"
-6. **Visualizza** - La rotta apparirà in rosso sulla mappa
-
-### Scorciatoie da tastiera
-- **ESC** - Chiudi il pannello di controllo
-
-## 📂 Struttura del progetto
-
-```
-stageMatch/
-├── app.py                          # Server Flask frontend
-├── server.py                       # Server Flask API backend
-├── requirements.txt                # Dipendenze Python
-├── .env                            # Variabili d'ambiente (da creare)
-├── .gitignore
-├── .gitattributes
-├── .editorconfig
-├── README.md                       # Documentazione
-├── CONTRIBUTING.md                 # Linee guida contributori
-├── resources/
-│   ├── html/
-│   │   └── index.html              # Pagina principale
-│   ├── js/
-│   │   └── index.js                # Logica applicazione
-│   └── css/
-│       └── index.css               # Stili
-└── snapshots/                      # Documenti pdf del progetto
+```bash
+python app.py
 ```
 
-## 🔧 Endpoint API
+L'app ascolta sulla porta configurata in `.env` con `PORT`. Con la configurazione consigliata è disponibile su `http://127.0.0.1:5000`.
 
-### `GET /routejson`
-Calcola un percorso tra due indirizzi
+## Sviluppo con SSO simulato
 
-**Parametri:**
-- `startaddress` - Indirizzo di partenza
-- `endaddress` - Indirizzo di destinazione
-- `routemode` - Mezzo di trasporto (driving-car, foot-walking, cycling-regular)
+Con `SSO_MODE=dev` non serve un portale SSO reale. Puoi avviare una sessione visitando:
 
-**Esempio:**
+```text
+http://127.0.0.1:5000/dev/login
 ```
+
+Oppure puoi simulare un utente specifico:
+
+```text
+http://127.0.0.1:5000/auth/login?email=utente@example.com
+```
+
+Al primo accesso l'app reindirizza al completamento del profilo. Dopo il salvataggio del profilo, l'utente accede alla homepage e alla mappa.
+
+## Utilizzo
+
+1. Avvia `server.py` e `app.py`.
+2. Esegui il login in modalità dev o tramite portale SSO in produzione.
+3. Completa il profilo se è il primo accesso.
+4. Apri la mappa dall'area autenticata.
+5. Inserisci indirizzo di partenza e destinazione.
+6. Scegli il mezzo di trasporto e calcola il percorso.
+
+## Endpoint principali
+
+### Applicazione (`app.py`)
+
+| Metodo | Endpoint | Accesso | Descrizione |
+|---|---|---|---|
+| `GET` | `/` | Pubblico | Landing page |
+| `GET` | `/login` | Pubblico | Pagina di login |
+| `GET` | `/privacy` | Pubblico | Informativa privacy |
+| `GET` | `/auth/login` | Pubblico | Callback SSO o login simulato in dev |
+| `GET` | `/auth/logout` | Autenticato | Logout |
+| `GET`, `POST` | `/logged/complete` | Autenticato | Completamento profilo |
+| `GET` | `/logged/homepage` | Autenticato | Homepage utente |
+| `GET` | `/logged/map` | Autenticato | Mappa |
+| `GET` | `/dev/login` | Solo dev | Shortcut per login simulato |
+| `GET` | `/api/users/profile` | Autenticato | Profilo utente in JSON |
+| `POST` | `/api/users/profile/save` | Autenticato | Salvataggio profilo |
+| `POST` | `/photon` | Autenticato | Proxy verso il backend Photon |
+| `POST` | `/routejson` | Autenticato | Proxy verso il backend routing |
+
+### Backend geografico (`server.py`)
+
+| Metodo | Endpoint | Descrizione |
+|---|---|---|
+| `GET` | `/photon` | Suggerimenti indirizzi da Photon |
+| `GET` | `/routejson` | Percorso GeoJSON da OpenRouteService |
+
+Esempio:
+
+```text
 GET http://127.0.0.1:5001/routejson?startaddress=Milano&endaddress=Roma&routemode=driving-car
 ```
 
-**Risposta:** GeoJSON con la geometria del percorso
+Parametri di `/routejson`:
 
-## 🐛 Troubleshooting
+- `startaddress`: indirizzo di partenza.
+- `endaddress`: indirizzo di arrivo.
+- `routemode`: modalità OpenRouteService, per esempio `driving-car`, `foot-walking` o `cycling-regular`.
+
+## Struttura del progetto
+
+```text
+stageMatch/
+├── app.py                       # Applicazione Flask principale
+├── server.py                    # Backend API per geocoding e routing
+├── requirements.txt             # Dipendenze Python
+├── .env.example                 # Template configurazione locale
+├── auth/                        # Autenticazione e middleware SSO
+├── database/                    # Helper database e modelli SQLAlchemy
+├── resources/
+│   ├── html/                    # Template HTML
+│   ├── css/                     # Stili
+│   ├── js/                      # Script frontend
+│   └── img/                     # Immagini
+├── test_auth/                   # Esempio separato di blueprint SSO
+├── snapshots/                   # Documenti PDF del progetto
+├── CONTRIBUTING.md              # Linee guida per contribuire
+├── LICENSE                      # Licenza Apache 2.0
+└── NOTICE                       # Riconoscimenti e attribuzioni
+```
+
+## Testing e verifica manuale
+
+Non è presente una test suite top-level. Per validare una modifica:
+
+- avvia `python server.py` e `python app.py`;
+- verifica login dev o SSO, completamento profilo e logout;
+- controlla homepage, salvataggio profilo e consenso privacy;
+- prova suggerimenti indirizzo, rendering mappa e generazione percorso;
+- se tocchi `auth/` o flussi SSO, verifica anche l'app in `test_auth/`.
+
+## Troubleshooting
 
 | Problema | Soluzione |
-|----------|-----------|
-| CORS errors | Verifica che backend giri su `http://127.0.0.1:5001` |
-| Chiave API non valida | Controlla il file `.env` e la chiave ORS |
-| Indirizzi non trovati | Usa indirizzi completi o cambia il bias geografico |
-| Mappa non carica | Verifica la connessione a internet (richiede OSM) |
+|---|---|
+| L'app parte su una porta inattesa | Controlla `PORT` nel file `.env`. |
+| Login dev non funziona | Verifica `SSO_MODE=dev`, `SERVER_SECRET_KEY` e `DEV_USER_EMAIL`. |
+| Redirect logout verso un URL inatteso | Controlla `PORTAL_URL`. |
+| Percorsi non calcolati | Verifica `ORS_API_KEY` e che `server.py` sia avviato su `127.0.0.1:5001`. |
+| Suggerimenti o mappe non caricano | Verifica la connessione internet e l'accesso ai servizi OpenStreetMap/Photon. |
+| Errori CORS | Verifica che l'app principale usi `127.0.0.1:5000` o aggiorna le origini in `server.py`. |
 
-## 🤝 Come contribuire
+## Contribuire
 
-Leggi le [Linee Guida per i Contributori](./CONTRIBUTING.md) per:
-- Naming dei branch
-- Convenzioni nei commit
-- Processo di Pull Request
+Leggi [CONTRIBUTING.md](./CONTRIBUTING.md) per branch, commit e Pull Request.
 
-## 📄 Licenza
+## Licenza e attribuzioni
 
-Questo progetto è sotto licenza di the Apache License 2.0.
-Guarda il [LICENSE](./LICENSE) file per maggiori dettagli.
+Il progetto è distribuito sotto licenza Apache License 2.0. Consulta [LICENSE](./LICENSE) per il testo completo.
 
-Questo progetto usa librerie e servizi di terze parti.
-Guarda il [NOTICE](./NOTICE) file per i riconoscimenti.
+Le attribuzioni del progetto e dei servizi di terze parti sono raccolte in [NOTICE](./NOTICE).
 
-## 👨‍💻 Autori
+## Autori
 
-- [Zhoupeng Wu](https://github.com/ZhoupengWu) - Sviluppo front-end & back-end, documentazione
-- [Riccardo Bertuletti](https://github.com/Bertu08) - Sviluppo front-end
-- [Viktor Kachan](https://github.com/Relunax255) - Sviluppo back-end
-
-## 🙏 Ringraziamenti
-
-- OpenStreetMap per i dati geografici
-- Leaflet.js per la libreria mappe
-- OpenRouteService per il routing
-- Photon Komoot per il geocoding
+- [Zhoupeng Wu](https://github.com/ZhoupengWu) - sviluppo front-end, back-end e documentazione.
+- [Riccardo Bertuletti](https://github.com/Bertu08) - sviluppo front-end.
+- [Viktor Kachan](https://github.com/Relunax255) - sviluppo back-end.
