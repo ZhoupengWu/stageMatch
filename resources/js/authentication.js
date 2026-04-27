@@ -7,6 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
 
+    // Sincronizza altezza slider con il pannello attivo
+    function syncSliderHeight(panel) {
+        sliderContainer.style.height = panel.offsetHeight + "px";
+    }
+
+    // Init: altezza del pannello login
+    syncSliderHeight(document.getElementById("loginPanel"));
+
     // Switch tra Login e Registrazione
     switchLinks.forEach(link => {
         link.addEventListener("click", (e) => {
@@ -15,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (target === "register") {
                 sliderContainer.classList.add("show-register");
+                setTimeout(() => syncSliderHeight(document.getElementById("registerPanel")), 50);
                 // Reset del form di login
                 loginForm.reset();
                 // Reset eventuali errori di validazione
@@ -23,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             } else {
                 sliderContainer.classList.remove("show-register");
+                setTimeout(() => syncSliderHeight(document.getElementById("loginPanel")), 50);
                 // Reset del form di registrazione
                 registerForm.reset();
                 // Reset password strength indicator
@@ -164,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const name = document.getElementById("register-name").value;
         const email = document.getElementById("register-email").value;
+        const accessCode = document.getElementById("register-access-code").value;
         const password = document.getElementById("register-password").value;
         const confirmPassword = document.getElementById("register-confirm-password").value;
         const acceptTerms = document.getElementById("accept-terms").checked;
@@ -179,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        console.log("Registration attempt:", { name, email });
+        console.log("Registration attempt:", { name, email, accessCode });
 
         // TODO: Implementare chiamata API per registrazione
         // Esempio:

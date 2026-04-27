@@ -5,31 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>stageMatch - Autenticazione</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!-- CSS personalizzato -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/authentication.css') }}">
 </head>
 <body>
-    <!-- Header con logo e titolo -->
-    <div class="auth-header">
-        <div class="logo-container">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            <h1>stageMatch</h1>
-        </div>
-        <p class="tagline">Trova il percorso migliore verso la tua destinazione</p>
-    </div>
-
     <!-- Container principale -->
     <div class="auth-container">
         <div class="auth-card">
-            <!-- Slider animato -->
             <div class="slider-container" id="sliderContainer">
-                <!-- Pannello Login -->
                 <div class="auth-panel login-panel active" id="loginPanel">
                     <div class="panel-header">
                         <h2>Bentornato!</h2>
@@ -105,7 +89,6 @@
                     </div>
                 </div>
 
-                <!-- Pannello Registrazione -->
                 <div class="auth-panel register-panel" id="registerPanel">
                     <div class="panel-header">
                         <h2>Crea un account</h2>
@@ -119,9 +102,9 @@
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
-                                Nome completo
+                                Nome dell'azienda
                             </label>
-                            <input type="text" id="register-name" class="form-input" placeholder="Mario Rossi" required>
+                            <input type="text" id="register-name" class="form-input" placeholder="Apple" required>
                         </div>
 
                         <div class="input-group">
@@ -133,6 +116,18 @@
                                 Email
                             </label>
                             <input type="email" id="register-email" class="form-input" placeholder="nome@esempio.it" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="register-access-code">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    <line x1="12" y1="15" x2="12" y2="17"></line>
+                                </svg>
+                                Codice di accesso
+                            </label>
+                            <input type="text" id="register-access-code" class="form-input" placeholder="Inserisci il codice fornito dalla scuola" required autocomplete="off" spellcheck="false">
                         </div>
 
                         <div class="input-group">
@@ -183,7 +178,12 @@
                             <label class="checkbox-container">
                                 <input type="checkbox" id="accept-terms" required>
                                 <span class="checkmark"></span>
-                                Accetto i <a href="#" class="terms-link">Termini e Condizioni</a>
+                                <a href="#" class="terms-link">Accetto i Termini e Condizioni</a>
+                            </label>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="accept-privacy" required>
+                                <span class="checkmark"></span>
+                                <a href="#" class="terms-link">Accetto l'informativa sulla Privacy</a>
                             </label>
                         </div>
 
