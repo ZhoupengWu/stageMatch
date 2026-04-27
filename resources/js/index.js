@@ -110,7 +110,17 @@ async function calcolaPercorso() {
         return;
     }
 
-    const response = await fetch(`http://127.0.0.1:5001/routejson?startaddress=${encodeURIComponent(address_start)}&endaddress=${encodeURIComponent(address_end)}&routemode=${encodeURIComponent(mode)}`);
+    const response = await fetch("/routejson", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "startaddress": address_start,
+            "endaddress": address_end,
+            "routemode": mode
+        })
+    });
 
     if (!response.ok) {
         throw new Error(`Code error: ${response.status} --- ${response}`);
@@ -135,7 +145,9 @@ async function calcolaPercorso() {
     panel.classList.remove("open");
     prev_layer = L.geoJSON(data, { style: { color: 'red', weight: 4 } }).addTo(map);
     prev_marker_start = L.marker([f_c[1], f_c[0]], { icon: startIcon }).addTo(map);
+    prev_marker_start.bindPopup(`${address_start}`);
     prev_marker_end = L.marker([l_c[1], l_c[0]], { icon: endIcon }).addTo(map);
+    prev_marker_end.bindPopup(`${address_end}`);
 
     if (prev_layer.getBounds) map.fitBounds(prev_layer.getBounds());
 }
@@ -176,11 +188,11 @@ async function suggestion() {
 
     if (this === input_address_start) {
         div_suggestion = div_suggestion_start;
-        input_wrapper = input_address_start.parentElement;
+        input_wrapper = input_address_start.closest(".input-field-wrapper");
     }
     else {
         div_suggestion = div_suggestion_end;
-        input_wrapper = input_address_end.parentElement;
+        input_wrapper = input_address_end.closest(".input-field-wrapper");
     }
 
     clearInterval(wait_time);
@@ -218,9 +230,19 @@ async function suggestion() {
     }, 100);
 
     try {
-        const response = await fetch(
-            `https://photon.komoot.io/api/?q=${encodeURIComponent(address)}&lat=${initial_coordinates[0]}&lon=${initial_coordinates[1]}&limit=5&lang=en`
-        );
+        const response = await fetch("/photon", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "q": address,
+                "lat": initial_coordinates[0],
+                "lon": initial_coordinates[1],
+                "limit": 5,
+                "lang": "en"
+            })
+        });
 
         if (!response.ok) {
             throw new Error(`Code error: ${response.status} --- ${response}`);
@@ -239,7 +261,7 @@ async function suggestion() {
 
         const data_address_html = data_address.map(data => {
             return `
-            <a href="#" id="${data.id}">${data.indirizzo_via} ${data.indirizzo_civico} ${data.indirizzo_cap} ${data.indirizzo_city}</a>
+            <a href="#" data-index="${data.id}">${data.indirizzo_via} ${data.indirizzo_civico} ${data.indirizzo_cap} ${data.indirizzo_city}</a>
             `
         });
 
@@ -250,7 +272,7 @@ async function suggestion() {
         if (input_spinner) input_spinner.remove();
 
         for (let i = 0; i < data_address_html.length; ++i) {
-            const dah = document.getElementById(`${i}`);
+            const dah = div_suggestion.querySelector(`[data-index="${i}"]`);
             dah.addEventListener("click", () => {
                 this.value = dah.textContent;
                 div_suggestion.classList.add("not-visible");
@@ -266,8 +288,15 @@ async function suggestion() {
     }
 }
 
-input_address_start.addEventListener("blur", suggestion);
-input_address_end.addEventListener("blur", suggestion);
+document.getElementById("search_start").addEventListener("click", suggestion.bind(input_address_start));
+document.getElementById("search_end").addEventListener("click", suggestion.bind(input_address_end));
+
+input_address_start.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") suggestion.call(input_address_start);
+});
+input_address_end.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") suggestion.call(input_address_end);
+});
 
 // GESTIONE TOGGLE PANNELLO
 document.addEventListener("DOMContentLoaded", () => {
@@ -279,13 +308,29 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    document.addEventListener("click", (e) => {
+        const is_inside_start = input_address_start.closest(".input-field-wrapper").contains(e.target) || document.getElementById("search_start").contains(e.target);
+        const is_inside_end = input_address_end.closest(".input-field-wrapper").contains(e.target) || document.getElementById("search_end").contains(e.target);
+
+        if (!is_inside_start) {
+            div_suggestion_start.classList.add("not-visible");
+            div_suggestion_start.innerHTML = "";
+        }
+
+        if (!is_inside_end) {
+            div_suggestion_end.classList.add("not-visible");
+            div_suggestion_end.innerHTML = "";
+        }
+    });
+
     toggle.addEventListener("click", () => {
         panel.classList.toggle("open");
 
-        if (panel.classList.contains("open")) {
-            console.log("Pannello aperto");
-        } else {
-            console.log("Pannello chiuso");
+        if (!panel.classList.contains("open")) {
+            div_suggestion_start.classList.add("not-visible");
+            div_suggestion_start.innerHTML = "";
+            div_suggestion_end.classList.add("not-visible");
+            div_suggestion_end.innerHTML = "";
         }
     });
 

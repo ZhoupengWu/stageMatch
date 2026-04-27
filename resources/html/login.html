@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>stageMatch - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" />
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <div class="noise"></div>
+
+    <main class="hero">
+        <div class="hero_content">
+            <div class="hero_label">Bergamo</div>
+            <h1 class="hero_title">stageMatch</h1>
+            <p class="hero_sub">Trova il tuo stage ideale</p>
+            <button class="btn-login" id="loginBtn">Login</button>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

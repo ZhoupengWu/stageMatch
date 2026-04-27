@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="{{ prefs.theme if prefs is defined else 'light' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Blueprint App{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+{% if user is defined and user %}
+<header class="app-header">
+    <a href="{{ url_for('dashboard') }}" class="header-brand">
+        <div class="brand-icon">B</div>
+        <span class="brand-name">Blueprint App</span>
+        <span class="brand-tag">SSO</span>
+    </a>
+
+    <nav class="header-nav">
+        <a href="{{ url_for('dashboard') }}"
+           class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+            Dashboard
+        </a>
+        <a href="{{ url_for('reports') }}"
+           class="nav-link {% if request.endpoint == 'reports' %}active{% endif %}">
+            Reports
+        </a>
+        <a href="{{ url_for('settings') }}"
+           class="nav-link {% if request.endpoint == 'settings' %}active{% endif %}">
+            Impostazioni
+        </a>
+    </nav>
+
+    <div class="header-user">
+        {% if user.picture %}
+            <img src="{{ user.picture }}" alt="{{ user.name }}" class="user-avatar">
+        {% else %}
+            <div class="user-avatar-placeholder">
+                {{ (user.name or user.email)[0]|upper }}
+            </div>
+        {% endif %}
+        <span class="user-name">{{ user.name or user.email }}</span>
+        <a href="{{ portal_url }}" class="btn-header">Portale</a>
+        <a href="{{ url_for('logout') }}" class="btn-header">Esci</a>
+    </div>
+</header>
+{% endif %}
+
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="app-footer">
+    Blueprint SSO App &mdash; Template di integrazione SSO per team di sviluppo
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

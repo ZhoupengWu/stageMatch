@@ -20,20 +20,21 @@ limitations under the License.
 THIRD-PARTY ATTRIBUTIONS
 ================================================================================
 
-This product includes software developed by:
+This product uses or integrates with the following third-party software,
+libraries, data sources, and services:
 
-* OpenStreetMap Contributors
-  - Data source for geographic information
+* OpenStreetMap
+  - Geographic data source
   - https://www.openstreetmap.org
 
-* Leaflet.js
+* Leaflet
   - Interactive map library
-  - Copyright (c) 2010-2023, Leaflet contributors
+  - Copyright (c) 2010-2024, Leaflet contributors
   - https://leafletjs.com
 
 * Bootstrap
   - Frontend framework
-  - Copyright (c) 2011-2023 Bootstrap contributors
+  - Copyright (c) 2011-2024 The Bootstrap Authors
   - https://getbootstrap.com
 
 * OpenRouteService
@@ -44,13 +45,45 @@ This product includes software developed by:
   - Geocoding and address suggestions
   - https://photon.komoot.io
 
+* Nominatim
+  - Geocoding service based on OpenStreetMap data
+  - https://nominatim.org
+
 * Flask
   - Python web framework
-  - Copyright (c) 2010 by Armin Ronacher
   - https://flask.palletsprojects.com
+
+* Flask-CORS
+  - CORS support for Flask
+  - https://github.com/corydolphin/flask-cors
+
+* Werkzeug
+  - WSGI utilities used by Flask
+  - https://werkzeug.palletsprojects.com
+
+* Jinja
+  - Template engine used by Flask
+  - https://jinja.palletsprojects.com
+
+* SQLAlchemy
+  - Python SQL toolkit and ORM
+  - https://www.sqlalchemy.org
+
+* PyJWT
+  - JSON Web Token implementation for Python
+  - https://pyjwt.readthedocs.io
+
+* python-dotenv
+  - Environment variable loading from .env files
+  - https://github.com/theskumar/python-dotenv
+
+* requests
+  - HTTP library for Python
+  - https://requests.readthedocs.io
 
 * aiohttp
   - Async HTTP client/server library
   - https://github.com/aio-libs/aiohttp
 
-For the full licenses of these dependencies, please refer to their respective project repositories.
+For the full license texts of these dependencies and services, refer to
+their respective project repositories or official documentation.
