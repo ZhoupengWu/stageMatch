@@ -1,4 +1,5 @@
 import os
+import sys
 import secrets
 import requests
 from flask import Flask, render_template, redirect, request, session, url_for, jsonify
@@ -10,6 +11,11 @@ from auth.auth_google.auth import initGoogleAuth, getGoogleUserInfo
 from database import database_helper
 
 load_dotenv()
+
+######ADD
+# Importa il middleware SSO localmente
+from auth.middleware.sso_middleware import SSOMiddleware, WhitelistManager, RateLimiter, render_sso_error
+#--------------------------------------------------------------------------------------------------------------
 
 PRIVACY_POLICY_VERSION = os.getenv("PRIVACY_POLICY_VERSION")
 
@@ -70,6 +76,62 @@ def _completeLogin(user_data: dict):
     au.sso_middleware.create_session(user_data, session, session_id)
 
     return redirect(url_for("completeLogin"))
+
+
+
+######ADD
+# ============================================
+# ROUTE SSO
+# ============================================
+
+@app.route('/sso/login')
+def sso_login():
+    """
+    Endpoint SSO - riceve il JWT dal portale, lo valida e crea la sessione
+    """
+    session["auth_type"] = "user"
+    token = request.args.get('token')
+    
+    # In modalità dev, permettiamo di simulare il login tramite query parameter
+    if au.SSO_MODE == 'dev' and not token:
+        dev_email = request.args.get('username') or request.args.get('email') or au.DEV_USER_EMAIL
+        app.logger.info(f"🔧 DEV MODE: Simulazione login SSO per {dev_email}")
+        
+        user_data = {
+            'email': dev_email,
+            'name': au.getUsername(dev_email).replace('.', ' ').title(),
+            'googleId': 'dev-user-id',
+            'picture': ''
+        }
+        return _completeLogin(user_data)
+
+    if not token:
+        return au.render_sso_error(
+            "Token SSO mancante. Accedi tramite il portale SSO.",
+            au.sso_middleware.portal_url
+        )
+    
+    try:
+        # Valida il JWT
+        user_data = au.sso_middleware.validate_jwt(token)
+        return _completeLogin(user_data)
+        
+    except Exception as e:
+        app.logger.error(f"Errore validazione SSO: {e}")
+        return au.render_sso_error(
+            f"Token SSO invalido o scaduto: {str(e)}",
+            au.sso_middleware.portal_url
+        )
+
+
+@app.route('/logout')
+def logout():
+    """Logout - reindirizza alla rotta di logout ufficiale"""
+    return redirect(url_for('authLogout'))
+
+#------------------------------------------------------------------------------------------------------
+
+
 
 @app.route('/')
 def mainPage():

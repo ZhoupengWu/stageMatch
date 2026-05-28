@@ -12,6 +12,6 @@ loginBtn.addEventListener('click', () => {
     loginBtn.style.opacity = '0.7';
 
     setTimeout(() => {
-        window.location.href = "/auth/login";
+        window.location.href = "/sso/login";
     }, 800);
 });
