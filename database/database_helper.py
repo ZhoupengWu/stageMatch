@@ -2,7 +2,7 @@ from datetime import datetime
 
 from tracemalloc import start
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, delete
 from sqlalchemy.orm import sessionmaker, selectinload
 from sqlalchemy.inspection import inspect
 from .models.base import Base
@@ -13,6 +13,7 @@ from .models.skill import Skill
 from .models.soft_skill import SoftSkill
 from .models.route import UserRoute
 from .models.privacy_consent import PrivacyConsent
+from .models.access_code import AccessCode
 
 # global
 Session = None
@@ -62,6 +63,23 @@ def addCompany(company_data: dict):
     with Session() as session:
         company = Company(**company_data)
         session.add(company)
+        session.commit()
+
+def addAccessCode(access_code_data: dict):
+    with Session() as session:
+        ac_data = AccessCode(**access_code_data)
+        session.add(ac_data)
+        session.commit()
+
+def getAccessCode(ac_email: str):
+    with Session() as session:
+        ac_data = session.query(AccessCode).filter_by(email=ac_email)
+        return ac_data.code
+
+def deleteAccessCode(email: str):
+    with Session() as session:
+        data = delete(AccessCode).where(AccessCode.email == email)
+        session.execute(data)
         session.commit()
 
 def getUserColumn(user_id: str, column: str):

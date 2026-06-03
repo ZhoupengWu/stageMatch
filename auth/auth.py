@@ -8,7 +8,7 @@ SSO_MODE: str = os.getenv("SSO_MODE").lower()
 DEV_USER_EMAIL: str = os.getenv("DEV_USER_EMAIL").lower()
 
 white_list_manager = WhitelistManager(
-    whitelist_path=os.path.join("test") # Change the logic of uploading
+    whitelist_path=os.path.join("whitelist") # Change the logic of uploading
 )
 
 rate_limiter = RateLimiter(

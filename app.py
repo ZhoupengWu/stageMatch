@@ -15,7 +15,7 @@ load_dotenv()
 ######ADD
 # Importa il middleware SSO localmente
 from auth.middleware.sso_middleware import SSOMiddleware, WhitelistManager, RateLimiter, render_sso_error
-#--------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------
 
 PRIVACY_POLICY_VERSION = os.getenv("PRIVACY_POLICY_VERSION")
 
@@ -78,7 +78,6 @@ def _completeLogin(user_data: dict):
     return redirect(url_for("completeLogin"))
 
 
-
 ######ADD
 # ============================================
 # ROUTE SSO
@@ -91,12 +90,12 @@ def sso_login():
     """
     session["auth_type"] = "user"
     token = request.args.get('token')
-    
+
     # In modalità dev, permettiamo di simulare il login tramite query parameter
     if au.SSO_MODE == 'dev' and not token:
         dev_email = request.args.get('username') or request.args.get('email') or au.DEV_USER_EMAIL
         app.logger.info(f"🔧 DEV MODE: Simulazione login SSO per {dev_email}")
-        
+
         user_data = {
             'email': dev_email,
             'name': au.getUsername(dev_email).replace('.', ' ').title(),
@@ -110,12 +109,12 @@ def sso_login():
             "Token SSO mancante. Accedi tramite il portale SSO.",
             au.sso_middleware.portal_url
         )
-    
+
     try:
         # Valida il JWT
         user_data = au.sso_middleware.validate_jwt(token)
         return _completeLogin(user_data)
-        
+
     except Exception as e:
         app.logger.error(f"Errore validazione SSO: {e}")
         return au.render_sso_error(
@@ -129,8 +128,7 @@ def logout():
     """Logout - reindirizza alla rotta di logout ufficiale"""
     return redirect(url_for('authLogout'))
 
-#------------------------------------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------------------------------
 
 
 @app.route('/')
@@ -248,7 +246,9 @@ def completeLogin():
             return redirect(url_for("homepageCompany"))
 
         pending_data = session.get("pending_company_data")
+
         if pending_data:
+            secrets.compare_digest()
             company_data = {
                 "googleId": user["googleId"],
                 "name": pending_data["name"],
@@ -342,6 +342,41 @@ def homepageCompany():
 @au.sso_middleware.sso_login_required
 def map():
     return render_template("/html/index.html")
+
+@app.route("/private/dashboard")
+@au.sso_middleware.sso_login_required
+def privateDashboard():
+    user = session["user"]
+    email = user["email"]
+
+    if not au.white_list_manager.is_authorized(email):
+        app.logger.warning(f"Accesso negato da whitelist: {email}")
+
+        return render_sso_error(
+            f"Il tuo account ({email}) non è autorizzato ad accedere a questa applicazione. "
+            "Contatta l'amministratore se ritieni sia un errore.",
+            SSO_CONFIG["portal_url"],
+            status_code=403,
+            title="Account Non Autorizzato",
+            icon="🚫",
+        )
+
+    return render_template("/html/private_dashboard.html")
+
+@app.route("/private/dashboard/dati", methods=["POST"])
+@au.sso_middleware.sso_login_required
+def postDati():
+    dati = request.get_json()
+
+    code = secrets.token_hex(128)
+
+    try:
+        dati["code"] = code
+        database_helper.addAccessCode(dati)
+
+        return jsonify({"status": 201, "code": code})
+    except Exception as e:
+        return jsonify({"status": 500})
 
 @app.route("/dev/login")
 def devLogin():
